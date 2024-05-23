@@ -55,7 +55,7 @@ export const OpenAiSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable && providerSettings.baseUrl) loadModels();
+		if (enable && providerSettings.baseUrl && providerSettings.apiKey) loadModels();
 	}, [enable]);
 
 	return (
@@ -113,7 +113,7 @@ export const OpenAiSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading}>
+					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
 						{t('Connectivity Check')}
 					</button>
 				</SettingItem>

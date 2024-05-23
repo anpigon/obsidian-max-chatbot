@@ -127,7 +127,7 @@ export const RestApiSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading}>
+					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
 					</button>
 				</SettingItem>
