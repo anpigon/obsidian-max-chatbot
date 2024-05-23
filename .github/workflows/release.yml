@@ -10,13 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version-file: '.nvmrc'
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -26,11 +24,11 @@ jobs:
 
       - name: Create release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           tag="${GITHUB_REF#refs/tags/}"
 
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            build/main.js build/styles.css manifest.json
+            manifest.json build/main.js build/styles.css
