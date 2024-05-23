@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	.input-error {
+		@apply !border-[var(--color-red)];
+	}
+
+	.font-ui-smaller {
+		font-size: var(--font-ui-smaller);
+		line-height: var(--line-height-tight);
+	}
+	.bg-primary {
+		background-color: var(--background-primary);
+	}
+	.bg-primary-alt {
+		background-color: var(---background-primary-alt);
+	}
+	.bg-secondary {
+		background-color: var(--background-secondary);
+	}
+
+	/* font color */
+	.text-red {
+		color: var(--color-red);
+	}
+	.text-orange {
+		color: var(--color-orange);
+	}
+	.text-yellow {
+		color: var(--color-yellow);
+	}
+	.text-green {
+		color: var(--color-green);
+	}
+	.text-cyan {
+		color: var(--color-cyan);
+	}
+	.text-blue {
+		color: var(--color-blue);
+	}
+	.text-purple {
+		color: var(--color-purple);
+	}
+	.text-pink {
+		color: var(--color-pink);
+	}
+	.text-interactive-accent {
+		color: var(--interactive-accent);
+	}
+}
