@@ -6,7 +6,7 @@ import {MAXSettings} from './types';
 import Logger, {LogLvl} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
-import {merge} from 'ts-deepmerge';
+import merge from 'lodash/merge'
 
 import './styles.css';
 
@@ -226,7 +226,6 @@ export default class MAXPlugin extends Plugin {
 	async loadSettings() {
 		const loadedData = (await this.loadData()) as MAXSettings;
 		this.settings = merge(DEFAULT_SETTINGS, loadedData);
-		console.log(this.settings); 
 	}
 
 	async saveSettings() {
