@@ -26,9 +26,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
+          tag="${GITHUB_REF#refs/tags/}" \
+
+          git log $(git describe --tags --abbrev=0)..HEAD --oneline > release-notes.md && git add release-notes.md \
 
           gh release create "$tag" \
             --title="$tag" \
-            --draft \
+            --notes-file="release-notes.md" \
             manifest.json build/main.js build/styles.css
