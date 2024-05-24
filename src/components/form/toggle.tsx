@@ -1,9 +1,12 @@
 import clsx from 'clsx';
-import {DetailedHTMLProps, InputHTMLAttributes} from 'react';
+import {InputHTMLAttributes, PropsWithChildren} from 'react';
+import {twMerge} from 'tailwind-merge';
 
-export const Toggle: React.FC<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>> = ({checked, ...props}) => {
+export type ToggleProps = InputHTMLAttributes<HTMLInputElement>;
+
+export const Toggle: React.FC<ToggleProps> = ({checked, className, ...props}) => {
 	return (
-		<label className={clsx('checkbox-container', {'is-enabled': checked})}>
+		<label className={twMerge(clsx('checkbox-container', {'is-enabled': checked}), className)}>
 			<input type="checkbox" checked={checked} {...props} />
 		</label>
 	);

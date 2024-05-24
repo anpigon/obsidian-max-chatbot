@@ -6,11 +6,11 @@ import {MAXSettings} from './types';
 import Logger, {LogLvl} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
-import merge from 'lodash/merge'
+import merge from 'lodash/merge';
 
 import './styles.css';
 
-export let checkActiveFile: TFile | null = null;
+export let currentActiveFile: TFile | null = null;
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -38,7 +38,23 @@ export default class MAXPlugin extends Plugin {
 			console.log('Default profile created.');
 		}
 
-		this.registerEvent(
+		this.registerView(VIEW_TYPE_CHATBOT, leaf => new ChatbotView(leaf, this));
+
+		// this.addRibbonIcon('bot', 'MAX Chatbot', () => this.activateView());
+
+		this.addCommand({
+			id: 'open-max-chatbot',
+			name: 'Open MAX Chatbot',
+			callback: () => this.activateView(),
+			hotkeys: [
+				{
+					modifiers: ['Mod'],
+					key: '0',
+				},
+			],
+		});
+
+		/* 		this.registerEvent(
 			this.app.vault.on('create', async (file: TFile) => {
 				if (file instanceof TFile && file.path.startsWith(folderPath)) {
 					const fileContent = await this.app.vault.read(file);
@@ -50,9 +66,9 @@ export default class MAXPlugin extends Plugin {
 					}
 				}
 			})
-		);
+		); */
 
-		this.registerEvent(
+		/* this.registerEvent(
 			this.app.vault.on('delete', async (file: TFile) => {
 				if (file instanceof TFile && file.path.startsWith(folderPath)) {
 					const filenameMessageHistory = `./.obsidian/plugins/max-chatbot/data/messageHistory_${file.name.replace('.md', '.json')}`;
@@ -64,7 +80,7 @@ export default class MAXPlugin extends Plugin {
 						if (this.settings!.profiles.profile === file.name) {
 							this.settings!.profiles.profile = DEFAULT_SETTINGS.profiles.profile;
 							const fileContent = (await this.app.vault.read(defaultProfile)).replace(/^---\s*[\s\S]*?---/, '').trim();
-							this.settings!.general.systemRole = fileContent;
+							this.settings!.general.systemPrompt = fileContent;
 							await updateSettingsFromFrontMatter(this, defaultProfile);
 							await this.saveSettings();
 						}
@@ -72,22 +88,22 @@ export default class MAXPlugin extends Plugin {
 					this.activateView();
 				}
 			})
-		);
+		); */
 
 		// Update frontmatter when the profile file is modified
-		this.registerEvent(
+		/* this.registerEvent(
 			this.app.vault.on('modify', async (file: TFile) => {
 				const currentProfilePath = `${folderPath}/${this.settings!.profiles.profile}`;
 				if (file.path === currentProfilePath) {
 					await updateSettingsFromFrontMatter(this, file);
 					const fileContent = (await this.app.vault.read(file)).replace(/^---\s*[\s\S]*?---/, '').trim();
-					this.settings!.general.systemRole = fileContent;
+					this.settings!.general.systemPrompt = fileContent;
 					await this.saveSettings();
 				}
 			})
-		);
+		); */
 
-		this.registerEvent(
+		/* this.registerEvent(
 			this.app.vault.on('rename', async (file: TFile, oldPath: string) => {
 				try {
 					const currentProfilePath = `${folderPath}/${this.settings!.profiles.profile}`;
@@ -121,7 +137,7 @@ export default class MAXPlugin extends Plugin {
 					}
 				}
 			})
-		);
+		); */
 
 		this.registerEvent(
 			this.app.workspace.on('active-leaf-change', () => {
@@ -129,53 +145,37 @@ export default class MAXPlugin extends Plugin {
 			})
 		);
 
-		this.registerView(VIEW_TYPE_CHATBOT, leaf => new ChatbotView(leaf, this));
+		// this.registerEvent(
+		// 	this.app.workspace.on('file-menu', (menu, file) => {
+		// 		if (!(file instanceof TFile)) {
+		// 			return;
+		// 		}
 
-		this.addRibbonIcon('bot', 'MAX Chatbot', () => this.activateView());
+		// 		menu.addItem(item => {
+		// 			item.setTitle('MAX Chatbot: Generate new title').onClick(() => renameTitleCommand(this, this.settings!));
+		// 		});
+		// 	})
+		// );
 
-		this.addCommand({
-			id: 'open-max-chatbot',
-			name: 'Open MAX Chatbot',
-			callback: () => this.activateView(),
-			hotkeys: [
-				{
-					modifiers: ['Mod'],
-					key: '0',
-				},
-			],
-		});
-
-		this.registerEvent(
-			this.app.workspace.on('file-menu', (menu, file) => {
-				if (!(file instanceof TFile)) {
-					return;
-				}
-
-				menu.addItem(item => {
-					item.setTitle('MAX Chatbot: Generate new title').onClick(() => renameTitleCommand(this, this.settings!));
-				});
-			})
-		);
-
-		this.addCommand({
-			id: 'prompt-select-generate',
-			name: 'Prompt Select Generate',
-			callback: () => {
-				promptSelectGenerateCommand(this, this.settings!);
-			},
-			hotkeys: [
-				{
-					modifiers: ['Mod', 'Shift'],
-					key: '=',
-				},
-			],
-		});
+		// this.addCommand({
+		// 	id: 'prompt-select-generate',
+		// 	name: 'Prompt Select Generate',
+		// 	callback: () => {
+		// 		promptSelectGenerateCommand(this, this.settings!);
+		// 	},
+		// 	hotkeys: [
+		// 		{
+		// 			modifiers: ['Mod', 'Shift'],
+		// 			key: '=',
+		// 		},
+		// 	],
+		// });
 
 		this.addSettingTab(new MAXSettingTab(this.app, this));
 	}
 
 	handleFileSwitch() {
-		checkActiveFile = this.app.workspace.getActiveFile();
+		currentActiveFile = this.app.workspace.getActiveFile();
 	}
 
 	async onunload() {
@@ -277,7 +277,7 @@ export async function defaultFrontMatter(plugin: MAXPlugin, file: TFile) {
 		console.error('Error processing frontmatter:', error);
 	}
 
-	plugin.app.vault.append(file, DEFAULT_SETTINGS.general.systemRole);
+	plugin.app.vault.append(file, DEFAULT_SETTINGS.general.systemPrompt);
 }
 
 export async function updateSettingsFromFrontMatter(plugin: MAXPlugin, file: TFile) {
@@ -318,7 +318,7 @@ export async function updateSettingsFromFrontMatter(plugin: MAXPlugin, file: TFi
 	try {
 		await plugin.app.fileManager.processFrontMatter(file, updateSettings, writeOptions);
 		const fileContent = (await plugin.app.vault.read(file)).replace(/^---\s*[\s\S]*?---/, '').trim();
-		plugin.settings!.general.systemRole = fileContent;
+		plugin.settings!.general.systemPrompt = fileContent;
 		updateProfile(plugin, file);
 	} catch (error) {
 		console.error('Error processing frontmatter:', error);

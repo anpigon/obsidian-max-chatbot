@@ -1,6 +1,5 @@
 import {Toggle} from '@/components/form/toggle';
 import {SettingItem} from '@/components/settings/setting-item';
-import {SettingItemHeading} from '@/components/settings/setting-item-heading';
 import {DEFAULT_SETTINGS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
 import {cleanFolderPath} from '@/utils/clean-folder-path';
@@ -73,7 +72,7 @@ export const ChatHistorySetting = () => {
 
 	return (
 		<>
-			<SettingItemHeading name={t('Chat History')} />
+			<SettingItem heading name={t('Chat History')} />
 
 			<SettingItem name={t('Chat History Folder Path')} description={t('Save your chat history in a specified folder.')}>
 				<input

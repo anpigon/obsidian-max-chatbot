@@ -1,5 +1,6 @@
 import {LLM_PROVIDERS} from '@/constants';
-import {ReactNode, createContext, useMemo, useState, useContext, useEffect} from 'react';
+import {usePlugin} from '@/hooks/useApp';
+import {ReactNode, createContext, useContext, useEffect, useMemo, useState} from 'react';
 
 interface Model {
 	provider: LLM_PROVIDERS;
@@ -18,14 +19,18 @@ const SettingStateContext = createContext<SettingState | undefined>(undefined);
 const SettingDispatchContext = createContext<SettingDispatch | undefined>(undefined);
 
 export const SettingProvider = ({children}: {children: ReactNode}) => {
+	const plugin = usePlugin();
 	const [models, setModels] = useState<Model[]>([]);
 
-	const state = useMemo(() => ({models}), [models]);
-	const actions = useMemo(() => ({setModels}), [setModels]);
+	const refreshChatbotView = () => {
+		plugin.activateView();
+	};
 
-	useEffect(() => {
-		console.log('providers');
-	}, []);
+	const state = useMemo(() => ({models}), [models]);
+	const actions = useMemo(() => ({
+		setModels, 
+		refreshChatbotView
+	}), [setModels]);
 
 	return (
 		<SettingStateContext.Provider value={state}>

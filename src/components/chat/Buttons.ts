@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {MarkdownRenderer, Modal, Notice, setIcon} from 'obsidian';
-import MAXPlugin, {checkActiveFile} from '@/main';
+import MAXPlugin, {currentActiveFile} from '@/main';
 import {ANTHROPIC_MODELS, OPEN_AI_MODELS} from '@/constants';
 import {activeEditor, filenameMessageHistoryJSON, lastCursorPosition, lastCursorPositionFile, messageHistory} from '@/views/chatbot-view';
 import {
@@ -392,14 +392,14 @@ export function displayAppendButton(plugin: MAXPlugin, settings: MAXSettings, me
 	const messageText = message;
 
 	appendButton.addEventListener('click', async function (event) {
-		if (checkActiveFile?.extension === 'md') {
+		if (currentActiveFile?.extension === 'md') {
 			// Check if the active file is different from the file of the last cursor position
-			if (checkActiveFile !== lastCursorPositionFile) {
+			if (currentActiveFile !== lastCursorPositionFile) {
 				// Append to the bottom of the file
 				getActiveFileContent(plugin, settings);
-				const existingContent = await plugin.app.vault.read(checkActiveFile);
+				const existingContent = await plugin.app.vault.read(currentActiveFile);
 				const updatedContent = `${existingContent}\n${messageText}`;
-				plugin.app.vault.modify(checkActiveFile, updatedContent);
+				plugin.app.vault.modify(currentActiveFile, updatedContent);
 			} else {
 				// Append at the last cursor position
 				activeEditor?.replaceRange(messageText, lastCursorPosition);

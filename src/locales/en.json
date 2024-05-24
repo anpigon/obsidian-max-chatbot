@@ -1,4 +1,9 @@
 {
+	"chatbot": {
+		"You are a helpful assistant": "You are a helpful assistant.",
+		"Refer to the current note": "Refer to the current note",
+		"What can I help you with?" : "What can I help you with?"
+	},
 	"settings": {
 		"Profiles": "Profiles",
 		"Profile": "Profile",

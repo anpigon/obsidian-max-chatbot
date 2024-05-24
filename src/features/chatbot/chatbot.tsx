@@ -1,14 +1,16 @@
 import { DEFAULT_SETTINGS } from '@/constants';
 import { usePlugin, useSettings } from '@/hooks/useApp';
-import { Notice } from 'obsidian';
+import { Notice, getFrontMatterInfo } from 'obsidian';
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BotMessage } from './components/bot-message';
 import { ChatBox } from './components/chat-box';
 import { ChatbotContainer } from './components/chatbot-container';
 import { ChatbotHeader } from './components/chatbot-header';
 import { MessageContainer } from './components/message-container';
 import { UserMessage } from './components/user-message';
+import { useChatbotState } from './context';
 import { useCurrentModel } from './hooks/use-current-model';
 import { useGetAiModels } from './hooks/use-get-ai-models';
 import { useLLM } from './hooks/use-llm';
@@ -17,6 +19,7 @@ import { useLLMSetting } from './hooks/use-llm-setting';
 export const Chatbot: React.FC = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();
+	const {t} = useTranslation('chatbot');
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const chatBoxRef = useRef<HTMLTextAreaElement>(null);
@@ -30,20 +33,47 @@ export const Chatbot: React.FC = () => {
 	const [currentModel, setCurrentModel] = useCurrentModel(settings);
 	const llmOptions = useLLMSetting(settings, currentModel.provider);
 
+	const {allowReferenceCurrentNote} = useChatbotState();
+
+	const defaultSystemPrompt = settings.general.systemPrompt || t('You are a helpful assistant');
+	// const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
+
+	// const getCurrentNoteContent = async () => {
+	// 	// console.log('checkActiveFile', checkActiveFile);
+	// 	const activeFile = plugin.app.workspace.getActiveFile();
+	// 	if (activeFile?.extension === 'md') {
+	// 		const content = await plugin.app.vault.cachedRead(activeFile);
+	// 		const clearFrontMatterContent = content.slice(getFrontMatterInfo(content).contentStart);
+	// 		return '\n\n' + '<Additional Note>' + '\n\n' + clearFrontMatterContent + '\n\n</Additional Note>\n\n';
+	// 	}
+	// };
+
+	// useEffect(() => {
+	// 	if (allowReferenceCurrentNote) {
+	// 		getCurrentNoteContent().then(content => {
+	// 			if (content) setSystemPrompt(defaultSystemPrompt + content);
+	// 		});
+	// 	} else {
+	// 		setSystemPrompt(defaultSystemPrompt);
+	// 	}
+	// }, [allowReferenceCurrentNote]);
+
 	const {messages, isStreaming, controller, setMessage, processMessage} = useLLM({
 		provider: currentModel.provider,
 		model: currentModel.model,
 		options: llmOptions,
+		systemPrompt: defaultSystemPrompt,
+		allowReferenceCurrentNote,
 		handlers: {
 			onMessageAdded() {
 				scrollToBottom();
-			}
-		}
+			},
+		},
 	});
 
 	const scrollToBottom = () => {
 		messageContainerRef.current?.scrollTo(0, messageContainerRef.current.scrollHeight);
-	}
+	};
 
 	useEffect(() => {
 		messageEndRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});

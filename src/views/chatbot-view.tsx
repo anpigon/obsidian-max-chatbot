@@ -1,5 +1,5 @@
 import {AppContext} from '@/context';
-import {Chatbot} from '@/features/chatbot';
+import Chatbot from '@/features/chatbot';
 import MAXPlugin from '@/main';
 import {ItemView, WorkspaceLeaf} from 'obsidian';
 import React from 'react';

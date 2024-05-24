@@ -50,7 +50,7 @@ export interface MAXSettings {
 	general: {
 		provider: LLM_PROVIDERS;
 		model: string;
-		systemRole: string;
+		systemPrompt: string;
 		maxTokens: string;
 		temperature: string;
 		allowReferenceCurrentNote: boolean;

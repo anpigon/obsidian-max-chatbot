@@ -1,4 +1,9 @@
 {
+	"chatbot": {
+		"You are a helpful assistant": "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘.",
+		"Refer to the current note": "현재 노트 참조",
+		"What can I help you with?" : "무엇을 도와드릴까요?"
+	},
 	"settings": {
 		"Profiles": "프로필 설정",
 		"Profile": "프로필",

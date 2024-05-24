@@ -1,15 +1,7 @@
-import {
-	fetchGoogleGeminiModels,
-	fetchMistralModels,
-	fetchOllamaModelsLegacy,
-	fetchOpenAIBaseModels,
-	fetchOpenRouterModels,
-	fetchRestApiModels,
-} from '@/apis/fetch-model-list';
 import {Dropdown} from '@/components/form/dropdown';
 import {Toggle} from '@/components/form/toggle';
 import {SettingItem} from '@/components/settings/setting-item';
-import {ANTHROPIC_MODELS, DEFAULT_MODEL, DEFAULT_SETTINGS, LLM_PROVIDERS} from '@/constants';
+import {DEFAULT_MODEL, DEFAULT_SETTINGS, LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
 import {ChangeEventHandler, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
@@ -25,26 +17,7 @@ export const GeneralSetting = () => {
 	const [allowReferenceCurrentNote, setAllowReferenceCurrentNote] = useState(settings.general.allowReferenceCurrentNote);
 	const [modelList, setModelList] = useState([DEFAULT_MODEL]);
 
-	async function fetchModels(sourceType: LLM_PROVIDERS) {
-		switch (sourceType) {
-			case LLM_PROVIDERS.OLLAMA:
-				return await fetchOllamaModelsLegacy(plugin);
-			case LLM_PROVIDERS.REST_API:
-				return await fetchRestApiModels(plugin);
-			case LLM_PROVIDERS.ANTHROPIC:
-				return ANTHROPIC_MODELS;
-			case LLM_PROVIDERS.GOOGLE_GEMINI:
-				return await fetchGoogleGeminiModels(plugin);
-			case LLM_PROVIDERS.MISTRAL:
-				return await fetchMistralModels(plugin);
-			case LLM_PROVIDERS.OPEN_AI:
-				return await fetchOpenAIBaseModels(plugin);
-			case LLM_PROVIDERS.OPEN_ROUTER:
-				return await fetchOpenRouterModels(plugin);
-			default:
-				return [];
-		}
-	}
+	async function fetchModels(sourceType: LLM_PROVIDERS) {}
 
 	useEffect(() => {
 		console.log(settings.providers.OLLAMA.enable);
@@ -79,7 +52,7 @@ export const GeneralSetting = () => {
 		const promises = modelSources.filter(({condition}) => condition).map(({type}) => fetchModels(type));
 		const settledResult = await Promise.allSettled(promises);
 		console.log('settledResult:', settledResult);
-		const fulfilledResult = settledResult.filter(({status}) => status === 'fulfilled') as PromiseFulfilledResult<string[]>[];
+		// const fulfilledResult = settledResult.filter(({status}) => status === 'fulfilled') as PromiseFulfilledResult<string[]>[];
 		console.log('fulfilledResult', fulfilledResult);
 		const loadedModels = fulfilledResult.map(({value}) => value).flat();
 		console.log('load models', loadedModels);

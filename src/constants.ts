@@ -35,7 +35,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 	general: {
 		provider: LLM_PROVIDERS.SIONIC_AI,
 		model: DEFAULT_MODEL,
-		systemRole: 'You are a helpful assistant.',
+		systemPrompt: '',
 		maxTokens: '',
 		temperature: '1.00',
 		allowReferenceCurrentNote: false,
