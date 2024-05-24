@@ -12,7 +12,7 @@ export interface UserMessageProps {
 
 export const BotMessage: React.FC<UserMessageProps> = ({name, message}) => {
 	return (
-		<div className="relative m-0 p-3 w-full inline-block group">
+		<div className="relative m-0 p-3 w-full inline-block group whitespace-pre-wrap">
 			<div data-component="userMessageToolBar" className="flex justify-between items-center h-5">
 				<span data-component="username" className="block text-sm font-bold text-[var(--interactive-accent)] m-0">
 					{name}
