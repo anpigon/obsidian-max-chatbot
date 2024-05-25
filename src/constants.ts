@@ -111,7 +111,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		[LLM_PROVIDERS.REST_API]: {
 			enable: false,
 			apiKey: '',
-			baseUrl: '',
+			baseUrl: 'http://localhost:8000/v1',
 			allowStream: false,
 			models: [],
 		},

@@ -51,7 +51,8 @@ export async function requestOpenAIModels({baseUrl, apiKey}: ProviderSettings) {
 	const models = await openai.models.list();
 	return models.data
 		.map((model: {id: string}) => model.id)
-		.filter((model: string) => model.startsWith('gpt-') && !model.endsWith('-preview') && !excludeModels.includes(model)).sort();
+		.filter((model: string) => model.startsWith('gpt-') && !model.endsWith('-preview') && !excludeModels.includes(model))
+		.sort();
 }
 
 export async function fetchRestApiModels({baseUrl, apiKey}: ProviderSettings) {
@@ -59,8 +60,7 @@ export async function fetchRestApiModels({baseUrl, apiKey}: ProviderSettings) {
 	try {
 		new URL(baseUrl);
 	} catch (error) {
-		console.error('Invalid REST API URL:', baseUrl);
-		return [];
+		throw new Error('Invalid REST API URL: ' + baseUrl);
 	}
 
 	const jsonData = await requestJson(`${baseUrl}/models`, {

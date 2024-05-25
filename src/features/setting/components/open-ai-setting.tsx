@@ -2,7 +2,7 @@ import {requestOpenAIModels} from '@/apis/fetch-model-list';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
-import {usePlugin} from '@/hooks/useApp';
+import {usePlugin, useSettings} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 import clsx from 'clsx';
 import {useEffect, useState} from 'react';
@@ -10,26 +10,22 @@ import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
 
 export const OpenAiSetting = () => {
-	const plugin = usePlugin()!;
-	const settings = plugin.settings!;
-	const providerSettings = settings.providers.OPEN_AI;
 	const {t} = useTranslation('settings');
 
+	const plugin = usePlugin();
+	const settings = useSettings();
+	const providerSettings = settings.providers.OPEN_AI;
+
+	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isConnected, setIsConnected] = useState(false);
-	const [error, setError] = useState('');
 	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
+	const [baseUrl, setBaseUrl] = useState(providerSettings?.baseUrl ?? '');
+	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const handleChangeAllowStream: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const value = event.target.checked;
-		setAllowStream(value);
-		providerSettings.allowStream = value;
-		plugin!.saveSettings();
-	};
-
 	const loadModels = async () => {
-		if (!providerSettings.baseUrl) {
+		if (!baseUrl) {
 			setError('Please enter a valid URL');
 			setIsConnected(false);
 			return;
@@ -39,7 +35,12 @@ export const OpenAiSetting = () => {
 		setIsLoading(true);
 
 		try {
-			const models = await requestOpenAIModels(providerSettings);
+			const models = await requestOpenAIModels({
+				...providerSettings,
+				baseUrl,
+				apiKey,
+				allowStream,
+			});
 			Logger.info(models);
 			setIsConnected(true);
 			providerSettings.models = models;
@@ -55,7 +56,7 @@ export const OpenAiSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable && providerSettings.baseUrl && providerSettings.apiKey) loadModels();
+		if (enable && baseUrl && apiKey) loadModels();
 	}, [enable]);
 
 	return (
@@ -78,9 +79,10 @@ export const OpenAiSetting = () => {
 						type="password"
 						spellCheck={false}
 						placeholder="sk-aOO-...Cvll"
-						defaultValue={providerSettings?.apiKey}
+						defaultValue={apiKey}
 						onChange={event => {
 							const value = event.target.value?.trim();
+							setApiKey(value);
 							providerSettings.apiKey = value;
 							plugin.saveSettings();
 						}}
@@ -118,11 +120,17 @@ export const OpenAiSetting = () => {
 					</button>
 				</SettingItem>
 
-				<SettingItem
-					name={t('Allow Stream')}
-					description={t('Allow the model to stream responses.', {name: 'OpenAI'})}
-				>
-					<Toggle name="allowStream" checked={allowStream} onChange={handleChangeAllowStream} />
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'OpenAI'})}>
+					<Toggle
+						name="allowStream"
+						checked={allowStream}
+						onChange={event => {
+							const value = event.target.checked;
+							setAllowStream(value);
+							providerSettings.allowStream = value;
+							plugin!.saveSettings();
+						}}
+					/>
 				</SettingItem>
 			</div>
 		</>

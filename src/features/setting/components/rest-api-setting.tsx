@@ -3,7 +3,7 @@ import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/constants';
-import {usePlugin} from '@/hooks/useApp';
+import {usePlugin, useSettings} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 import clsx from 'clsx';
 import {useEffect, useState} from 'react';
@@ -11,26 +11,22 @@ import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
 
 export const RestApiSetting = () => {
-	const plugin = usePlugin()!;
-	const settings = plugin.settings!;
-	const providerSettings = settings.providers.REST_API;
 	const {t} = useTranslation('settings');
 
+	const plugin = usePlugin();
+	const settings = useSettings();
+	const providerSettings = settings.providers.REST_API;
+
+	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isConnected, setIsConnected] = useState(false);
-	const [error, setError] = useState('');
 	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
+	const [baseUrl, setBaseUrl] = useState(providerSettings?.baseUrl ?? '');
+	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const handleChangeAllowStream: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const value = event.target.checked;
-		setAllowStream(value);
-		providerSettings.allowStream = value;
-		plugin!.saveSettings();
-	};
-
 	const loadModels = async () => {
-		if (!providerSettings.baseUrl) {
+		if (!baseUrl) {
 			setError('Please enter a valid URL');
 			setIsConnected(false);
 			return;
@@ -40,7 +36,13 @@ export const RestApiSetting = () => {
 		setIsLoading(true);
 
 		try {
-			const models = await fetchRestApiModels(providerSettings);
+			const models = await fetchRestApiModels({
+				...providerSettings,
+				baseUrl,
+				apiKey,
+				allowStream,
+			});
+			Logger.info(models);
 			setIsConnected(true);
 			providerSettings.models = models;
 			plugin.saveSettings();
@@ -55,7 +57,7 @@ export const RestApiSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable && providerSettings.baseUrl) loadModels();
+		if (enable && baseUrl) loadModels();
 	}, [enable]);
 
 	return (
@@ -77,10 +79,11 @@ export const RestApiSetting = () => {
 					<input
 						type="text"
 						spellCheck={false}
-						defaultValue={providerSettings?.baseUrl}
-						placeholder={DEFAULT_SETTINGS.providers.LM_STUDIO.baseUrl}
+						defaultValue={baseUrl}
+						placeholder={DEFAULT_SETTINGS.providers.REST_API.baseUrl}
 						onChange={event => {
 							const value = event.target.value?.trim();
+							setBaseUrl(value);
 							providerSettings.baseUrl = value;
 							plugin.saveSettings();
 						}}
@@ -92,9 +95,10 @@ export const RestApiSetting = () => {
 						type="password"
 						spellCheck={false}
 						placeholder="insert-api-key-here"
-						defaultValue={providerSettings?.apiKey}
+						defaultValue={apiKey}
 						onChange={event => {
 							const value = event.target.value?.trim();
+							setApiKey(value);
 							providerSettings.apiKey = value;
 							plugin.saveSettings();
 						}}
@@ -132,11 +136,17 @@ export const RestApiSetting = () => {
 					</button>
 				</SettingItem>
 
-				<SettingItem
-					name={t('Allow Stream')}
-					description={t('Allow the model to stream responses.', {name: 'REST API'})}
-				>
-					<Toggle name="allowStream" checked={allowStream} onChange={handleChangeAllowStream} />
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'REST API'})}>
+					<Toggle
+						name="allowStream"
+						checked={allowStream}
+						onChange={event => {
+							const value = event.target.checked;
+							setAllowStream(value);
+							providerSettings.allowStream = value;
+							plugin.saveSettings();
+						}}
+					/>
 				</SettingItem>
 			</div>
 		</>
