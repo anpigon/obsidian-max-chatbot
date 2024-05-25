@@ -38,7 +38,7 @@ const getChatModel = ({provider, model, options}: Pick<UseLLMProps, 'provider' |
 	if (provider === LLM_PROVIDERS.OLLAMA) {
 		return new ChatOllama({...options, model, baseUrl: options.baseUrl, verbose});
 	}
-	return new ChatOpenAI({model, apiKey: options.apiKey, configuration: {baseURL: options.baseUrl}, verbose});
+	return new ChatOpenAI({model, apiKey: options.apiKey || 'api-key', configuration: {baseURL: options.baseUrl}, verbose});
 };
 
 const createMessageHistory = (messages: UseChatMessage[], message: string) => {

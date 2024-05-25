@@ -19,10 +19,6 @@ export const GeneralSetting = () => {
 
 	async function fetchModels(sourceType: LLM_PROVIDERS) {}
 
-	useEffect(() => {
-		console.log(settings.providers.OLLAMA.enable);
-	}, [settings.providers.OLLAMA.enable]);
-
 	const modelSources = [
 		{type: LLM_PROVIDERS.OLLAMA, condition: settings.providers.OLLAMA?.enable},
 		{
@@ -51,12 +47,10 @@ export const GeneralSetting = () => {
 	const loadModels = async () => {
 		const promises = modelSources.filter(({condition}) => condition).map(({type}) => fetchModels(type));
 		const settledResult = await Promise.allSettled(promises);
-		console.log('settledResult:', settledResult);
 		// const fulfilledResult = settledResult.filter(({status}) => status === 'fulfilled') as PromiseFulfilledResult<string[]>[];
-		console.log('fulfilledResult', fulfilledResult);
-		const loadedModels = fulfilledResult.map(({value}) => value).flat();
-		console.log('load models', loadedModels);
-		setModelList(prev => Array.from(new Set([...prev, ...loadedModels])));
+		// const loadedModels = fulfilledResult.map(({value}) => value).flat();
+		// console.log('load models', loadedModels);
+		// setModelList(prev => Array.from(new Set([...prev, ...loadedModels])));
 	};
 
 	useEffect(() => {

@@ -80,7 +80,7 @@ export const RestApiSetting = () => {
 						type="text"
 						spellCheck={false}
 						defaultValue={baseUrl}
-						placeholder={DEFAULT_SETTINGS.providers.REST_API.baseUrl}
+						placeholder='http://localhost:8000/v1'
 						onChange={event => {
 							const value = event.target.value?.trim();
 							setBaseUrl(value);
