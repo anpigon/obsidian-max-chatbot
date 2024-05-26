@@ -19,7 +19,7 @@ const useChatStream = (input: UseChatStreamInput) => {
 	};
 
 	const addMessage = (message: Omit<UseChatStreamChatMessage, 'id'>) => {
-		const messageWithId = {...message, id: crypto.randomUUID() as string};
+		const messageWithId = {...message, id: Date.now().toString(36)};
 		setMessages(messages => [...messages, messageWithId]);
 
 		return messageWithId;

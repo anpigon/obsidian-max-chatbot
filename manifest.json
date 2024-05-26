@@ -1,7 +1,7 @@
 {
 	"id": "max-chatbot",
 	"name": "MAX",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"minAppVersion": "1.5.0",
 	"description": "Generate and brainstorm ideas while creating your notes using Large Language Models (LLMs) from Ollama, LM Studio, Anthropic, OpenAI, Mistral AI, and more for Obsidian.",
 	"author": "anpigon",
