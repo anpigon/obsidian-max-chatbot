@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 
 import './styles.css';
 
-export let currentActiveFile: TFile | null = null;
+// export let currentActiveFile: TFile | null = null;
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -139,11 +139,12 @@ export default class MAXPlugin extends Plugin {
 			})
 		); */
 
-		this.registerEvent(
-			this.app.workspace.on('active-leaf-change', () => {
-				this.handleFileSwitch();
-			})
-		);
+		// this.registerEvent(
+		// 	this.app.workspace.on('active-leaf-change', () => {
+		// 		this.handleFileSwitch();
+		// 		// window.dispatchEvent(new Event('active-leaf-change'));
+		// 	})
+		// );
 
 		// this.registerEvent(
 		// 	this.app.workspace.on('file-menu', (menu, file) => {

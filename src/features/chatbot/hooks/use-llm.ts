@@ -1,21 +1,20 @@
-import {LLM_PROVIDERS} from '@/constants';
-import {useApp} from '@/hooks/useApp';
-import {currentActiveFile} from '@/main';
-import {ProviderSettings} from '@/types';
+import { LLM_PROVIDERS } from '@/constants';
+import { usePlugin } from '@/hooks/useApp';
+import useOnceEffect from '@/hooks/useOnceEffect';
+import { ProviderSettings } from '@/types';
 import Logger from '@/utils/logging';
-import {ChatOllama} from '@langchain/community/chat_models/ollama';
-import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
-import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
-import {StringOutputParser} from '@langchain/core/output_parsers';
-import {Runnable, RunnableConfig} from '@langchain/core/runnables';
-import {ChatOpenAI} from '@langchain/openai';
-import {getFrontMatterInfo} from 'obsidian';
-import {useState, useTransition} from 'react';
+import { ChatOllama } from '@langchain/community/chat_models/ollama';
+import { BaseLanguageModelInput } from '@langchain/core/language_models/base';
+import { AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage } from '@langchain/core/messages';
+import { StringOutputParser } from '@langchain/core/output_parsers';
+import { Runnable, RunnableConfig } from '@langchain/core/runnables';
+import { ChatOpenAI } from '@langchain/openai';
+import { TFile, getFrontMatterInfo } from 'obsidian';
+import { useState, useTransition } from 'react';
 
 interface UseLLMProps {
 	provider: LLM_PROVIDERS;
 	model: string;
-	options: ProviderSettings;
 	systemPrompt: string;
 	allowReferenceCurrentNote?: boolean;
 	handlers?: UseChatStreamEventHandlers;
@@ -33,7 +32,7 @@ interface UseChatStreamEventHandlers {
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
-const getChatModel = ({provider, model, options}: Pick<UseLLMProps, 'provider' | 'model' | 'options'>) => {
+const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
 	const verbose = false;
 	if (provider === LLM_PROVIDERS.OLLAMA) {
 		return new ChatOllama({...options, model, baseUrl: options.baseUrl, verbose});
@@ -60,15 +59,20 @@ const createMessageHistory = (messages: UseChatMessage[], message: string) => {
 	return [...history, new HumanMessage({content: message})];
 };
 
-export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, options, handlers}: UseLLMProps) => {
-	const app = useApp();
+export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
+	const plugin = usePlugin();
+	const app = plugin.app;
+	const settings = plugin.settings!;
+	const options = settings.providers[provider];
+
 	const [, startTransition] = useTransition();
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
 	const [messages, setMessages] = useState<UseChatMessage[]>([]);
 	const [message, setMessage] = useState('');
+	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
 
-	const llm = getChatModel({provider, options, model});
+	const llm = getChatModel(provider, model, options);
 	const outputParser = new StringOutputParser();
 
 	const prepareMessages = (message: string) => {
@@ -82,18 +86,35 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 			const title = app.metadataCache.getFileCache(currentActiveFile)?.frontmatter?.title || currentActiveFile.basename;
 			const content = await app.vault.cachedRead(currentActiveFile);
 			const clearFrontMatterContent = content.slice(getFrontMatterInfo(content).contentStart);
-			return '\n\n' + '<Additional Note>' + `\n\n# ${title}\n\n` + clearFrontMatterContent + '\n\n</Additional Note>\n\n';
+			return '\n\n' + '<Notes>' + `\n\n# ${title}\n\n` + clearFrontMatterContent + '\n\n</Notes>\n\n';
 		}
 		return '';
 	};
 
+	useOnceEffect(() => {
+		const handleFileSwitch = () => {
+			const activeFile = app.workspace.getActiveFile();
+			setCurrentActiveFile(activeFile);
+		};
+		handleFileSwitch();
+
+		app.workspace.on('active-leaf-change', handleFileSwitch);
+
+		return () => {
+			app.workspace.off('active-leaf-change', handleFileSwitch);
+		};
+	});
+
 	const processMessage = async (message: string) => {
 		setIsStreaming(true);
 
+		console.log('Processing message:', message);
+		console.log('Current active file:', currentActiveFile);
+		console.log('Allow reference current note:', allowReferenceCurrentNote);
 		const currentNote = allowReferenceCurrentNote ? await getCurrentNoteContent() : '';
 
 		const systemPromptTemplate: UseChatMessage = {
-			content: systemPrompt + currentNote,
+			content: (settings.general.systemPrompt || systemPrompt) + currentNote,
 			role: 'system',
 			id: crypto.randomUUID() as string,
 		};

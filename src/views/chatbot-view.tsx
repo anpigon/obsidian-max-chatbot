@@ -25,15 +25,15 @@ export class ChatbotView extends ItemView {
 		super(leaf);
 	}
 
-	getViewType() {
+	getViewType(): string {
 		return VIEW_TYPE_CHATBOT;
 	}
 
-	getDisplayText() {
+	getDisplayText(): string {
 		return 'MAX Chatbot view';
 	}
 
-	async onOpen() {
+	async onOpen(): Promise<void> {
 		this.root = createRoot(this.containerEl.children[1]);
 		this.root.render(
 			<React.StrictMode>
@@ -42,12 +42,10 @@ export class ChatbotView extends ItemView {
 				</AppContext.Provider>
 			</React.StrictMode>
 		);
-		return Promise.resolve();
 	}
 
-	async onClose() {
-		// Nothing to clean up.
+	async onClose(): Promise<void> {
 		this.root?.unmount();
-		return Promise.resolve();
+		this.root = null;
 	}
 }

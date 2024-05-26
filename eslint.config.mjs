@@ -26,5 +26,6 @@ export default tseslint.config(eslint.configs.recommended, ...tseslint.configs.r
 		'@typescript-eslint/no-misused-promises': 'warn',
 		'@typescript-eslint/no-redundant-type-constituents': 'warn',
 		'@typescript-eslint/ban-ts-comment': 'off',
+		'@typescript-eslint/require-await': 'warn',
 	},
 });
