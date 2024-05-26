@@ -128,7 +128,7 @@ export const OpenAiSetting = () => {
 							const value = event.target.checked;
 							setAllowStream(value);
 							providerSettings.allowStream = value;
-							plugin!.saveSettings();
+							plugin.saveSettings();
 						}}
 					/>
 				</SettingItem>

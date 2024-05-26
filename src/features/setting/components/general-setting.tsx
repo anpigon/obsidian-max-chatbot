@@ -9,7 +9,7 @@ import {Trans, useTranslation} from 'react-i18next';
 // Helper function to fetch models based on the source type
 
 export const GeneralSetting = () => {
-	const plugin = usePlugin()!;
+	const plugin = usePlugin();
 	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 	const [temperature, setTemperature] = useState(settings.general.temperature);

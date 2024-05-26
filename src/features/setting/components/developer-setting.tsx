@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 
 export const DeveloperSetting: React.FC = () => {
 	const plugin = usePlugin();
-	const settings = plugin!.settings!;
+	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 
 	const [isVerbose, setIsVerbose] = useState(settings.isVerbose);
@@ -15,7 +15,7 @@ export const DeveloperSetting: React.FC = () => {
 		const value = event.target.checked;
 		setIsVerbose(value);
 		settings.isVerbose = value;
-		plugin!.saveSettings();
+		plugin.saveSettings();
 	};
 
 	return (

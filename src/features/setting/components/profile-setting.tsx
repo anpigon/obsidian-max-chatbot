@@ -11,7 +11,7 @@ import {useTranslation} from 'react-i18next';
 
 export const ProfileSetting: React.FC = () => {
 	const plugin = usePlugin();
-	const settings = plugin!.settings!;
+	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 	const [, startTransition] = useTransition();
 
@@ -21,7 +21,7 @@ export const ProfileSetting: React.FC = () => {
 
 	const loadProfileList = () => {
 		const path = settings.profiles.profileFolderPath || DEFAULT_SETTINGS.profiles.profileFolderPath;
-		const profileFiles = plugin!.app.vault.getFiles().filter(file => file.parent?.path === path);
+		const profileFiles = plugin.app.vault.getFiles().filter(file => file.parent?.path === path);
 		profileFiles?.sort((a, b) => a.name.localeCompare(b.name));
 
 		const optionValues = profileFiles.map(f => f.basename);
@@ -47,7 +47,7 @@ export const ProfileSetting: React.FC = () => {
 		}
 	};
 
-	const handleChangeProfile: ChangeEventHandler<HTMLSelectElement> = async event => {
+	const handleChangeProfile: ChangeEventHandler<HTMLSelectElement> =  event => {
 		const value = event.target.value;
 		setProfile(value);
 	};
@@ -77,7 +77,7 @@ export const ProfileSetting: React.FC = () => {
 			loadProfileList();
 		}
 
-		await plugin!.saveSettings();
+		await plugin.saveSettings();
 	};
 
 	return (

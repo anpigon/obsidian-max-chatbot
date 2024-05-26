@@ -46,7 +46,7 @@ export function displayBotMessage(plugin: MAXPlugin, settings: MAXSettings, mess
 		addParagraphBreaks(messageBlockDiv);
 	}
 
-	const copyCodeBlocks = messageBlockDiv.querySelectorAll('.copy-code-button') as NodeListOf<HTMLElement>;
+	const copyCodeBlocks = messageBlockDiv.querySelectorAll('.copy-code-button');
 	copyCodeBlocks.forEach(copyCodeBlock => {
 		copyCodeBlock.textContent = 'Copy';
 		setIcon(copyCodeBlock, 'copy');
@@ -170,7 +170,7 @@ export function displayErrorBotMessage(
 
 	const index = messageHistory.length - 1;
 
-	addMessage(plugin, messageBlockDiv.innerHTML, 'botMessage', this.settings!, index);
+	addMessage(plugin, messageBlockDiv.innerHTML, 'botMessage', this.settings, index);
 
 	return botMessageDiv;
 }

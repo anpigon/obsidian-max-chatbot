@@ -11,7 +11,7 @@ import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
 
 export const LMStudioSetting = () => {
-	const plugin = usePlugin()!;
+	const plugin = usePlugin();
 	const settings = plugin.settings!;
 	const providerSettings = settings.providers.LM_STUDIO;
 	const {t} = useTranslation('settings');
@@ -26,7 +26,7 @@ export const LMStudioSetting = () => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		plugin!.saveSettings();
+		plugin.saveSettings();
 	};
 
 	const loadModels = async () => {

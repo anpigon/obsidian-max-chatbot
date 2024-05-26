@@ -15,7 +15,7 @@ export class MAXSettingTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 
-	async display(): Promise<void> {
+	display() {
 		this.root = createRoot(this.containerEl);
 		this.root.render(
 			<React.StrictMode>
@@ -26,7 +26,6 @@ export class MAXSettingTab extends PluginSettingTab {
 				</ErrorBoundary>
 			</React.StrictMode>
 		);
-		return;
 	}
 
 	hide() {

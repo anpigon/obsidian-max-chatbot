@@ -4,7 +4,7 @@ import {usePlugin} from '@/hooks/useApp';
 import {useTranslation} from 'react-i18next';
 
 export const OllamaSettingAdvanced = () => {
-	const plugin = usePlugin()!;
+	const plugin = usePlugin();
 	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 
@@ -207,8 +207,8 @@ export const OllamaSettingAdvanced = () => {
 					name="stop, \\n, user:"
 					placeholder="0"
 					defaultValue={
-						settings!.providers.OLLAMA.options.stop && Array.isArray(settings!.providers.OLLAMA.options.stop)
-							? settings!.providers.OLLAMA.options.stop.join(', ')
+						settings.providers.OLLAMA.options.stop && Array.isArray(settings.providers.OLLAMA.options.stop)
+							? settings.providers.OLLAMA.options.stop.join(', ')
 							: DEFAULT_SETTINGS.providers.OLLAMA.options.stop.join(', ')
 					}
 					onChange={async event => {

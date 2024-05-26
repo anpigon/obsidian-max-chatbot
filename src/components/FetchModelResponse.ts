@@ -12,7 +12,7 @@ import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
 import {BaseMessageLike} from '@langchain/core/messages';
 import {MAXSettings} from '@/types';
 
-let abortController = new AbortController();
+const abortController = new AbortController();
 
 // Fetch response from Ollama
 // NOTE: Abort does not work for requestUrl

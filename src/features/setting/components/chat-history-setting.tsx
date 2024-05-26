@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 
 export const ChatHistorySetting = () => {
 	const plugin = usePlugin();
-	const settings = plugin!.settings!;
+	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 	const [error, setError] = useState({chatHistoryPath: false, templateFilePath: false});
 	const [allowRenameNoteTitle, setAllowRenameNoteTitle] = useState(settings.chatHistory.allowRenameNoteTitle);
@@ -38,7 +38,7 @@ export const ChatHistorySetting = () => {
 			settings.chatHistory.chatHistoryFolderPath = folderPath;
 		}
 
-		await plugin!.saveSettings();
+		await plugin.saveSettings();
 	};
 
 	const handleChangeTemplateFilePath: ChangeEventHandler<HTMLInputElement> = async event => {
@@ -59,7 +59,7 @@ export const ChatHistorySetting = () => {
 			settings.chatHistory.templateFilePath = folderPath;
 		}
 
-		await plugin!.saveSettings();
+		await plugin.saveSettings();
 	};
 
 	const handleChangeAllowRenameNoteTitle: ChangeEventHandler<HTMLInputElement> = event => {
@@ -67,7 +67,7 @@ export const ChatHistorySetting = () => {
 		setAllowRenameNoteTitle(value);
 
 		settings.chatHistory.allowRenameNoteTitle = value;
-		plugin!.saveSettings();
+		plugin.saveSettings();
 	};
 
 	return (

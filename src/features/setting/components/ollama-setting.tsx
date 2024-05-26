@@ -12,7 +12,7 @@ import {Icon} from '@/components/icons/icon';
 import Logger from '@/utils/logging';
 
 export const OllamaSetting = () => {
-	const plugin = usePlugin()!;
+	const plugin = usePlugin();
 	const settings = plugin.settings!;
 	const providerSettings = settings.providers.OLLAMA;
 	const {t} = useTranslation('settings');
@@ -26,7 +26,7 @@ export const OllamaSetting = () => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		plugin!.saveSettings();
+		plugin.saveSettings();
 	};
 
 	const loadOllamaModels = async () => {

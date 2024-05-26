@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {ClientOptions} from '@langchain/openai';
 import {requestUrl} from 'obsidian';
 import Logger from './logging';
 
-export const requestFetch: ClientOptions['fetch'] = async (url, init) => {
-	Logger.info(url, init);
+export const requestFetch: ClientOptions['fetch'] = async (req, init) => {
+	Logger.info(req, init);
 	const headers = init?.headers as unknown as Record<string, string>;
-	const body = JSON.stringify(JSON.parse(`${init?.body ?? {}}`));
+	const body = init?.body ? JSON.stringify(JSON.parse(init.body as string)) : '{}';
 
+	const url = req instanceof Request ? req.url : req;
 	const response = await requestUrl({
-		url: `${url}`,
+		url,
 		method: 'POST',
 		headers,
 		body,

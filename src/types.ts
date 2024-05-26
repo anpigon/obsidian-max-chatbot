@@ -112,7 +112,7 @@ export type UseChatStreamHttpOptions = {
 };
 
 export type UseChatStreamEventHandlers = {
-	onMessageAdded: (message: UseChatStreamChatMessage) => unknown | Promise<unknown>;
+	onMessageAdded: (message: UseChatStreamChatMessage) => void | Promise<void>;
 };
 
 export type UseChatStreamInputMethod = {

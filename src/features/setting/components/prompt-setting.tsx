@@ -11,15 +11,15 @@ import {useTranslation} from 'react-i18next';
 export const PromptSetting = () => {
 	const {t} = useTranslation('settings');
 	const plugin = usePlugin();
-	const settings = plugin!.settings!;
+	const settings = plugin.settings!;
 
 	const [error, setError] = useState({promptFolderPath: false});
 	const [promptList, setPromptList] = useState<string[]>([]);
 	const [prompt, setPrompt] = useState('');
 
-	const loadPromptList = async () => {
+	const loadPromptList = () => {
 		const path = settings.prompts.promptFolderPath || DEFAULT_SETTINGS.prompts.promptFolderPath;
-		const promptFiles = plugin!.app.vault.getFiles().filter(file => file.parent?.path === path);
+		const promptFiles = plugin.app.vault.getFiles().filter(file => file.parent?.path === path);
 		promptFiles.sort((a, b) => a.name.localeCompare(b.name));
 		console.log('prompt files', promptFiles);
 
@@ -47,7 +47,7 @@ export const PromptSetting = () => {
 		settings.prompts.promptFolderPath = value ?? DEFAULT_SETTINGS.prompts.promptFolderPath;
 
 		if (value) {
-			const folderPath = cleanFolderPath(settings!.prompts.promptFolderPath);
+			const folderPath = cleanFolderPath(settings.prompts.promptFolderPath);
 
 			if (!validateFolderPath(folderPath)) {
 				setError({promptFolderPath: true});
@@ -59,7 +59,7 @@ export const PromptSetting = () => {
 			loadPromptList();
 		}
 
-		await plugin!.saveSettings();
+		await plugin.saveSettings();
 	};
 
 	return (

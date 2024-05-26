@@ -33,7 +33,7 @@ export class ChatbotView extends ItemView {
 		return 'MAX Chatbot view';
 	}
 
-	async onOpen(): Promise<void> {
+	async onOpen() {
 		this.root = createRoot(this.containerEl.children[1]);
 		this.root.render(
 			<React.StrictMode>
@@ -42,10 +42,12 @@ export class ChatbotView extends ItemView {
 				</AppContext.Provider>
 			</React.StrictMode>
 		);
+		return Promise.resolve();
 	}
 
 	async onClose() {
 		// Nothing to clean up.
 		this.root?.unmount();
+		return Promise.resolve();
 	}
 }

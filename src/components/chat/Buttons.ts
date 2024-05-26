@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {MarkdownRenderer, Modal, Notice, setIcon} from 'obsidian';
-import MAXPlugin, {currentActiveFile} from '@/main';
 import {ANTHROPIC_MODELS, OPEN_AI_MODELS} from '@/constants';
-import {activeEditor, filenameMessageHistoryJSON, lastCursorPosition, lastCursorPositionFile, messageHistory} from '@/views/chatbot-view';
+// Start of Selection
+import MAXPlugin, {currentActiveFile} from '@/main';
+import {MAXSettings} from '@/types';
+import {filenameMessageHistoryJSON} from '@/views/chatbot-view';
+import {MarkdownRenderer, Modal, Notice, setIcon} from 'obsidian';
 import {
-	fetchOpenAIAPIResponseStream,
-	fetchOpenAIAPIResponse,
+	fetchAnthropicResponse,
+	fetchGoogleGeminiResponse,
+	fetchMistralResponse,
+	fetchMistralResponseStream,
 	fetchOllamaResponse,
 	fetchOllamaResponseStream,
-	fetchAnthropicResponse,
+	fetchOpenAIAPIResponse,
+	fetchOpenAIAPIResponseStream,
+	fetchOpenRouterResponse,
+	fetchOpenRouterResponseStream,
 	fetchRESTAPIURLResponse,
 	fetchRESTAPIURLResponseStream,
-	fetchMistralResponseStream,
-	fetchMistralResponse,
-	fetchGoogleGeminiResponse,
-	fetchOpenRouterResponseStream,
-	fetchOpenRouterResponse,
 } from '../FetchModelResponse';
 import {getActiveFileContent} from '../editor/ReferenceCurrentNote';
-import {MAXSettings} from '@/types';
 
 export function regenerateUserButton(plugin: MAXPlugin, settings: MAXSettings) {
 	const regenerateButton = document.createElement('button');
@@ -281,7 +282,7 @@ export function displayBotEditButton(plugin: MAXPlugin, message: string) {
 
 			await MarkdownRenderer.render(plugin.app, message, messageBlock as HTMLElement, '/', plugin);
 
-			const copyCodeBlocks = messageBlock.querySelectorAll('.copy-code-button') as NodeListOf<HTMLElement>;
+			const copyCodeBlocks = messageBlock.querySelectorAll('.copy-code-button');
 			copyCodeBlocks.forEach(copyCodeBlock => {
 				copyCodeBlock.textContent = 'Copy';
 				setIcon(copyCodeBlock, 'copy');
@@ -316,7 +317,7 @@ export function displayBotEditButton(plugin: MAXPlugin, message: string) {
 
 			await MarkdownRenderer.render(plugin.app, message, messageBlock as HTMLElement, '/', plugin);
 
-			const copyCodeBlocks = messageBlock.querySelectorAll('.copy-code-button') as NodeListOf<HTMLElement>;
+			const copyCodeBlocks = messageBlock.querySelectorAll('.copy-code-button');
 			copyCodeBlocks.forEach(copyCodeBlock => {
 				copyCodeBlock.textContent = 'Copy';
 				setIcon(copyCodeBlock, 'copy');
@@ -449,7 +450,7 @@ export function displayTrashButton(plugin: MAXPlugin) {
                 `;
 
 				const confirmDeleteButton = modal.contentEl.querySelector('#confirmDelete');
-				confirmDeleteButton?.addEventListener('click', async function () {
+				confirmDeleteButton?.addEventListener('click', () => {
 					deleteMessage(plugin, index);
 					new Notice('Message deleted.');
 					// hideAllDropdowns();

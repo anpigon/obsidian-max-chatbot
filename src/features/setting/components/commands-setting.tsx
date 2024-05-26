@@ -6,7 +6,7 @@ import {Trans, useTranslation} from 'react-i18next';
 
 export const CommandsSetting = () => {
 	const plugin = usePlugin();
-	const settings = plugin!.settings!;
+	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 
 	const handleChangePromptSelectGenerateSystemRole: ChangeEventHandler<HTMLTextAreaElement> = async event => {
@@ -14,7 +14,7 @@ export const CommandsSetting = () => {
 
 		settings.editor.promptSelectGenerateSystemRole = value ?? DEFAULT_SETTINGS.editor.promptSelectGenerateSystemRole;
 
-		await plugin!.saveSettings();
+		await plugin.saveSettings();
 	};
 
 	return (
@@ -25,7 +25,7 @@ export const CommandsSetting = () => {
 				<textarea
 					name="promptSelectGenerateSystemRole"
 					placeholder="You are a helpful assistant."
-					defaultValue={settings!.editor.promptSelectGenerateSystemRole}
+					defaultValue={settings.editor.promptSelectGenerateSystemRole}
 					onChange={handleChangePromptSelectGenerateSystemRole}
 					className="w-full"
 				/>

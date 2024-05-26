@@ -28,7 +28,7 @@ interface UseChatMessage {
 }
 
 interface UseChatStreamEventHandlers {
-	onMessageAdded: (message: UseChatMessage) => unknown | Promise<unknown>;
+	onMessageAdded: (message: UseChatMessage) => any | Promise<any>;
 }
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';

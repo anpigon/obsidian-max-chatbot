@@ -178,10 +178,9 @@ export default class MAXPlugin extends Plugin {
 		currentActiveFile = this.app.workspace.getActiveFile();
 	}
 
-	async onunload() {
+	onunload() {
 		this.app.workspace.getLeavesOfType(VIEW_TYPE_CHATBOT).forEach(leaf => {
 			const maxView = leaf.view as ChatbotView;
-
 			if (maxView) {
 				this.saveSettings();
 			}
@@ -231,7 +230,7 @@ export default class MAXPlugin extends Plugin {
 	async saveSettings() {
 		const currentProfileFile = `${this.settings!.profiles.profileFolderPath}/${this.settings!.profiles.profile}`;
 		const currentProfile = this.app.vault.getAbstractFileByPath(currentProfileFile) as TFile;
-		updateFrontMatter(this, currentProfile);
+		await updateFrontMatter(this, currentProfile);
 		await this.saveData(this.settings);
 	}
 }
@@ -239,7 +238,7 @@ export default class MAXPlugin extends Plugin {
 export async function defaultFrontMatter(plugin: MAXPlugin, file: TFile) {
 	// Define a callback function to modify the frontmatter
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const setDefaultFrontMatter = async (frontmatter: any) => {
+	const setDefaultFrontMatter = (frontmatter: Record<string, any>) => {
 		// Add or modify properties in the frontmatter
 		frontmatter.model = DEFAULT_SETTINGS.general.model;
 		frontmatter.max_tokens = parseInt(DEFAULT_SETTINGS.general.maxTokens);
@@ -277,13 +276,13 @@ export async function defaultFrontMatter(plugin: MAXPlugin, file: TFile) {
 		console.error('Error processing frontmatter:', error);
 	}
 
-	plugin.app.vault.append(file, DEFAULT_SETTINGS.general.systemPrompt);
+	await plugin.app.vault.append(file, DEFAULT_SETTINGS.general.systemPrompt);
 }
 
 export async function updateSettingsFromFrontMatter(plugin: MAXPlugin, file: TFile) {
 	// 프론트메터를 수정하는 콜백 함수를 정의합니다.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const updateSettings = async (frontmatter: any) => {
+	const updateSettings = (frontmatter: any) => {
 		// 프론트메터에 속성 추가 또는 수정하기
 		if (!plugin.settings) return;
 		plugin.settings.general.model = frontmatter.model;
@@ -319,7 +318,7 @@ export async function updateSettingsFromFrontMatter(plugin: MAXPlugin, file: TFi
 		await plugin.app.fileManager.processFrontMatter(file, updateSettings, writeOptions);
 		const fileContent = (await plugin.app.vault.read(file)).replace(/^---\s*[\s\S]*?---/, '').trim();
 		plugin.settings!.general.systemPrompt = fileContent;
-		updateProfile(plugin, file);
+		await updateProfile(plugin, file);
 	} catch (error) {
 		console.error('Error processing frontmatter:', error);
 	}
@@ -328,10 +327,10 @@ export async function updateSettingsFromFrontMatter(plugin: MAXPlugin, file: TFi
 export async function updateFrontMatter(plugin: MAXPlugin, file: TFile) {
 	// Define a callback function to modify the frontmatter
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const modifyFrontMatter = async (frontmatter: any) => {
+	const modifyFrontMatter = (frontmatter: any) => {
 		if (!plugin.settings) return;
 		// Add or modify properties in the frontmatter
-		frontmatter.model = plugin.settings!.general.model;
+		frontmatter.model = plugin.settings.general.model;
 		frontmatter.max_tokens = parseInt(plugin.settings.general.maxTokens);
 		frontmatter.temperature = parseFloat(plugin.settings.general.temperature);
 		frontmatter.reference_current_note = plugin.settings.general.allowReferenceCurrentNote;
@@ -339,7 +338,7 @@ export async function updateFrontMatter(plugin: MAXPlugin, file: TFile) {
 		frontmatter.user_name = plugin.settings.appearance.userName;
 		frontmatter.chatbot_name = plugin.settings.appearance.chatbotName;
 		frontmatter.allow_header = plugin.settings.appearance.allowHeader;
-		frontmatter.prompt_select_generate_system_role = plugin.settings!.editor.promptSelectGenerateSystemRole;
+		frontmatter.prompt_select_generate_system_role = plugin.settings.editor.promptSelectGenerateSystemRole;
 		frontmatter.ollama_mirostat = plugin.settings.providers.OLLAMA.options.mirostat;
 		frontmatter.ollama_mirostat_eta = plugin.settings.providers.OLLAMA.options.mirostatEta;
 		frontmatter.ollama_mirostat_tau = plugin.settings.providers.OLLAMA.options.mirostatTau;
@@ -362,7 +361,7 @@ export async function updateFrontMatter(plugin: MAXPlugin, file: TFile) {
 
 	try {
 		await plugin.app.fileManager.processFrontMatter(file, modifyFrontMatter, writeOptions);
-		updateProfile(plugin, file);
+		await updateProfile(plugin, file);
 	} catch (error) {
 		console.error('Error processing frontmatter:', error);
 	}
@@ -371,7 +370,7 @@ export async function updateFrontMatter(plugin: MAXPlugin, file: TFile) {
 export async function updateProfile(plugin: MAXPlugin, file: TFile) {
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		await plugin.app.fileManager.processFrontMatter(file, (frontmatter: any) => {
+		await plugin.app.fileManager.processFrontMatter(file, (frontmatter: Record<string, any>) => {
 			plugin.settings!.general.model = frontmatter.model || DEFAULT_SETTINGS.general.model;
 
 			const modelName = document.querySelector('#modelName');
@@ -424,7 +423,7 @@ export async function updateProfile(plugin: MAXPlugin, file: TFile) {
 			}
 			frontmatter.user_name = plugin.settings!.appearance.userName;
 
-			const userNames = document.querySelectorAll('.userName') as NodeListOf<HTMLHeadingElement>;
+			const userNames = document.querySelectorAll('.userName');
 			userNames.forEach(userName => {
 				userName.textContent = plugin.settings!.appearance.userName;
 			});
@@ -437,7 +436,7 @@ export async function updateProfile(plugin: MAXPlugin, file: TFile) {
 			// frontmatter.chatbot_name = plugin.settings!.appearance.chatbotName;
 
 			const chatbotNameHeading = document.querySelector('#chatbotNameHeading') as HTMLHeadingElement;
-			const chatbotNames = document.querySelectorAll('.chatbotName') as NodeListOf<HTMLHeadingElement>;
+			const chatbotNames = document.querySelectorAll('.chatbotName');
 			if (chatbotNameHeading) {
 				chatbotNameHeading.textContent = plugin.settings!.appearance.chatbotName;
 			}
