@@ -1,12 +1,11 @@
-import {DataWriteOptions, Plugin, TFile} from 'obsidian';
-import {promptSelectGenerateCommand, renameTitleCommand} from './components/editor/EditorCommands';
+import merge from 'lodash/merge';
+import {DataWriteOptions, Plugin, TFile, WorkspaceLeaf} from 'obsidian';
 import {DEFAULT_SETTINGS} from './constants';
 import './i18n';
 import {MAXSettings} from './types';
 import Logger, {LogLvl} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
-import merge from 'lodash/merge';
 
 import './styles.css';
 
@@ -175,9 +174,9 @@ export default class MAXPlugin extends Plugin {
 		this.addSettingTab(new MAXSettingTab(this.app, this));
 	}
 
-	handleFileSwitch() {
-		currentActiveFile = this.app.workspace.getActiveFile();
-	}
+	// handleFileSwitch() {
+	// 	currentActiveFile = this.app.workspace.getActiveFile();
+	// }
 
 	onunload() {
 		this.app.workspace.getLeavesOfType(VIEW_TYPE_CHATBOT).forEach(leaf => {
@@ -189,38 +188,32 @@ export default class MAXPlugin extends Plugin {
 	}
 
 	async activateView() {
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_CHATBOT);
+		const {workspace} = this.app;
 
-		const rightLeaf = this.app.workspace.getRightLeaf(false);
-		await rightLeaf?.setViewState({
-			type: VIEW_TYPE_CHATBOT,
-			active: true,
-		});
+		let leaf: WorkspaceLeaf | null = null;
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_CHATBOT);
 
-		this.app.workspace.revealLeaf(this.app.workspace.getLeavesOfType(VIEW_TYPE_CHATBOT)[0]);
-
-		// Focus on the textarea
-		const textarea = document.querySelector('.chatbox textarea') as HTMLTextAreaElement;
-
-		if (textarea) {
-			textarea.style.opacity = '0';
-			textarea.style.transition = 'opacity 1s ease-in-out';
-
-			setTimeout(() => {
-				textarea.focus();
-				textarea.style.opacity = '1';
-			}, 50);
+		if (leaves.length > 0) {
+			// 이미 존재하는 리프 사용
+			leaf = leaves[0];
+		} else {
+			// 워크스페이스에서 뷰를 찾을 수 없으므로
+			// 새로운 리프를 우측 사이드바에 생성
+			leaf = workspace.getRightLeaf(false);
+			await leaf?.setViewState({type: VIEW_TYPE_CHATBOT, active: true});
 		}
 
-		this.app.workspace.revealLeaf(this.app.workspace.getLeavesOfType(VIEW_TYPE_CHATBOT)[0]);
+		// 리프(leaf)가 접힌 사이드바에 있는 경우 "표시(Reveal)" 합니다.
+		if (leaf) workspace.revealLeaf(leaf);
 
+		/* 
 		const messageContainer = document.querySelector('#messageContainer');
 		if (messageContainer) {
 			messageContainer.scroll({
 				top: messageContainer.scrollHeight,
 				behavior: 'smooth',
 			});
-		}
+		} */
 	}
 
 	async loadSettings() {

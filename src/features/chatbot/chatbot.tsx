@@ -14,6 +14,7 @@ import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
 import {useGetAiModels} from './hooks/use-get-ai-models';
 import {useLLM} from './hooks/use-llm';
+import useOnceEffect from '@/hooks/useOnceEffect';
 
 export const Chatbot: React.FC = () => {
 	const app = useApp();
@@ -49,8 +50,17 @@ export const Chatbot: React.FC = () => {
 	});
 
 	const scrollToBottom = () => {
-		messageContainerRef.current?.scrollTo(0, messageContainerRef.current.scrollHeight);
+		// messageContainerRef.current?.scrollTo(0, messageContainerRef.current.scrollHeight);
+		messageContainerRef.current?.scroll({
+			top: messageContainerRef.current?.scrollHeight,
+			behavior: 'smooth',
+		});
 	};
+
+	useOnceEffect(() => {
+		chatBoxRef.current?.focus();
+		scrollToBottom();
+	});
 
 	useEffect(() => {
 		messageEndRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
