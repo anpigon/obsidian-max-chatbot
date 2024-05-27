@@ -30,7 +30,7 @@ export class ChatbotView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'MAX Chatbot view';
+		return 'MAX Chatbot';
 	}
 
 	async onOpen(): Promise<void> {
