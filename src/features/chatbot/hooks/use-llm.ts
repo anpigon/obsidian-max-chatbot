@@ -1,16 +1,16 @@
-import { LLM_PROVIDERS } from '@/constants';
-import { usePlugin } from '@/hooks/useApp';
+import {LLM_PROVIDERS} from '@/constants';
+import {usePlugin} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
-import { ProviderSettings } from '@/types';
+import {ProviderSettings} from '@/types';
 import Logger from '@/utils/logging';
-import { ChatOllama } from '@langchain/community/chat_models/ollama';
-import { BaseLanguageModelInput } from '@langchain/core/language_models/base';
-import { AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage } from '@langchain/core/messages';
-import { StringOutputParser } from '@langchain/core/output_parsers';
-import { Runnable, RunnableConfig } from '@langchain/core/runnables';
-import { ChatOpenAI } from '@langchain/openai';
-import { TFile, getFrontMatterInfo } from 'obsidian';
-import { useState, useTransition } from 'react';
+import {ChatOllama} from '@langchain/community/chat_models/ollama';
+import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
+import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
+import {StringOutputParser} from '@langchain/core/output_parsers';
+import {Runnable, RunnableConfig} from '@langchain/core/runnables';
+import {ChatOpenAI} from '@langchain/openai';
+import {TFile, getFrontMatterInfo} from 'obsidian';
+import {useState, useTransition} from 'react';
 
 interface UseLLMProps {
 	provider: LLM_PROVIDERS;
@@ -137,9 +137,10 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 			await handlers?.onMessageAdded?.({...aiMessage, content: response});
 		} catch (error) {
-			if (error instanceof DOMException && error.name === 'AbortError') {
+			if (error instanceof Error && error.message === 'AbortError') {
 				// Request was aborted, do not show the notice
 				setMessages(messages => {
+					if (messages.length === 0) return messages;
 					const latestMessage = messages[messages.length - 1];
 					if (latestMessage.role === 'ai' && latestMessage.content === '') {
 						return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + ' (Request aborted)'}];

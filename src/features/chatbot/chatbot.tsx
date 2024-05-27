@@ -2,7 +2,7 @@ import {DEFAULT_SETTINGS} from '@/constants';
 import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import {Notice} from 'obsidian';
 import type {ChangeEvent, KeyboardEvent} from 'react';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
 import {BotMessage} from './components/bot-message';
 import {ChatBox} from './components/chat-box';
@@ -21,6 +21,7 @@ export const Chatbot: React.FC = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const {t} = useTranslation('chatbot');
+	const [, startTransition] = useTransition();
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const chatBoxRef = useRef<HTMLTextAreaElement>(null);
@@ -37,7 +38,7 @@ export const Chatbot: React.FC = () => {
 
 	const defaultSystemPrompt = t('You are a helpful assistant');
 
-	const {messages, isStreaming, controller, setMessage, processMessage} = useLLM({
+	const {messages, setMessages, isStreaming, controller, setMessage, processMessage} = useLLM({
 		provider: currentModel.provider,
 		model: currentModel.model,
 		systemPrompt: defaultSystemPrompt,
@@ -123,6 +124,15 @@ export const Chatbot: React.FC = () => {
 					settings.general.provider = newProvider;
 					settings.general.model = newModel;
 					plugin.saveSettings();
+				}}
+				onStartNewChat={() => {
+					controller?.abort();
+					startTransition(() => {
+						setMessages([]);
+						setMessage('');
+						resetInputForm();
+						scrollToBottom();
+					});
 				}}
 			/>
 

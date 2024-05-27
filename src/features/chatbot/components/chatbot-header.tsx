@@ -2,6 +2,9 @@ import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/constants';
 import {PropsWithChildren} from 'react';
 import {ProviderModels} from '../hooks/use-get-ai-models';
+import {Button} from './button';
+import {IconButton} from '@/components/buttons/icon-button';
+import {t} from 'i18next';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;
@@ -12,9 +15,10 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 		model: string;
 	};
 	onChangeModel: (provider: LLM_PROVIDERS, modelName: string) => void;
+	onStartNewChat: () => void;
 }
 
-export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel}) => {
+export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, onStartNewChat}) => {
 	const handleChangeModel: React.ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
 		if (value) {
@@ -24,7 +28,7 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 	};
 
 	return (
-		<div className="py-4 px-0 text-center *:text-interactive-accent">
+		<div className="py-4 px-0 text-center *:text-interactive-accent relative">
 			<h2 className="mt-0 mb-0 p-0 text-xl w-full">{botName}</h2>
 			<Dropdown
 				className="h-fit px-0 py-1 shadow-none hover:shadow-none text-center text-xs mr-1 pr-4"
@@ -50,6 +54,7 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 						return null;
 					})}
 			</Dropdown>
+			<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={onStartNewChat} />
 		</div>
 	);
 };
