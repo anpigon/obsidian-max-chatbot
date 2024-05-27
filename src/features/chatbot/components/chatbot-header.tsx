@@ -6,6 +6,7 @@ import {ProviderModels} from '../hooks/use-get-ai-models';
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;
 	providers: ProviderModels[];
+	disabled: boolean;
 	currentModel: {
 		provider: LLM_PROVIDERS;
 		model: string;
@@ -13,7 +14,7 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 	onChangeModel: (provider: LLM_PROVIDERS, modelName: string) => void;
 }
 
-export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers, currentModel, onChangeModel}) => {
+export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel}) => {
 	const handleChangeModel: React.ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
 		if (value) {
@@ -22,7 +23,6 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 		}
 	};
 
-
 	return (
 		<div className="py-4 px-0 text-center *:text-interactive-accent">
 			<h2 className="mt-0 mb-0 p-0 text-xl w-full">{botName}</h2>
@@ -30,6 +30,7 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 				className="h-fit px-0 py-1 shadow-none hover:shadow-none text-center text-xs mr-1 pr-4"
 				value={`${currentModel.provider}/${currentModel.model}`}
 				onChange={handleChangeModel}
+				disabled={disabled}
 			>
 				{providers
 					?.filter(({provider, models}) => models.length > 0)

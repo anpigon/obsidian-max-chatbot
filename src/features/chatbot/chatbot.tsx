@@ -14,7 +14,6 @@ import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
 import {useGetAiModels} from './hooks/use-get-ai-models';
 import {useLLM} from './hooks/use-llm';
-import {useLLMSetting} from './hooks/use-llm-setting';
 
 export const Chatbot: React.FC = () => {
 	const app = useApp();
@@ -32,7 +31,6 @@ export const Chatbot: React.FC = () => {
 
 	const providers = useGetAiModels(settings);
 	const [currentModel, setCurrentModel] = useCurrentModel(settings);
-	const llmOptions = useLLMSetting(settings, currentModel.provider);
 
 	const {allowReferenceCurrentNote} = useChatbotState();
 
@@ -109,6 +107,7 @@ export const Chatbot: React.FC = () => {
 				providers={providers}
 				botName={chatbotName}
 				currentModel={currentModel}
+				disabled={isStreaming}
 				onChangeModel={(newProvider, newModel) => {
 					setCurrentModel(newProvider, newModel);
 					settings.general.provider = newProvider;
