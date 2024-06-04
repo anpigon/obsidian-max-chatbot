@@ -9,7 +9,7 @@ import {MAXSettingTab} from './views/setting-view';
 
 import './styles.css';
 
-if (Platform.isMobile) {
+if (Platform.isMobile || Platform.isMobileApp) {
 	(window as any)['process'] = {env: {NODE_ENV: 'production'}};
 }
 
