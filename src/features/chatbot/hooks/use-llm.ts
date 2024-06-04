@@ -12,6 +12,7 @@ import {ChatOpenAI} from '@langchain/openai';
 import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
 import {TFile, getFrontMatterInfo} from 'obsidian';
 import {useState, useTransition} from 'react';
+import {ChatGroq} from '@langchain/groq';
 
 interface UseLLMProps {
 	provider: LLM_PROVIDERS;
@@ -40,6 +41,8 @@ const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderS
 		return new ChatOllama({...options, model, baseUrl: options.baseUrl, verbose});
 	} else if (provider === LLM_PROVIDERS.GOOGLE_GEMINI) {
 		return new ChatGoogleGenerativeAI({...options, model, baseUrl: options.baseUrl, verbose});
+	} else if (provider === LLM_PROVIDERS.GROQ) {
+		return new ChatGroq({...options, model, verbose});
 	}
 	return new ChatOpenAI({model, apiKey: options.apiKey || 'api-key', configuration: {baseURL: options.baseUrl}, verbose});
 };
