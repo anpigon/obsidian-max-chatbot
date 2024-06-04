@@ -9,6 +9,7 @@ import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} f
 import {StringOutputParser} from '@langchain/core/output_parsers';
 import {Runnable, RunnableConfig} from '@langchain/core/runnables';
 import {ChatOpenAI} from '@langchain/openai';
+import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
 import {TFile, getFrontMatterInfo} from 'obsidian';
 import {useState, useTransition} from 'react';
 
@@ -37,6 +38,8 @@ const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderS
 	const verbose = false;
 	if (provider === LLM_PROVIDERS.OLLAMA) {
 		return new ChatOllama({...options, model, baseUrl: options.baseUrl, verbose});
+	} else if (provider === LLM_PROVIDERS.GOOGLE_GEMINI) {
+		return new ChatGoogleGenerativeAI({...options, model, baseUrl: options.baseUrl, verbose});
 	}
 	return new ChatOpenAI({model, apiKey: options.apiKey || 'api-key', configuration: {baseURL: options.baseUrl}, verbose});
 };
