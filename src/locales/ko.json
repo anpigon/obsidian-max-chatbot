@@ -3,7 +3,9 @@
 		"You are a helpful assistant": "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘.",
 		"Refer to the current note": "현재 노트 참조",
 		"What can I help you with?" : "무엇을 도와드릴까요?",
-		"Start new chat": "새 채팅 시작"
+		"Start new chat": "새 채팅 시작",
+		"Text copied to clipboard": "클립보드에 텍스트가 복사되었습니다.",
+		"Failed to copy text to clipboard": "클립보드에 텍스트를 복사하지 못했습니다."
 	},
 	"settings": {
 		"Profiles": "프로필 설정",
