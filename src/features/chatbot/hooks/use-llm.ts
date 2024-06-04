@@ -24,6 +24,7 @@ interface UseChatMessage {
 	role: MessageType;
 	content: string;
 	id: string;
+	showLoading?: boolean;
 }
 
 interface UseChatStreamEventHandlers {
@@ -77,7 +78,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 	const prepareMessages = (message: string) => {
 		const humanMessage = addMessage({content: message ?? message, role: 'human'});
-		const aiMessage = addMessage({content: '', role: 'ai'});
+		const aiMessage = addMessage({content: '', role: 'ai', showLoading: true});
 		return {humanMessage, aiMessage};
 	};
 
@@ -158,6 +159,16 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 			// new Notice('An error occurred while fetching the response. Please try again later.');
 		} finally {
 			setIsStreaming(false);
+			setMessages(messages => {
+				const latestMessage = messages[messages.length - 1];
+				return [
+					...messages.slice(0, -1),
+					{
+						...latestMessage,
+						showLoading: false,
+					},
+				];
+			});
 		}
 	};
 
@@ -191,7 +202,13 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		startTransition(() => {
 			setMessages(messages => {
 				const latestMessage = messages[messages.length - 1];
-				return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + message}];
+				return [
+					...messages.slice(0, -1),
+					{
+						...latestMessage,
+						content: latestMessage.content + message,
+					},
+				];
 			});
 		});
 	};

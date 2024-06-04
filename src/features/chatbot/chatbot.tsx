@@ -1,21 +1,19 @@
-import {DEFAULT_SETTINGS} from '@/constants';
-import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
-import {Notice} from 'obsidian';
-import type {ChangeEvent, KeyboardEvent} from 'react';
-import {useEffect, useRef, useTransition} from 'react';
-import {useTranslation} from 'react-i18next';
-import {BotMessage} from './components/bot-message';
-import {ChatBox} from './components/chat-box';
-import {ChatbotContainer} from './components/chatbot-container';
-import {ChatbotHeader} from './components/chatbot-header';
-import {MessagesContainer} from './components/messages-container';
-import {UserMessage} from './components/user-message';
-import {useChatbotState} from './context';
-import {useCurrentModel} from './hooks/use-current-model';
-import {useGetAiModels} from './hooks/use-get-ai-models';
-import {useLLM} from './hooks/use-llm';
+import { DEFAULT_SETTINGS } from '@/constants';
+import { useApp, usePlugin, useSettings } from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
-import {Message} from './components/message';
+import { Notice } from 'obsidian';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import { useEffect, useRef, useTransition } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ChatBox } from './components/chat-box';
+import { ChatbotContainer } from './components/chatbot-container';
+import { ChatbotHeader } from './components/chatbot-header';
+import { Message } from './components/message';
+import { MessagesContainer } from './components/messages-container';
+import { useChatbotState } from './context';
+import { useCurrentModel } from './hooks/use-current-model';
+import { useGetAiModels } from './hooks/use-get-ai-models';
+import { useLLM } from './hooks/use-llm';
 
 export const Chatbot: React.FC = () => {
 	const app = useApp();
@@ -142,7 +140,7 @@ export const Chatbot: React.FC = () => {
 			/>
 
 			<MessagesContainer ref={messageContainerRef}>
-				{messages.map(({role, content, id}, i) =>
+				{messages.map(({role, content, id, showLoading}, i) =>
 					role === 'ai' ? (
 						<Message
 							key={id}
@@ -150,7 +148,7 @@ export const Chatbot: React.FC = () => {
 							type="bot"
 							name={chatbotName}
 							message={content}
-							showLoading={isStreaming}
+							showLoading={showLoading}
 							onDeleteMessage={handleDeleteMessage}
 						/>
 					) : (
