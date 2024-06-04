@@ -42,7 +42,7 @@
 		"Enter your Ollama Base Url using": "Enter your Ollama Base Url using <a>Ollama</a>",
 		"Run the local Ollama server by running this in your terminal": "Additional setup required: <a>[Instructions]</a>",
 		"Allow Stream": "Allow Stream",
-		"Allow the model to stream responses.": "Allow Ollama models to stream response.",
+		"Allow the model to stream responses.": "Allow {{name}} models to stream response.",
 		"Ollama Advanced Settings": "Ollama Advanced Settings",
 		"Language models": "Language models",
 		"Model List": "Model List",
@@ -69,6 +69,9 @@
 		"Enter your REST API URL": "Enter your REST API URL.",
 		"OpenAI": "OpenAI",
 		"OpenAI API Key": "OpenAI API Key",
-		"Insert your OpenAI API Key": "Insert your OpenAI API Key."
+		"Insert your OpenAI API Key": "Insert your OpenAI API Key.",
+		"Upstage": "Upstage",
+		"Upstage API Key": "Upstage API Key",
+		"Insert your Upstage API Key": "Insert your Upstage API Key."
 	}
 }

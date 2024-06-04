@@ -68,6 +68,9 @@
 		"Enter your REST API URL": "REST API URL을 입력하세요.",
 		"OpenAI": "OpenAI",
 		"OpenAI API Key": "OpenAI API Key",
-		"Insert your OpenAI API Key": "OpenAI API Key를 입력하세요."
+		"Insert your OpenAI API Key": "OpenAI API Key를 입력하세요.",
+		"Upstage": "Upstage",
+		"Upstage API Key": "Upstage API Key",
+		"Insert your Upstage API Key": "Upstage API Key를 입력하세요."
 	}
 }
