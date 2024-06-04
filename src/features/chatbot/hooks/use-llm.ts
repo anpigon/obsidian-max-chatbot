@@ -116,7 +116,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		const systemPromptTemplate: UseChatMessage = {
 			content: (settings.general.systemPrompt || systemPrompt) + currentNote,
 			role: 'system',
-			id: Date.now().toString(36),
+			id: Date.now().toString(36) + '-system',
 		};
 
 		const messageHistory = createMessageHistory([systemPromptTemplate, ...messages], message);
@@ -180,7 +180,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	};
 
 	const addMessage = (message: Omit<UseChatMessage, 'id'>) => {
-		const messageWithId = {...message, id: Date.now().toString(36)};
+		const messageWithId = {...message, id: Date.now().toString(36) + '-' + message.role};
 		startTransition(() => {
 			setMessages(messages => [...messages, messageWithId]);
 		});

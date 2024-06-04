@@ -8,13 +8,14 @@ import {BotMessage} from './components/bot-message';
 import {ChatBox} from './components/chat-box';
 import {ChatbotContainer} from './components/chatbot-container';
 import {ChatbotHeader} from './components/chatbot-header';
-import {MessageContainer} from './components/message-container';
+import {MessagesContainer} from './components/messages-container';
 import {UserMessage} from './components/user-message';
 import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
 import {useGetAiModels} from './hooks/use-get-ai-models';
 import {useLLM} from './hooks/use-llm';
 import useOnceEffect from '@/hooks/useOnceEffect';
+import {Message} from './components/message';
 
 export const Chatbot: React.FC = () => {
 	const app = useApp();
@@ -112,6 +113,10 @@ export const Chatbot: React.FC = () => {
 		}
 	};
 
+	const handleDeleteMessage = (id: string) => {
+		setMessages(messages.filter(message => message.id !== id));
+	};
+
 	return (
 		<ChatbotContainer>
 			<ChatbotHeader
@@ -136,12 +141,24 @@ export const Chatbot: React.FC = () => {
 				}}
 			/>
 
-			<MessageContainer ref={messageContainerRef}>
-				{messages.map(({role, content}, i) =>
-					role === 'ai' ? <BotMessage key={i} name={chatbotName} message={content} /> : <UserMessage key={i} username={username} message={content} />
+			<MessagesContainer ref={messageContainerRef}>
+				{messages.map(({role, content, id}, i) =>
+					role === 'ai' ? (
+						<Message
+							key={id}
+							id={id}
+							type="bot"
+							name={chatbotName}
+							message={content}
+							showLoading={isStreaming}
+							onDeleteMessage={handleDeleteMessage}
+						/>
+					) : (
+						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={handleDeleteMessage} />
+					)
 				)}
 				<div ref={messageEndRef} />
-			</MessageContainer>
+			</MessagesContainer>
 
 			<form ref={formRef}>
 				<ChatBox

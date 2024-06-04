@@ -11,7 +11,7 @@ export const MISTRAL_BASE_URL = 'https://api.mistral.ai/v1';
 export const OPEN_ROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 
 export const ANTHROPIC_MODELS = ['claude-instant-1.2', 'claude-2.0', 'claude-2.1', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229'];
-export const OPEN_AI_MODELS = ['gpt-3.5-turbo', 'gpt-3.5-turbo-1106', 'gpt-4', 'gpt-4-turbo-preview'];
+export const OPEN_AI_MODELS = ['gpt-3.5-turbo', 'gpt-4o', 'gpt-4'];
 
 export const enum LLM_PROVIDERS {
 	SIONIC_AI = 'SIONIC_AI',
