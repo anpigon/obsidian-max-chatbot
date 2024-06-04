@@ -61,12 +61,13 @@ export const GoogleSetting = () => {
 		setIsLoading(true);
 
 		try {
-			const models = await fetchGoogleGeminiModels({
-				apiKey,
-			});
-			setIsConnected(true);
-			providerSettings.models = models;
+			const models = await fetchGoogleGeminiModels({apiKey});
+			providerSettings.models = models
+				.map((model: {name: string}) => model.name)
+				.filter((model: string) => model.startsWith('models/gemini-') && (model.endsWith('-pro') || model.endsWith('-flash'))).map((model: string) => model.replace('models/', ''));
+			Logger.info('Google Gemini Models:', providerSettings.models);
 			saveSettings();
+			setIsConnected(true);
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				Logger.error(err);

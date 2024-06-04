@@ -1,7 +1,6 @@
 import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
 import {ProviderSettings} from '@/types';
 import {requestJson} from '@/utils/http';
-import Logger from '@/utils/logging';
 import {OpenAI} from 'openai';
 
 export async function requestOllamaModels(baseUrl: string) {
@@ -84,19 +83,21 @@ export async function fetchRestApiModels({baseUrl, apiKey}: ProviderSettings) {
 
 // Anthropic API models are static. No need to fetch them.
 
+interface GoogleGeminiModel {
+	description: string;
+	displayName: string;
+	inputTokenLimit: number;
+	name: string;
+	outputTokenLimit: number;
+	supportedGenerationMethods: string[];
+	temperature: number;
+	topP: number;
+	version: string;
+}
+
 export async function fetchGoogleGeminiModels({apiKey}: Pick<ProviderSettings, 'apiKey'>) {
-	const jsonData = await requestJson(`${GOOGLE_GEMINI_BASE_URL}/models?key=${apiKey}`);
-
-	// Check if the response is valid and has data
-	if (jsonData?.models) {
-		const models = jsonData.models
-			.map((model: {name: string}) => model.name)
-			.filter((model: string) => model.startsWith('models/gemini-') && (model.endsWith('-pro') || model.endsWith('-flash')));
-		Logger.info('Google Gemini Models:', models);
-		return models;
-	}
-
-	return [];
+	const jsonData = await requestJson<{models: GoogleGeminiModel[]}>(`${GOOGLE_GEMINI_BASE_URL}/models?key=${apiKey}`);
+	return jsonData.models;
 }
 
 export async function fetchMistralModels({apiKey}: ProviderSettings) {
