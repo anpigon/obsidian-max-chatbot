@@ -1,4 +1,4 @@
-import {GOOGLE_GEMINI_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
+import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
 import {ProviderSettings} from '@/types';
 import {requestJson} from '@/utils/http';
 import Logger from '@/utils/logging';
@@ -151,4 +151,23 @@ export async function fetchOpenRouterModels({baseUrl, apiKey}: ProviderSettings)
 	}
 
 	return [];
+}
+
+interface GroqModel {
+	id: string;
+	object: string;
+	created: number;
+	context_window: number;
+	owned_by: string;
+	active: true;
+}
+
+export async function fetchGroqModels({apiKey}: Pick<ProviderSettings, 'apiKey'>) {
+	const jsonData = await requestJson<{
+		object: 'list';
+		data: GroqModel[];
+	}>(`${GROQ_BASE_URL}/models`, {
+		headers: {Authorization: `Bearer ${apiKey}`},
+	});
+	return jsonData.data;
 }

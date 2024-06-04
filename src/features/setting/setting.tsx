@@ -13,6 +13,7 @@ import {CommandsSetting} from './components/commands-setting';
 import {GeneralSetting} from './components/general-setting';
 import { UpstageSetting } from './components/upstage-setting';
 import { GoogleSetting } from './components/google-setting';
+import { GroqSetting } from './components/groq-setting';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
@@ -34,6 +35,7 @@ export const Setting = () => {
 			<RestApiSetting />
 			<OpenAiSetting />
 			<GoogleSetting />
+			<GroqSetting />
 			<UpstageSetting />
 
 			{/* etc settings */}
