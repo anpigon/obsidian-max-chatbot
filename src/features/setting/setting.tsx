@@ -12,6 +12,7 @@ import {ChatHistorySetting} from './components/chat-history-setting';
 import {CommandsSetting} from './components/commands-setting';
 import {GeneralSetting} from './components/general-setting';
 import { UpstageSetting } from './components/upstage-setting';
+import { GoogleSetting } from './components/google-setting';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
@@ -32,6 +33,7 @@ export const Setting = () => {
 			<LMStudioSetting />
 			<RestApiSetting />
 			<OpenAiSetting />
+			<GoogleSetting />
 			<UpstageSetting />
 
 			{/* etc settings */}

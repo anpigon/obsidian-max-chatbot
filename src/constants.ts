@@ -6,7 +6,7 @@ export const SIONIC_AI_BASE_URL = 'http://sionic.chat:8001/v1';
 export const OLLAMA_BASE_URL = 'http://localhost:11434';
 export const LM_STUDIO_BASE_URL = 'http://localhost:1234/v1';
 export const OPEN_AI_BASE_URL = 'https://api.openai.com/v1';
-export const GOOGLE_GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+export const GOOGLE_GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1';
 export const MISTRAL_BASE_URL = 'https://api.mistral.ai/v1';
 export const OPEN_ROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 export const UPSTAGE_BASE_URL = 'https://api.upstage.ai/v1/solar';
@@ -109,7 +109,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		[LLM_PROVIDERS.UPSTAGE]: {
 			enable: false,
 			apiKey: '',
-			baseUrl: 'https://api.upstage.ai/v1/solar',
+			baseUrl: UPSTAGE_BASE_URL,
 			allowStream: true,
 			models: [],
 		},
@@ -124,28 +124,28 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 			enable: false,
 			apiKey: '',
 			baseUrl: '',
-			allowStream: false,
+			allowStream: true,
 			models: [],
 		},
 		[LLM_PROVIDERS.GOOGLE_GEMINI]: {
 			enable: false,
 			apiKey: '',
-			baseUrl: '',
-			allowStream: false,
+			baseUrl: GOOGLE_GEMINI_BASE_URL,
+			allowStream: true,
 			models: [],
 		},
 		[LLM_PROVIDERS.GROQ]: {
 			enable: false,
 			apiKey: '',
 			baseUrl: '',
-			allowStream: false,
+			allowStream: true,
 			models: [],
 		},
 		[LLM_PROVIDERS.MISTRAL]: {
 			enable: false,
 			apiKey: '',
 			baseUrl: '',
-			allowStream: false,
+			allowStream: true,
 			models: [],
 		},
 		[LLM_PROVIDERS.OPEN_ROUTER]: {

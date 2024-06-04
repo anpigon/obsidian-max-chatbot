@@ -72,6 +72,9 @@
 		"Insert your OpenAI API Key": "Insert your OpenAI API Key.",
 		"Upstage": "Upstage",
 		"Upstage API Key": "Upstage API Key",
-		"Insert your Upstage API Key": "Insert your Upstage API Key."
+		"Insert your Upstage API Key": "Insert your Upstage API Key.",
+		"Google Gemini": "Google Gemini",
+		"Provider API Key": "{{name}} API Key",
+		"Insert your provider API Key": "Insert your {{name}} API Key."
 	}
 }

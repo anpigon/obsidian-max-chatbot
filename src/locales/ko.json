@@ -71,6 +71,9 @@
 		"Insert your OpenAI API Key": "OpenAI API Key를 입력하세요.",
 		"Upstage": "Upstage",
 		"Upstage API Key": "Upstage API Key",
-		"Insert your Upstage API Key": "Upstage API Key를 입력하세요."
+		"Insert your Upstage API Key": "Upstage API Key를 입력하세요.",
+		"Google Gemini": "Google Gemini",
+		"Provider API Key": "{{name}} API Key",
+		"Insert your provider API Key": "{{name}} API Key를 입력하세요."
 	}
 }
