@@ -37,14 +37,23 @@ const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
 const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
 	const verbose = false;
-	if (provider === LLM_PROVIDERS.OLLAMA) {
-		return new ChatOllama({...options, model, baseUrl: options.baseUrl, verbose});
-	} else if (provider === LLM_PROVIDERS.GOOGLE_GEMINI) {
-		return new ChatGoogleGenerativeAI({...options, model, baseUrl: options.baseUrl, verbose});
-	} else if (provider === LLM_PROVIDERS.GROQ) {
-		return new ChatGroq({...options, model, verbose});
+	const commonOptions = { ...options, model, verbose };
+
+	switch (provider) {
+		case LLM_PROVIDERS.OLLAMA:
+			return new ChatOllama({ ...commonOptions, baseUrl: options.baseUrl });
+		case LLM_PROVIDERS.GOOGLE_GEMINI:
+			return new ChatGoogleGenerativeAI({ ...commonOptions, baseUrl: options.baseUrl });
+		case LLM_PROVIDERS.GROQ:
+			return new ChatGroq(commonOptions);
+		default:
+			return new ChatOpenAI({
+				model,
+				apiKey: options.apiKey || 'api-key',
+				configuration: { baseURL: options.baseUrl },
+				verbose
+			});
 	}
-	return new ChatOpenAI({model, apiKey: options.apiKey || 'api-key', configuration: {baseURL: options.baseUrl}, verbose});
 };
 
 const createMessageHistory = (messages: UseChatMessage[], message: string) => {
