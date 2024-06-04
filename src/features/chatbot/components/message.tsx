@@ -5,11 +5,12 @@ import {IconCopy} from '@/components/icons/icon-copy';
 import {IconEdit} from '@/components/icons/icon-edit';
 import {IconTrash} from '@/components/icons/icon-trash';
 
+import {t} from 'i18next';
+import {Notice} from 'obsidian';
+import {useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import {Button} from './button';
 import {Loading} from './loading';
-import {Notice} from 'obsidian';
-import { t } from 'i18next';
 
 interface MessageProps {
 	id: string;
@@ -18,10 +19,12 @@ interface MessageProps {
 	message: React.ReactNode;
 	showLoading?: boolean;
 	onDeleteMessage: (id: string) => void;
+	onEditMessage: (id: string, message: string) => void;
 }
 
-export const Message: React.FC<MessageProps> = ({name, message, onDeleteMessage, id, type, showLoading = false}) => {
+export const Message: React.FC<MessageProps> = ({id, type, name, message, showLoading = false, onDeleteMessage, onEditMessage}) => {
 	const [copiedText, copy] = useCopyToClipboard();
+	const [editing, setEditing] = useState(false);
 
 	const handleCopy = async () => {
 		try {
@@ -31,6 +34,14 @@ export const Message: React.FC<MessageProps> = ({name, message, onDeleteMessage,
 			console.error(error);
 			new Notice(t('Failed to copy text to clipboard'));
 		}
+	};
+
+	const handleEdit: React.FormEventHandler<HTMLFormElement> = event => {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
+		const message = form.get('message')?.toString() ?? '';
+		setEditing(false);
+		onEditMessage(id, message);
 	};
 
 	return (
@@ -48,10 +59,10 @@ export const Message: React.FC<MessageProps> = ({name, message, onDeleteMessage,
 				{!showLoading && (
 					<div data-component="buttonContainer" className="invisible group-hover:visible m-0 flex justify-between items-center">
 						<Button title="regenerate" className="invisible opacity-0"></Button>
-						<Button title="edit">
+						<Button title="edit" onClick={() => setEditing(true)}>
 							<IconEdit />
 						</Button>
-						<Button title="copy" onClick={handleCopy}>
+						<Button title="copy" onClick={() => handleCopy()}>
 							<IconCopy />
 						</Button>
 						<Button title="trash" onClick={() => onDeleteMessage(id)}>
@@ -60,7 +71,23 @@ export const Message: React.FC<MessageProps> = ({name, message, onDeleteMessage,
 					</div>
 				)}
 			</div>
-			<div className="m-0 whitespace-pre-wrap break-words *:m-0 *:leading-6 peer">{message}</div>
+			<div className="m-0 whitespace-pre-wrap break-words *:m-0 *:leading-6 peer">
+				{editing ? (
+					<form onSubmit={handleEdit}>
+						<textarea name="message" className="w-full h-20" defaultValue={message?.toString()}></textarea>
+						<div className="flex justify-end gap-1">
+							<Button type="button" title="cancel" onClick={() => setEditing(false)} className="w-fit">
+								{t('Cancel')}
+							</Button>
+							<Button type="submit" title="save" className="w-fit">
+								{t('Save')}
+							</Button>
+						</div>
+					</form>
+				) : (
+					message
+				)}
+			</div>
 			{showLoading && <Loading className="hidden peer-empty:block" />}
 		</div>
 	);

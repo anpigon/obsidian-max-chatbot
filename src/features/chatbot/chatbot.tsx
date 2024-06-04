@@ -115,6 +115,14 @@ export const Chatbot: React.FC = () => {
 		setMessages(messages.filter(message => message.id !== id));
 	};
 
+	const handleEditMessage = (id: string, message: string) => {
+		const messageToEdit = messages.find(m => m.id === id);
+		if (messageToEdit) {
+			messageToEdit.content = message;
+			setMessages([...messages]);
+		}
+	}
+
 	return (
 		<ChatbotContainer>
 			<ChatbotHeader
@@ -150,9 +158,11 @@ export const Chatbot: React.FC = () => {
 							message={content}
 							showLoading={showLoading}
 							onDeleteMessage={handleDeleteMessage}
+							onEditMessage={handleEditMessage}
 						/>
 					) : (
-						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={handleDeleteMessage} />
+						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={handleDeleteMessage}
+						onEditMessage={handleEditMessage} />
 					)
 				)}
 				<div ref={messageEndRef} />
