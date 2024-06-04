@@ -77,7 +77,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	const outputParser = new StringOutputParser();
 
 	const prepareMessages = (message: string) => {
-		const humanMessage = addMessage({content: message ?? message, role: 'human'});
+		const humanMessage = addMessage({content: message, role: 'human'});
 		const aiMessage = addMessage({content: '', role: 'ai', showLoading: true});
 		return {humanMessage, aiMessage};
 	};
@@ -87,7 +87,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 			const title = app.metadataCache.getFileCache(currentActiveFile)?.frontmatter?.title || currentActiveFile.basename;
 			const content = await app.vault.cachedRead(currentActiveFile);
 			const clearFrontMatterContent = content.slice(getFrontMatterInfo(content).contentStart);
-			return '\n\n' + '<Notes>' + `\n\n# ${title}\n\n` + clearFrontMatterContent + '\n\n</Notes>\n\n';
+			return `\n\n<Notes>\n\n# ${title}\n\n${clearFrontMatterContent}\n\n</Notes>\n\n`;
 		}
 		return '';
 	};
@@ -138,37 +138,10 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 			await handlers?.onMessageAdded?.({...aiMessage, content: response});
 		} catch (error) {
-			if (error instanceof Error && error.message === 'AbortError') {
-				// Request was aborted, do not show the notice
-				setMessages(messages => {
-					if (messages.length === 0) return messages;
-					const latestMessage = messages[messages.length - 1];
-					if (latestMessage.role === 'ai' && latestMessage.content === '') {
-						return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + ' (Request aborted)'}];
-					}
-					return messages;
-				});
-				return;
-			}
-			Logger.error('Error invoking LLM:', error);
-
-			const errorMessage = (error as Error)?.message || BOT_ERROR_MESSAGE;
-			appendMessageToChat(errorMessage);
-			await handlers?.onMessageAdded?.({...aiMessage, content: errorMessage});
-
-			// new Notice('An error occurred while fetching the response. Please try again later.');
+			handleError(error, aiMessage);
 		} finally {
 			setIsStreaming(false);
-			setMessages(messages => {
-				const latestMessage = messages[messages.length - 1];
-				return [
-					...messages.slice(0, -1),
-					{
-						...latestMessage,
-						showLoading: false,
-					},
-				];
-			});
+			updateLoadingState();
 		}
 	};
 
@@ -210,6 +183,42 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 					},
 				];
 			});
+		});
+	};
+
+	const handleError = (error: any, aiMessage: UseChatMessage) => {
+		if (error instanceof Error && error.message === 'AbortError') {
+			handleAbortError();
+			return;
+		}
+		Logger.error('Error invoking LLM:', error);
+
+		const errorMessage = (error as Error)?.message || BOT_ERROR_MESSAGE;
+		appendMessageToChat(errorMessage);
+		handlers?.onMessageAdded?.({...aiMessage, content: errorMessage});
+	};
+
+	const handleAbortError = () => {
+		setMessages(messages => {
+			if (messages.length === 0) return messages;
+			const latestMessage = messages[messages.length - 1];
+			if (latestMessage.role === 'ai' && latestMessage.content === '') {
+				return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + ' (Request aborted)'}];
+			}
+			return messages;
+		});
+	};
+
+	const updateLoadingState = () => {
+		setMessages(messages => {
+			const latestMessage = messages[messages.length - 1];
+			return [
+				...messages.slice(0, -1),
+				{
+					...latestMessage,
+					showLoading: false,
+				},
+			];
 		});
 	};
 
