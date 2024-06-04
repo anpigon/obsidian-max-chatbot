@@ -1,5 +1,5 @@
 import merge from 'lodash/merge';
-import {DataWriteOptions, Plugin, TFile, WorkspaceLeaf} from 'obsidian';
+import {DataWriteOptions, Platform, Plugin, TFile, WorkspaceLeaf} from 'obsidian';
 import {DEFAULT_SETTINGS} from './constants';
 import './i18n';
 import {MAXSettings} from './types';
@@ -9,7 +9,9 @@ import {MAXSettingTab} from './views/setting-view';
 
 import './styles.css';
 
-// export let currentActiveFile: TFile | null = null;
+if (Platform.isMobile) {
+	(window as any)['process'] = {env: {NODE_ENV: 'production'}};
+}
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -18,7 +20,6 @@ export default class MAXPlugin extends Plugin {
 		await this.loadSettings();
 
 		Logger.setLogLevel(this.settings?.isVerbose ? LogLvl.DEBUG : LogLvl.DISABLED);
-
 		Logger.info('debug mode: on');
 
 		const folderPath = this.settings?.profiles.profileFolderPath || DEFAULT_SETTINGS.profiles.profileFolderPath;
