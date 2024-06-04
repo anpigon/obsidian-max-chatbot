@@ -97,7 +97,7 @@ export const UpstageSetting = () => {
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
-				<SettingItem name={t('Upstage API Key')} description={t('Insert your Upstage API Key')}>
+				<SettingItem name={t('Provider API Key', {name: 'Upstage'})} description={t('Insert your provider API Key', {name: 'Upstage'})}>
 					<input type="password" spellCheck={false} placeholder="up_fJN...ETmB" defaultValue={apiKey} onChange={handleApiKeyChange} />
 				</SettingItem>
 

@@ -1,13 +1,13 @@
-import {requestOpenAIModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
-import {SettingItem} from '@/components/settings/setting-item';
-import {usePlugin, useSettings} from '@/hooks/useApp';
+import { requestOpenAIModels } from '@/apis/fetch-model-list';
+import { Toggle } from '@/components/form/toggle';
+import { Icon } from '@/components/icons/icon';
+import { SettingItem } from '@/components/settings/setting-item';
+import { usePlugin, useSettings } from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 import clsx from 'clsx';
-import {useEffect, useState} from 'react';
-import {Trans, useTranslation} from 'react-i18next';
-import {twMerge} from 'tailwind-merge';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 export const OpenAiSetting = () => {
 	const {t} = useTranslation('settings');
@@ -74,7 +74,7 @@ export const OpenAiSetting = () => {
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
-				<SettingItem name={t('OpenAI API Key')} description={t('Insert your OpenAI API Key')}>
+				<SettingItem name={t('Provider API Key', {name: 'OpenAI API'})} description={t('Insert your provider API Key', {name: 'OpenAI API'})}>
 					<input
 						type="password"
 						spellCheck={false}
