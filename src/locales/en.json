@@ -71,6 +71,7 @@
 		"Upstage": "Upstage",
 		"Google Gemini": "Google Gemini",
 		"Provider API Key": "{{name}} API Key",
-		"Insert your provider API Key": "Insert your {{name}} API Key."
+		"Insert your provider API Key": "Insert your {{name}} API Key.",
+		"Agents": "Agents"
 	}
 }

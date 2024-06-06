@@ -9,6 +9,7 @@ import LanguageModels from './components/language-models';
 import {ProfileSetting} from './components/profile-setting';
 import {PromptSetting} from './components/prompt-setting';
 import {SettingProvider} from './context';
+import AgentSetting from './components/agents';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
@@ -17,6 +18,7 @@ export const Setting = () => {
 
 	const tabs = [
 		{label: t('Language models'), component: <LanguageModels />},
+		{label: t('Agents'), component: <AgentSetting />},
 		{label: t('Developer options'), component: <DeveloperSetting />},
 	];
 
