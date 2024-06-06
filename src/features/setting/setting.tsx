@@ -12,7 +12,8 @@ import {SettingProvider} from './context';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
-	const [selectedTab, setSelectedTab] = useState(0);
+	const selectedTabCookie = Number(window.localStorage.getItem('max-selected-tab'));
+	const [selectedTab, setSelectedTab] = useState(selectedTabCookie || 0);
 
 	const tabs = [
 		{label: t('Language models'), component: <LanguageModels />},
@@ -21,7 +22,8 @@ export const Setting = () => {
 
 	const handleTabChange = (index: number) => () => {
 		setSelectedTab(index);
-	}
+		window.localStorage.setItem('max-selected-tab', index.toString());
+	};
 
 	return (
 		<SettingProvider>
