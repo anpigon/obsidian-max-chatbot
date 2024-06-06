@@ -19,12 +19,16 @@ export const Setting = () => {
 		{label: t('Developer options'), component: <DeveloperSetting />},
 	];
 
+	const handleTabChange = (index: number) => () => {
+		setSelectedTab(index);
+	}
+
 	return (
 		<SettingProvider>
 			<div className="workspace-tabs">
 				<div className="workspace-tab-header-container bg-transparent">
 					{tabs.map((tab, index) => (
-						<div key={index} className="workspace-tab-header-container-inner" onClick={() => setSelectedTab(index)}>
+						<div key={index} className="workspace-tab-header-container-inner" onClick={handleTabChange(index)}>
 							<div
 								className={clsx('workspace-tab-header', {
 									'is-active': selectedTab === index,
