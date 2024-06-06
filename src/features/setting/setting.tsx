@@ -22,7 +22,7 @@ export const Setting = () => {
 	return (
 		<SettingProvider>
 			<div className="workspace-tabs">
-				<div className="workspace-tab-header-container">
+				<div className="workspace-tab-header-container bg-transparent">
 					{tabs.map((tab, index) => (
 						<div key={index} className="workspace-tab-header-container-inner" onClick={() => setSelectedTab(index)}>
 							<div
