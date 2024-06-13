@@ -1,3 +1,4 @@
+import {ErrorBoundary} from '@/components';
 import {AppContext} from '@/context';
 import Chatbot from '@/features/chatbot';
 import MAXPlugin from '@/main';
@@ -37,9 +38,11 @@ export class ChatbotView extends ItemView {
 		this.root = createRoot(this.containerEl.children[1]);
 		this.root.render(
 			<React.StrictMode>
-				<AppContext.Provider value={this.plugin}>
-					<Chatbot />
-				</AppContext.Provider>
+				<ErrorBoundary>
+					<AppContext.Provider value={this.plugin}>
+						<Chatbot />
+					</AppContext.Provider>
+				</ErrorBoundary>
 			</React.StrictMode>
 		);
 	}

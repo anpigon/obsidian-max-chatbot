@@ -7,12 +7,13 @@ import React from 'react';
 import {Root, createRoot} from 'react-dom/client';
 
 export class MAXSettingTab extends PluginSettingTab {
-	plugin: MAXPlugin;
 	private root: Root | null = null;
 
-	constructor(app: App, plugin: MAXPlugin) {
+	constructor(
+		readonly app: App,
+		readonly plugin: MAXPlugin
+	) {
 		super(app, plugin);
-		this.plugin = plugin;
 	}
 
 	display() {

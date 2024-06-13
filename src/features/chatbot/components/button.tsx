@@ -1,6 +1,6 @@
 import {twMerge} from 'tailwind-merge';
 
-export const Button: React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>> = ({
+export const SmallButton: React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>> = ({
 	children,
 	className,
 	...props
