@@ -72,7 +72,7 @@ export const Message: React.FC<MessageProps> = ({id, type, name, message, showLo
 					</div>
 				)}
 			</div>
-			<div className="m-0 whitespace-pre-wrap break-words *:m-0 *:leading-6 peer">
+			<div className="m-0 py-3 peer">
 				{editing ? (
 					<form onSubmit={handleEdit}>
 						<textarea name="message" className="w-full h-20" defaultValue={message?.toString()}></textarea>
