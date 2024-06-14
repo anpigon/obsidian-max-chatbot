@@ -1,5 +1,5 @@
 import {LLM_PROVIDERS} from '@/constants';
-import {MAXSettings} from '@/types';
+import type {MAXSettings} from '@/features/setting/types';
 import {useEffect, useState} from 'react';
 
 export interface ProviderModels {

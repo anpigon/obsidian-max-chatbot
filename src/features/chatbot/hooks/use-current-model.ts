@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {MAXSettings} from '@/types';
+import type {MAXSettings} from '@/features/setting/types';
 import {LLM_PROVIDERS, DEFAULT_SETTINGS} from '@/constants';
 
 interface CurrentModel {

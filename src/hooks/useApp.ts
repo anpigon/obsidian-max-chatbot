@@ -1,6 +1,6 @@
 import {AppContext} from '@/context';
+import type {MAXSettings} from '@/features/setting/types';
 import MAXPlugin from '@/main';
-import {MAXSettings} from '@/types';
 import {App} from 'obsidian';
 import {useContext} from 'react';
 

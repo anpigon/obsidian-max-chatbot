@@ -1,5 +1,5 @@
 import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
-import {ProviderSettings} from '@/types';
+import type {ProviderSettings} from '@/features/setting/types';
 import {requestJson} from '@/utils/http';
 import {OpenAI} from 'openai';
 

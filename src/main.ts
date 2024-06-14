@@ -3,8 +3,8 @@ import './set-process-env-mobile';
 import merge from 'lodash/merge';
 import {Plugin, WorkspaceLeaf} from 'obsidian';
 
+import type {MAXSettings} from '@/features/setting/types';
 import {DEFAULT_SETTINGS} from './constants';
-import {MAXSettings} from './types';
 import Logger, {LogLvl} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
