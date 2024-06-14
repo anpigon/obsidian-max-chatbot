@@ -27,7 +27,7 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 	};
 
 	return (
-		<div className="py-4 px-0 text-center *:text-interactive-accent relative">
+		<div className="py-4 px-0 text-center relative">
 			<h2 className="mt-0 mb-0 p-0 text-xl w-full">{botName}</h2>
 			<Dropdown
 				className="h-fit px-0 py-1 shadow-none hover:shadow-none text-center text-xs mr-1 pr-4"
