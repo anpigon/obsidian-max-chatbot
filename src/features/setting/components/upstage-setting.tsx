@@ -1,3 +1,4 @@
+import {Button} from '@/components';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
@@ -127,9 +128,9 @@ export const UpstageSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Upstage'})}>

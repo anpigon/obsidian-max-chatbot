@@ -1,4 +1,5 @@
 import {fetchGoogleGeminiModels} from '@/apis/fetch-model-list';
+import {Button} from '@/components';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
@@ -64,7 +65,8 @@ export const GoogleSetting = () => {
 			const models = await fetchGoogleGeminiModels({apiKey});
 			providerSettings.models = models
 				.map((model: {name: string}) => model.name)
-				.filter((model: string) => model.startsWith('models/gemini-') && (model.endsWith('-pro') || model.endsWith('-flash'))).map((model: string) => model.replace('models/', ''));
+				.filter((model: string) => model.startsWith('models/gemini-') && (model.endsWith('-pro') || model.endsWith('-flash')))
+				.map((model: string) => model.replace('models/', ''));
 			Logger.info('Google Gemini Models:', providerSettings.models);
 			saveSettings();
 			setIsConnected(true);
@@ -123,9 +125,9 @@ export const GoogleSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Google'})}>

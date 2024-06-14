@@ -10,6 +10,7 @@ import {twMerge} from 'tailwind-merge';
 import {OllamaSettingAdvanced} from './ollama-setting-advanced';
 import {Icon} from '@/components/icons/icon';
 import Logger from '@/utils/logging';
+import {Button} from '@/components';
 
 export const OllamaSetting = () => {
 	const plugin = usePlugin();
@@ -135,9 +136,9 @@ export const OllamaSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadOllamaModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta" onClick={loadOllamaModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Ollama'})}>

@@ -1,13 +1,14 @@
-import { requestOpenAIModels } from '@/apis/fetch-model-list';
-import { Toggle } from '@/components/form/toggle';
-import { Icon } from '@/components/icons/icon';
-import { SettingItem } from '@/components/settings/setting-item';
-import { usePlugin, useSettings } from '@/hooks/useApp';
+import {requestOpenAIModels} from '@/apis/fetch-model-list';
+import {Button} from '@/components';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import {SettingItem} from '@/components/settings/setting-item';
+import {usePlugin, useSettings} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { twMerge } from 'tailwind-merge';
+import {useEffect, useState} from 'react';
+import {Trans, useTranslation} from 'react-i18next';
+import {twMerge} from 'tailwind-merge';
 
 export const OpenAiSetting = () => {
 	const {t} = useTranslation('settings');
@@ -115,9 +116,9 @@ export const OpenAiSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'OpenAI'})}>

@@ -1,4 +1,5 @@
 import {requestLMStudioModels, requestOpenAIModels} from '@/apis/fetch-model-list';
+import {Button} from '@/components';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
@@ -131,15 +132,12 @@ export const LMStudioSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
-				<SettingItem
-					name={t('Allow Stream')}
-					description={t('Allow the model to stream responses.', {name: 'LM Studio'})}
-				>
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'LM Studio'})}>
 					<Toggle name="allowStream" checked={allowStream} onChange={handleChangeAllowStream} />
 				</SettingItem>
 			</div>

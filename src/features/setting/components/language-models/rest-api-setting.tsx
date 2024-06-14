@@ -1,4 +1,5 @@
 import {fetchRestApiModels} from '@/apis/fetch-model-list';
+import {Button} from '@/components';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
@@ -80,7 +81,7 @@ export const RestApiSetting = () => {
 						type="text"
 						spellCheck={false}
 						defaultValue={baseUrl}
-						placeholder='http://localhost:8000/v1'
+						placeholder="http://localhost:8000/v1"
 						onChange={event => {
 							const value = event.target.value?.trim();
 							setBaseUrl(value);
@@ -131,9 +132,9 @@ export const RestApiSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'REST API'})}>
