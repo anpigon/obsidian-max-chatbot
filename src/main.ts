@@ -2,12 +2,14 @@ import './set-process-env-mobile';
 
 import merge from 'lodash/merge';
 import {Plugin, WorkspaceLeaf} from 'obsidian';
+
 import {DEFAULT_SETTINGS} from './constants';
-import './i18n';
 import {MAXSettings} from './types';
 import Logger, {LogLvl} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
+
+import './i18n';
 
 import './styles.css';
 
