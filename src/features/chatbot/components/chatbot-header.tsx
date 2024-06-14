@@ -2,7 +2,6 @@ import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/constants';
 import {PropsWithChildren} from 'react';
 import {ProviderModels} from '../hooks/use-get-ai-models';
-import {Button} from './button';
 import {IconButton} from '@/components/buttons/icon-button';
 import {t} from 'i18next';
 

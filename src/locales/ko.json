@@ -2,10 +2,11 @@
 	"chatbot": {
 		"You are a helpful assistant": "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘.",
 		"Refer to the current note": "현재 노트 참조",
-		"What can I help you with?" : "무엇을 도와드릴까요?",
+		"What can I help you with?": "무엇을 도와드릴까요?",
 		"Start new chat": "새 채팅 시작",
 		"Text copied to clipboard": "클립보드에 텍스트가 복사되었습니다.",
-		"Failed to copy text to clipboard": "클립보드에 텍스트를 복사하지 못했습니다."
+		"Failed to copy text to clipboard": "클립보드에 텍스트를 복사하지 못했습니다.",
+		"copy": "복사"
 	},
 	"settings": {
 		"Profiles": "프로필 설정",
@@ -53,11 +54,12 @@
 		"Options": "옵션",
 		"Verify connection": "연결 확인",
 		"Checking connection": "연결 확인 중...",
-		"Developer options": "개발자 옵션","debugging": "디버깅",
-        "langsmith_key": "LangSmith API 키",
-        "langsmith_key_desc": "챗봇의 내부를 추적 및 평가하려면 Langsmith API 키를 제공하세요.",
-        "verbose": "개발자 콘솔 로깅",
-        "verbose_desc": "개발자 콘솔에서 자세한 로깅을 활성화합니다.",
+		"Developer options": "개발자 옵션",
+		"debugging": "디버깅",
+		"langsmith_key": "LangSmith API 키",
+		"langsmith_key_desc": "챗봇의 내부를 추적 및 평가하려면 Langsmith API 키를 제공하세요.",
+		"verbose": "개발자 콘솔 로깅",
+		"verbose_desc": "개발자 콘솔에서 자세한 로깅을 활성화합니다.",
 		"LM Studio": "LM Studio",
 		"LM Studio Base Url": "LM Studio API URL",
 		"Enter your LM Studio Base Url using": "<a>LM Studio</a><span>를 설치하고 LM Studio API URL을 입력하세요.</span>",

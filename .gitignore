@@ -22,6 +22,5 @@ data/*
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
 
-# Version
-version-bump.mjs
+# build
 build

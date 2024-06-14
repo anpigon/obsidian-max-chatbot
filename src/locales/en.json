@@ -2,10 +2,11 @@
 	"chatbot": {
 		"You are a helpful assistant": "You are a helpful assistant.",
 		"Refer to the current note": "Refer to the current note",
-		"What can I help you with?" : "What can I help you with?",
+		"What can I help you with?": "What can I help you with?",
 		"Start new chat": "Start new chat",
 		"Text copied to clipboard": "Text copied to clipboard",
-		"Failed to copy text to clipboard": "Failed to copy text to clipboard"
+		"Failed to copy text to clipboard": "Failed to copy text to clipboard",
+		"copy": "copy"
 	},
 	"settings": {
 		"Profiles": "Profiles",

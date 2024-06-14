@@ -1,3 +1,5 @@
+import './set-process-env-mobile';
+
 import merge from 'lodash/merge';
 import {DataWriteOptions, Platform, Plugin, TFile, WorkspaceLeaf} from 'obsidian';
 import {DEFAULT_SETTINGS} from './constants';
@@ -8,10 +10,6 @@ import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
 
 import './styles.css';
-
-if (Platform.isMobile || Platform.isMobileApp) {
-	(window as any)['process'] = {env: {NODE_ENV: 'production'}};
-}
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;

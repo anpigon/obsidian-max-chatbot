@@ -5,25 +5,26 @@ import {IconCopy} from '@/components/icons/icon-copy';
 import {IconEdit} from '@/components/icons/icon-edit';
 import {IconTrash} from '@/components/icons/icon-trash';
 
+import {MarkdownView} from '@/components';
 import {t} from 'i18next';
 import {Notice} from 'obsidian';
 import {useState} from 'react';
 import {twMerge} from 'tailwind-merge';
-import {Button} from './button';
+import {SmallButton} from './button';
 import {Loading} from './loading';
 
 interface MessageProps {
 	id: string;
 	type: 'bot' | 'user';
 	name: string;
-	message: React.ReactNode;
+	message: string;
 	showLoading?: boolean;
 	onDeleteMessage: (id: string) => void;
 	onEditMessage: (id: string, message: string) => void;
 }
 
 export const Message: React.FC<MessageProps> = ({id, type, name, message, showLoading = false, onDeleteMessage, onEditMessage}) => {
-	const [copiedText, copy] = useCopyToClipboard();
+	const [, copy] = useCopyToClipboard();
 	const [editing, setEditing] = useState(false);
 
 	const handleCopy = async () => {
@@ -58,34 +59,34 @@ export const Message: React.FC<MessageProps> = ({id, type, name, message, showLo
 				</span>
 				{!showLoading && (
 					<div data-component="buttonContainer" className="invisible group-hover:visible m-0 flex justify-between items-center">
-						<Button title="regenerate" className="invisible opacity-0"></Button>
-						<Button title="edit" onClick={() => setEditing(true)}>
+						<SmallButton title="regenerate" className="invisible opacity-0"></SmallButton>
+						<SmallButton title="edit" onClick={() => setEditing(true)}>
 							<IconEdit />
-						</Button>
-						<Button title="copy" onClick={() => handleCopy()}>
+						</SmallButton>
+						<SmallButton title="copy" onClick={() => handleCopy()}>
 							<IconCopy />
-						</Button>
-						<Button title="trash" onClick={() => onDeleteMessage(id)}>
+						</SmallButton>
+						<SmallButton title="trash" onClick={() => onDeleteMessage(id)}>
 							<IconTrash />
-						</Button>
+						</SmallButton>
 					</div>
 				)}
 			</div>
-			<div className="m-0 whitespace-pre-wrap break-words *:m-0 *:leading-6 peer">
+			<div className="m-0 py-3 peer">
 				{editing ? (
 					<form onSubmit={handleEdit}>
 						<textarea name="message" className="w-full h-20" defaultValue={message?.toString()}></textarea>
 						<div className="flex justify-end gap-1">
-							<Button type="button" title="cancel" onClick={() => setEditing(false)} className="w-fit">
+							<SmallButton type="button" title="cancel" onClick={() => setEditing(false)} className="w-fit">
 								{t('Cancel')}
-							</Button>
-							<Button type="submit" title="save" className="w-fit">
+							</SmallButton>
+							<SmallButton type="submit" title="save" className="w-fit">
 								{t('Save')}
-							</Button>
+							</SmallButton>
 						</div>
 					</form>
 				) : (
-					message
+					<MarkdownView content={message} />
 				)}
 			</div>
 			{showLoading && <Loading className="hidden peer-empty:block" />}
