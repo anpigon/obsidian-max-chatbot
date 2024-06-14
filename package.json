@@ -23,7 +23,6 @@
 	"author": "anpigon",
 	"license": "MIT",
 	"devDependencies": {
-		"@line/ts-remove-unused": "^0.2.0",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-typescript": "^11.1.6",
 		"@types/node": "^20.12.12",
