@@ -1,7 +1,7 @@
 import {requestOllamaModels} from '@/apis/fetch-model-list';
 import {Toggle} from '@/components/form/toggle';
 import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin} from '@/hooks/useApp';
 import clsx from 'clsx';
 import {useEffect, useState} from 'react';

@@ -1,7 +1,8 @@
 import {Dropdown} from '@/components/form/dropdown';
 import {Toggle} from '@/components/form/toggle';
 import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_MODEL, DEFAULT_SETTINGS, LLM_PROVIDERS} from '@/constants';
+import {DEFAULT_MODEL, LLM_PROVIDERS} from '@/constants';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin} from '@/hooks/useApp';
 import {ChangeEventHandler, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';

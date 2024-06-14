@@ -1,6 +1,6 @@
 import {Toggle} from '@/components/form/toggle';
 import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin} from '@/hooks/useApp';
 import {cleanFolderPath} from '@/utils/clean-folder-path';
 import clsx from 'clsx';

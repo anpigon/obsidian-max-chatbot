@@ -1,19 +1,19 @@
-import { DEFAULT_SETTINGS } from '@/constants';
-import { useApp, usePlugin, useSettings } from '@/hooks/useApp';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
-import { Notice } from 'obsidian';
-import type { ChangeEvent, KeyboardEvent } from 'react';
-import { useEffect, useRef, useTransition } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ChatBox } from './components/chat-box';
-import { ChatbotContainer } from './components/chatbot-container';
-import { ChatbotHeader } from './components/chatbot-header';
-import { Message } from './components/message';
-import { MessagesContainer } from './components/messages-container';
-import { useChatbotState } from './context';
-import { useCurrentModel } from './hooks/use-current-model';
-import { useGetAiModels } from './hooks/use-get-ai-models';
-import { useLLM } from './hooks/use-llm';
+import {Notice} from 'obsidian';
+import type {ChangeEvent, KeyboardEvent} from 'react';
+import {useEffect, useRef, useTransition} from 'react';
+import {useTranslation} from 'react-i18next';
+import {ChatBox} from './components/chat-box';
+import {ChatbotContainer} from './components/chatbot-container';
+import {ChatbotHeader} from './components/chatbot-header';
+import {Message} from './components/message';
+import {MessagesContainer} from './components/messages-container';
+import {useChatbotState} from './context';
+import {useCurrentModel} from './hooks/use-current-model';
+import {useGetAiModels} from './hooks/use-get-ai-models';
+import {useLLM} from './hooks/use-llm';
 
 export const Chatbot: React.FC = () => {
 	const app = useApp();
@@ -121,7 +121,7 @@ export const Chatbot: React.FC = () => {
 			messageToEdit.content = message;
 			setMessages([...messages]);
 		}
-	}
+	};
 
 	return (
 		<ChatbotContainer>
@@ -161,8 +161,15 @@ export const Chatbot: React.FC = () => {
 							onEditMessage={handleEditMessage}
 						/>
 					) : (
-						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={handleDeleteMessage}
-						onEditMessage={handleEditMessage} />
+						<Message
+							key={i}
+							id={id}
+							type="user"
+							name={username}
+							message={content}
+							onDeleteMessage={handleDeleteMessage}
+							onEditMessage={handleEditMessage}
+						/>
 					)
 				)}
 				<div ref={messageEndRef} />

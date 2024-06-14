@@ -1,5 +1,5 @@
 import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin} from '@/hooks/useApp';
 import {useTranslation} from 'react-i18next';
 

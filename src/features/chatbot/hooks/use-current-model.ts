@@ -1,6 +1,8 @@
+import {LLM_PROVIDERS} from '@/constants';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {useState} from 'react';
+
 import type {MAXSettings} from '@/features/setting/types';
-import {LLM_PROVIDERS, DEFAULT_SETTINGS} from '@/constants';
 
 interface CurrentModel {
 	provider: LLM_PROVIDERS;
