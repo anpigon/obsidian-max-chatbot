@@ -48,7 +48,7 @@ export const Message: React.FC<MessageProps> = ({id, type, name, message, showLo
 	return (
 		<div
 			className={twMerge(
-				clsx('relative m-0 p-3 w-full inline-block group whitespace-pre-wrap', {
+				clsx('relative m-0 p-3 w-full inline-block group', {
 					[`bg-[var(--background-primary)]`]: type === 'bot',
 				})
 			)}
