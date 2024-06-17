@@ -30,3 +30,35 @@ export const enum LLM_PROVIDERS {
 	UPSTAGE = 'UPSTAGE',
 	GROQ = 'GROQ',
 }
+
+export const MAX_TOKEN = {
+	'gpt-4o': 128_000,
+	'gpt-4o-2024-05-13': 128_000,
+	'gpt-4-turbo': 128_000,
+	'gpt-4-turbo-2024-04-09': 128_000,
+	'gpt-4-turbo-preview': 128_000,
+	'gpt-4-0125-preview': 128_000,
+	'gpt-4-1106-preview': 128_000,
+	'gpt-4-vision-preview': 128_000,
+	'gpt-4-1106-vision-preview': 128_000,
+	'gpt-4': 8_192,
+	'gpt-4-0613': 8_192,
+	'gpt-4-32k': 32_768,
+	'gpt-4-32k-0613': 32_768,
+	'gpt-3.5-turbo-0125': 16_385,
+	'gpt-3.5-turbo': 16_385,
+	'gpt-3.5-turbo-1106': 16_385,
+	'gpt-3.5-turbo-instruct': 4_096,
+	'gpt-3.5-turbo-16k': 16_385,
+	'gpt-3.5-turbo-0613': 4_096,
+	'gpt-3.5-turbo-16k-0613': 16_385,
+};
+
+export const EMBEDDING_MODELS = {
+	'nomic-embed-text': {dimension: 1_024, sequenceLength: 8_192},
+	'bge-m3': {dimension: 1_024, sequenceLength: 8_192},
+	'bge-m3-unsupervised': {dimension: 1_024, sequenceLength: 8_192},
+	'bge-large-en-v1.5': {dimension: 1_024, sequenceLength: 512},
+	'bge-base-en-v1.5': {dimension: 768, sequenceLength: 512},
+	'bge-small-en-v1.5': {dimension: 384, sequenceLength: 512},
+};
