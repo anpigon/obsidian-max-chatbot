@@ -26,6 +26,13 @@ export default function AgentSetting() {
 			// },
 		});
 
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/chroma
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/faiss
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/opensearch
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/qdrant
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/pgvector
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/supabase
+		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/lancedb
 		const dir = normalizePath(plugin.manifest.dir + '/lancedb-');
 		if (!(await plugin.app.vault.adapter.exists(dir))) {
 			await plugin.app.vault.adapter.mkdir(dir);
