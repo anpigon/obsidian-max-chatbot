@@ -50,7 +50,7 @@ export const MarkdownView: React.FC<MarkdownViewProps> = ({content}) => {
 	return (
 		<div
 			ref={containerRef}
-			className="markdown-rendered *:!my-0"
+			className="markdown-rendered"
 			dangerouslySetInnerHTML={{
 				__html: renderedHTML,
 			}}
