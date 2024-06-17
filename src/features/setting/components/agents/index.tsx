@@ -1,13 +1,14 @@
 import {Button} from '@/components';
 import {SettingItem} from '@/components/settings/setting-item';
 import {SystemMessage} from '@langchain/core/messages';
+import {DirectoryLoader} from 'langchain/document_loaders/fs/directory';
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
-
 import {useTranslation} from 'react-i18next';
 import {usePlugin} from '@/hooks/useApp';
-import {normalizePath} from 'obsidian';
-import {LanceDB} from '@langchain/community/vectorstores/lancedb';
+import {TFile, normalizePath} from 'obsidian';
+// import {LanceDB} from '@langchain/community/vectorstores/lancedb';
 import {connect} from 'vectordb';
+import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();
@@ -33,7 +34,7 @@ export default function AgentSetting() {
 		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/pgvector
 		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/supabase
 		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/lancedb
-		const dir = normalizePath(plugin.manifest.dir + '/lancedb-');
+		/* 		const dir = normalizePath(plugin.manifest.dir + '/lancedb-');
 		if (!(await plugin.app.vault.adapter.exists(dir))) {
 			await plugin.app.vault.adapter.mkdir(dir);
 		}
@@ -42,8 +43,14 @@ export default function AgentSetting() {
 		const vectorStore = await LanceDB.fromDocuments([], embeddings, {
 			table,
 		});
+		const resultOne = await vectorStore.similaritySearch('hello world', 1); */
 
-		const resultOne = await vectorStore.similaritySearch('hello world', 1);
+		// const files = plugin.app.vault.getFileByPath('/');
+		// console.log(files);
+		const mdFiles = plugin.app.vault.getMarkdownFiles();
+		// console.log(mdFiles);
+		const docs = await obsidianDocumentLoader(plugin.app, mdFiles);
+		console.log(docs);
 	};
 
 	return (
