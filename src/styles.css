@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+	.dialog {
+		--checkbox-size: var(--font-ui-medium);
+		background-color: var(--modal-background);
+		border-radius: var(--modal-radius);
+		border: var(--modal-border-width) solid var(--modal-border-color);
+		padding: var(--size-4-4);
+		min-height: 100px;
+		width: var(--dialog-width);
+		max-width: var(--dialog-max-width);
+		max-height: var(--dialog-max-height);
+		flex-direction: column;
+		overflow: auto;
+	}
+}
+
 @layer utilities {
 	.input-error {
 		@apply !border-[var(--color-red)];
@@ -49,6 +65,4 @@
 	.text-interactive-accent {
 		color: var(--interactive-accent);
 	}
-
-
 }
