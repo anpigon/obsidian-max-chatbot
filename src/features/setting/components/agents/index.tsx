@@ -3,15 +3,16 @@ import {SettingItem} from '@/components/settings/setting-item';
 import {usePlugin} from '@/hooks/useApp';
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
 import {useTranslation} from 'react-i18next';
-// import {LanceDB} from '@langchain/community/vectorstores/lancedb';
 import {OramaStore} from '@/utils/local-vector-store';
 import Logger from '@/utils/logging';
 import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
-import {MemoryVectorStore} from 'langchain/vectorstores/memory';
+import {useAddAgentModal} from './hooks/use-add-agent-modal';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();
 	const {t} = useTranslation('settings');
+
+	const [AddAgentModal, openAddAgentModal] = useAddAgentModal();
 
 	const handleTest = async () => {
 		const embeddings = new OllamaEmbeddings({
@@ -51,7 +52,10 @@ export default function AgentSetting() {
 		Logger.info('retriever', await retriever.invoke('private AI personal knowledge'));
 	};
 
-	const handleAddAgent = async () => {};
+	const handleAddAgent = async () => {
+		const data = await openAddAgentModal();
+		Logger.info('Modal confirmed with data:', data);
+	};
 
 	return (
 		<>
@@ -62,6 +66,8 @@ export default function AgentSetting() {
 			<SettingItem name="">
 				<Button onClick={handleTest}>Test</Button>
 			</SettingItem>
+
+			{AddAgentModal}
 		</>
 	);
 }
