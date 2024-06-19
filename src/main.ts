@@ -1,17 +1,19 @@
 import './set-process-env-mobile';
 
 import merge from 'lodash/merge';
-import {Plugin, WorkspaceLeaf} from 'obsidian';
+import {Plugin, WorkspaceLeaf, normalizePath} from 'obsidian';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import type {MAXSettings} from '@/features/setting/types';
-import Logger, {LogLvl} from './utils/logging';
+import Logger, {LogLevel} from './utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
 import {MAXSettingTab} from './views/setting-view';
 
 import './i18n';
 
 import './styles.css';
+import {decode, encode} from '@msgpack/msgpack';
+import {VectorStoreBackup} from './utils/local-vector-store';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -19,7 +21,7 @@ export default class MAXPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		Logger.setLogLevel(this.settings?.isVerbose ? LogLvl.DEBUG : LogLvl.DISABLED);
+		Logger.setLogLevel(this.settings?.isVerbose ? LogLevel.DEBUG : LogLevel.DISABLED);
 		Logger.info('debug mode: on');
 
 		this.registerView(VIEW_TYPE_CHATBOT, leaf => new ChatbotView(leaf, this));
@@ -69,5 +71,30 @@ export default class MAXPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	public async getVectorStoreFilepath(storeName?: string) {
+		const vectorStoresDir = normalizePath(this.manifest.dir + '/vector_stores');
+		if (!(await this.app.vault.adapter.exists(vectorStoresDir))) {
+			await this.app.vault.adapter.mkdir(vectorStoresDir);
+		}
+
+		const vectorStoreFilepath = normalizePath(vectorStoresDir + `/${storeName || 'vector_store'}` + '.bin');
+		Logger.info('vectorStoreFilepath', vectorStoreFilepath);
+
+		return vectorStoreFilepath;
+	}
+
+	public async saveVectorStoreData(storeName: string, data: VectorStoreBackup) {
+		const normalizedPath = await this.getVectorStoreFilepath(storeName);
+		await this.app.vault.adapter.writeBinary(normalizedPath, encode(data));
+		Logger.info('Saved vector store data');
+	}
+
+	public async loadVectorStoreData(storeName: string) {
+		const normalizedPath = await this.getVectorStoreFilepath(storeName);
+		const vectorStoreData = await this.app.vault.adapter.readBinary(normalizedPath);
+		Logger.info('Loaded vector store data');
+		return decode(vectorStoreData) as VectorStoreBackup;
 	}
 }
