@@ -20,9 +20,10 @@ export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenS
 		const frontmatter = fileMetadata?.frontmatter;
 		const yamlPosition = fileMetadata?.sections?.find(({type}) => type === 'yaml')?.position;
 		const pageContent = (yamlPosition ? noteContent.slice(yamlPosition.end.offset) : noteContent).trim();
-		const hash = await hashString(pageContent);
 		const filepath = file.path;
 		const title = file.basename;
+		const id = await hashString(file.path);
+		const hash = await hashString(pageContent);
 
 		docs.push({
 			pageContent,
@@ -31,6 +32,7 @@ export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenS
 				...frontmatter,
 				filepath,
 				hash,
+				id,
 			},
 		});
 	}
