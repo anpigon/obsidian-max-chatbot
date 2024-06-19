@@ -73,6 +73,7 @@
 		"Google Gemini": "Google Gemini",
 		"Provider API Key": "{{name}} API Key",
 		"Insert your provider API Key": "{{name}} API Key를 입력하세요.",
-		"Agents": "에이전트"
+		"Agents": "에이전트",
+		"Add Agent": "에이전트 추가"
 	}
 }
