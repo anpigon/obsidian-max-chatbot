@@ -1,6 +1,6 @@
 import {Document} from '@langchain/core/documents';
 import {RecursiveCharacterTextSplitter} from '@langchain/textsplitters';
-import {App, TFile, getFrontMatterInfo, parseYaml} from 'obsidian';
+import {App, TFile} from 'obsidian';
 
 import {hashString} from './hash';
 import Logger from './logging';
@@ -12,6 +12,7 @@ export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenS
 		chunkOverlap: 0,
 	}); // One token is 4 characters on average
 
+	let docCount = 1;
 	const docs: Document[] = [];
 	for (const file of files) {
 		const fileMetadata = app.metadataCache.getFileCache(file);
@@ -30,9 +31,12 @@ export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenS
 			metadata: {
 				title,
 				...frontmatter,
-				filepath,
-				hash,
 				id,
+				hash,
+				filepath,
+				order: docCount++,
+				header: [title, ...(fileMetadata?.headings?.map(h => h.heading) ?? [])],
+				content: pageContent,
 			},
 		});
 	}

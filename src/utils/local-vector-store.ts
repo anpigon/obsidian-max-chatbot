@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {Document} from '@langchain/core/documents';
 import {Embeddings} from '@langchain/core/embeddings';
 import {VectorStore} from '@langchain/core/vectorstores';
@@ -33,7 +36,7 @@ export class OramaStore extends VectorStore {
 
 	constructor(
 		public embeddings: Embeddings,
-		args: Record<string, any>
+		args: {similarityThreshold?: number}
 	) {
 		super(embeddings, args);
 		this.similarity = args.similarityThreshold ?? 0.75;
@@ -42,11 +45,9 @@ export class OramaStore extends VectorStore {
 	async create(indexName: string, vectorSize?: number) {
 		this.vectorSize = vectorSize ?? (await this.embeddings.embedQuery('test')).length;
 		this.indexName = indexName;
+
 		this.db = await create({
-			schema: {
-				...vectorStoreSchema,
-				embedding: `vector[${this.vectorSize}]`,
-			} as const,
+			schema: {...vectorStoreSchema, embedding: `vector[${this.vectorSize}]`} as const,
 			id: indexName,
 		});
 	}
@@ -58,7 +59,7 @@ export class OramaStore extends VectorStore {
 		}
 
 		// vectorStoreBackup is an object and not an array for some reason
-		const docs = Object.keys(vectorStoreBackup.docs).map(key => vectorStoreBackup.docs[key]);
+		const docs: VectorDocument[] = Object.values(vectorStoreBackup.docs);
 		await this.create(vectorStoreBackup.indexName, vectorStoreBackup.vectorSize);
 		await insertMultiple(this.db, docs);
 		Logger.info('Restored vectorstore from backup');
@@ -99,7 +100,7 @@ export class OramaStore extends VectorStore {
 			throw new Error('Database is not initialized');
 		}
 
-		const results: Results<VectorDocument> = await search(this.db, {
+		const results = await search(this.db, {
 			mode: 'vector',
 			vector: {value: query, property: 'embedding'},
 			limit: k,
@@ -116,7 +117,7 @@ export class OramaStore extends VectorStore {
 		});
 	}
 
-	async getData(): Promise<VectorStoreBackup> {
+	getData(): VectorStoreBackup {
 		if (!this.db || !this.indexName || !this.vectorSize) {
 			throw new Error('Database is not initialized');
 		}

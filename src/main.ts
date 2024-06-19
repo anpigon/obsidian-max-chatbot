@@ -85,13 +85,13 @@ export default class MAXPlugin extends Plugin {
 		return vectorStoreFilepath;
 	}
 
-	public async saveVectorStoreData(storeName: string, data: VectorStoreBackup) {
+	public async saveVectorStoreData(storeName: string, data: VectorStoreBackup): Promise<void> {
 		const normalizedPath = await this.getVectorStoreFilepath(storeName);
 		await this.app.vault.adapter.writeBinary(normalizedPath, encode(data));
 		Logger.info('Saved vector store data');
 	}
 
-	public async loadVectorStoreData(storeName: string) {
+	public async loadVectorStoreData(storeName: string): Promise<VectorStoreBackup> {
 		const normalizedPath = await this.getVectorStoreFilepath(storeName);
 		const vectorStoreData = await this.app.vault.adapter.readBinary(normalizedPath);
 		Logger.info('Loaded vector store data');
