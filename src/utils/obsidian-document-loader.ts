@@ -5,14 +5,12 @@ import {App, TFile} from 'obsidian';
 import {hashString} from './hash';
 import Logger from './logging';
 
-export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenSize = 512): Promise<Document[]> {
-	// 여기의 청크 사이즈는 토큰 크기가 아니라 문자 크기이다.
+export async function obsidianDocumentLoader(app: App, files: TFile[]): Promise<Document[]> {
 	const splitter = RecursiveCharacterTextSplitter.fromLanguage('markdown', {
-		chunkSize: maxTokenSize * 4,
-		chunkOverlap: 0,
+		chunkSize: 2000,
+		chunkOverlap: 200,
 	}); // One token is 4 characters on average
 
-	let docCount = 1;
 	const docs: Document[] = [];
 	for (const file of files) {
 		const fileMetadata = app.metadataCache.getFileCache(file);
@@ -24,23 +22,18 @@ export async function obsidianDocumentLoader(app: App, files: TFile[], maxTokenS
 		const filepath = file.path;
 		const title = file.basename;
 		const id = await hashString(file.path);
-		const hash = await hashString(pageContent);
 
 		docs.push({
 			pageContent,
 			metadata: {
-				title,
 				...frontmatter,
 				id,
-				hash,
+				title,
 				filepath,
-				order: docCount++,
-				header: [title, ...(fileMetadata?.headings?.map(h => h.heading) ?? [])],
 				content: pageContent,
 			},
 		});
 	}
 	Logger.info('Loaded ' + docs.length + ' documents from Obsidian');
-
 	return docs;
 }

@@ -1,16 +1,13 @@
 import {Button} from '@/components';
 import {SettingItem} from '@/components/settings/setting-item';
-import {SystemMessage} from '@langchain/core/messages';
-import {DirectoryLoader} from 'langchain/document_loaders/fs/directory';
+import {usePlugin} from '@/hooks/useApp';
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
 import {useTranslation} from 'react-i18next';
-import {usePlugin} from '@/hooks/useApp';
-import {TFile, normalizePath} from 'obsidian';
 // import {LanceDB} from '@langchain/community/vectorstores/lancedb';
-import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
 import {OramaStore} from '@/utils/local-vector-store';
-import {encode} from '@msgpack/msgpack';
 import Logger from '@/utils/logging';
+import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
+import {MemoryVectorStore} from 'langchain/vectorstores/memory';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();
@@ -60,11 +57,12 @@ export default function AgentSetting() {
 		Logger.info(docs);
 
 		const vectorStore = new OramaStore(embeddings, {
-			similarityThreshold: 0.75,
+			similarityThreshold: 0.1,
 		});
 		await vectorStore.create('test');
-		await vectorStore.addDocuments(docs);
+		const ids = await vectorStore.addDocuments(docs);
 		Logger.info('vectorSize', vectorStore.getData().vectorSize);
+		Logger.info('ids', ids);
 
 		Logger.info('vectorStoreData', vectorStore.getData());
 		await plugin.saveVectorStoreData('vector_store', vectorStore.getData());
@@ -73,9 +71,23 @@ export default function AgentSetting() {
 		const vectorStoreData = await plugin.loadVectorStoreData('vector_store');
 		await vectorStore.restore(vectorStoreData);
 
-		Logger.info('similaritySearch', await vectorStore.similaritySearch('reor'));
+		Logger.info('similaritySearch', await vectorStore.similaritySearchWithScore('private AI personal knowledge', 10));
 		const retriever = vectorStore.asRetriever({k: 10});
-		Logger.info('retriever', await retriever.invoke('reor'));
+		Logger.info('retriever', await retriever.invoke('private AI personal knowledge'));
+	};
+
+	const handleTest = async () => {
+		const mdFiles = plugin.app.vault.getMarkdownFiles();
+		const docs = await obsidianDocumentLoader(plugin.app, mdFiles);
+		const embeddings = new OllamaEmbeddings({
+			model: 'nomic-embed-text',
+			baseUrl: 'http://localhost:11434',
+			maxRetries: 0,
+		});
+		const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
+		Logger.info('similaritySearch', await vectorStore.similaritySearchWithScore('private AI personal knowledge', 10));
+		const retriever = vectorStore.asRetriever({k: 10});
+		Logger.info('retriever', await retriever.invoke('private AI personal knowledge'));
 	};
 
 	return (
@@ -83,6 +95,9 @@ export default function AgentSetting() {
 			<SettingItem heading name={t('Agents')} />
 			<SettingItem name="">
 				<Button onClick={handleAddAgent}>Add Agents</Button>
+			</SettingItem>
+			<SettingItem name="">
+				<Button onClick={handleTest}>Test</Button>
 			</SettingItem>
 		</>
 	);

@@ -4,15 +4,15 @@
 import {Document} from '@langchain/core/documents';
 import {Embeddings} from '@langchain/core/embeddings';
 import {VectorStore} from '@langchain/core/vectorstores';
-import {Orama, Results, TypedDocument, create, insertMultiple, removeMultiple, search} from '@orama/orama';
+import {Orama, TypedDocument, create, insertMultiple, removeMultiple, search} from '@orama/orama';
 
 import Logger from './logging';
+import {hashString} from './hash';
 
 const vectorStoreSchema = {
 	id: 'string',
 	filepath: 'string',
-	order: 'number',
-	header: 'string[]',
+	title: 'string',
 	content: 'string',
 } as const;
 
@@ -78,21 +78,29 @@ export class OramaStore extends VectorStore {
 			throw new Error('Database is not initialized');
 		}
 
-		const docs: VectorDocument[] = documents.map((document, index) => ({
-			id: document.metadata.hash,
-			filepath: document.metadata.filepath,
-			content: document.metadata.content,
-			header: document.metadata.header,
-			order: document.metadata.order,
-			embedding: vectors[index],
-		}));
+		const vectorDocs: VectorDocument[] = [];
+		for (let index = 0; index < documents.length; index++) {
+			const docs = documents[index];
+			const filepath = docs.metadata?.filepath || '';
+			const title = docs.metadata?.title || '';
+			const content = docs.pageContent || '';
+			const id = await hashString(filepath + content);
+			vectorDocs.push({
+				id,
+				filepath,
+				title,
+				content,
+				embedding: vectors[index],
+			});
+		}
 
-		const ids = await insertMultiple(this.db, docs);
+		const ids = await insertMultiple(this.db, vectorDocs);
 		return ids;
 	}
 
-	async addDocuments(documents: Document[]) {
-		await this.addVectors(await this.embeddings.embedDocuments(documents.map(document => document.pageContent)), documents);
+	async addDocuments(documents: Document[]): Promise<string[]> {
+		const vectors: number[][] = await this.embeddings.embedDocuments(documents.map(document => document.pageContent));
+		return await this.addVectors(vectors, documents);
 	}
 
 	async similaritySearchVectorWithScore(query: number[], k: number): Promise<[Document, number][]> {
