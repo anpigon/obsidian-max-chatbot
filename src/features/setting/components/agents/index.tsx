@@ -13,42 +13,19 @@ export default function AgentSetting() {
 	const plugin = usePlugin();
 	const {t} = useTranslation('settings');
 
-	const handleAddAgent = async () => {
+	const handleTest = async () => {
 		const embeddings = new OllamaEmbeddings({
-			model: 'nomic-embed-text', // default value
-			baseUrl: 'http://localhost:11434', // default value
-			// requestOptions: {
-			// 	useMMap: true, // use_mmap 1
-			// 	numThread: 6, // num_thread 6
-			// 	numGpu: 1, // num_gpu 1
-			// },
-			maxRetries: 0,
+			model: 'nomic-embed-text',
+			baseUrl: 'http://localhost:11434',
+			maxRetries: 3,
+			requestOptions: {
+				useMMap: true,
+				numThread: 6,
+				numGpu: 1,
+			},
 		});
 
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/chroma
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/faiss
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/opensearch
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/qdrant
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/pgvector
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/supabase
-		// https://js.langchain.com/v0.2/docs/integrations/vectorstores/lancedb
-		/* 		const dir = normalizePath(plugin.manifest.dir + '/lancedb-');
-		if (!(await plugin.app.vault.adapter.exists(dir))) {
-			await plugin.app.vault.adapter.mkdir(dir);
-		}
-		const db = await connect(dir);
-		const table = await db.createTable('vectors', []);
-		const vectorStore = await LanceDB.fromDocuments([], embeddings, {
-			table,
-		});
-		const resultOne = await vectorStore.similaritySearch('hello world', 1); */
-
-		// const files = plugin.app.vault.getFileByPath('/');
-		// console.log(files);
 		const mdFiles = plugin.app.vault.getMarkdownFiles();
-		// console.log('configDir', plugin.app.vault.configDir);
-		// console.log('getRoot', plugin.app.vault.getRoot());
-		// console.log(mdFiles);
 		const docs = await obsidianDocumentLoader(
 			plugin.app,
 			mdFiles
@@ -56,9 +33,7 @@ export default function AgentSetting() {
 		);
 		Logger.info(docs);
 
-		const vectorStore = new OramaStore(embeddings, {
-			similarityThreshold: 0.1,
-		});
+		const vectorStore = new OramaStore(embeddings, {similarityThreshold: 0.1});
 		await vectorStore.create('test');
 		const ids = await vectorStore.addDocuments(docs);
 		Logger.info('vectorSize', vectorStore.getData().vectorSize);
@@ -76,19 +51,7 @@ export default function AgentSetting() {
 		Logger.info('retriever', await retriever.invoke('private AI personal knowledge'));
 	};
 
-	const handleTest = async () => {
-		const mdFiles = plugin.app.vault.getMarkdownFiles();
-		const docs = await obsidianDocumentLoader(plugin.app, mdFiles);
-		const embeddings = new OllamaEmbeddings({
-			model: 'nomic-embed-text',
-			baseUrl: 'http://localhost:11434',
-			maxRetries: 0,
-		});
-		const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
-		Logger.info('similaritySearch', await vectorStore.similaritySearchWithScore('private AI personal knowledge', 10));
-		const retriever = vectorStore.asRetriever({k: 10});
-		Logger.info('retriever', await retriever.invoke('private AI personal knowledge'));
-	};
+	const handleAddAgent = async () => {};
 
 	return (
 		<>
