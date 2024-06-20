@@ -50,6 +50,7 @@ export interface Agent {
 	systemPrompt: '';
 	llmProvider: LLM_PROVIDERS;
 	llmModel: string;
+	enable: boolean;
 }
 
 export interface MAXSettings {
