@@ -12,7 +12,7 @@ import {Message} from './components/message';
 import {MessagesContainer} from './components/messages-container';
 import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
-import {useGetAiModels} from './hooks/use-get-ai-models';
+import {useEnabledAIModels} from '@/hooks/useEnabledAIModels';
 import {useLLM} from './hooks/use-llm';
 
 export const Chatbot: React.FC = () => {
@@ -30,7 +30,7 @@ export const Chatbot: React.FC = () => {
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
 
-	const providers = useGetAiModels(settings);
+	const providers = useEnabledAIModels();
 	const [currentModel, setCurrentModel] = useCurrentModel(settings);
 
 	const {allowReferenceCurrentNote} = useChatbotState();

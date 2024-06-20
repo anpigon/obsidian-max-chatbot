@@ -153,4 +153,5 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 	allModels: [DEFAULT_MODEL],
 	isVerbose: false,
 	langSmithKey: '',
+	agents: [],
 } as const;

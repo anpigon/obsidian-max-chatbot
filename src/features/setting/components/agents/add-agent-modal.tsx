@@ -1,4 +1,5 @@
 import {SettingItem} from '@/components';
+import {useEnabledAIModels} from '@/hooks/useEnabledAIModels';
 import Logger from '@/utils/logging';
 import mergeRefs from 'merge-refs';
 import {FormEventHandler, forwardRef, useRef} from 'react';
@@ -17,6 +18,9 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 	const {t} = useTranslation('add_agent');
 	const ref = useRef<HTMLDialogElement>(null);
 	const mergeRef = mergeRefs<HTMLDialogElement>(ref, forwardedRef);
+
+	const enabledAIModels = useEnabledAIModels();
+	console.log('enabledAIModels', enabledAIModels);
 
 	const handleClose = () => {
 		ref?.current?.close();

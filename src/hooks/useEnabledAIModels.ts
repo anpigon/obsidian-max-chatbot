@@ -1,13 +1,15 @@
 import {LLM_PROVIDERS} from '@/constants';
 import type {MAXSettings} from '@/features/setting/types';
 import {useEffect, useState} from 'react';
+import {useSettings} from './useApp';
 
 export interface ProviderModels {
 	provider: LLM_PROVIDERS;
 	models: string[];
 }
 
-export const useGetAiModels = (settings: MAXSettings) => {
+export const useEnabledAIModels = () => {
+	const settings = useSettings();
 	const [models, setModels] = useState<ProviderModels[]>([]);
 
 	useEffect(() => {
