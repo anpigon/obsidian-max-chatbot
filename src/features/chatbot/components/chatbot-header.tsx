@@ -50,7 +50,6 @@ export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers,
 								})}
 							</optgroup>
 						);
-						return null;
 					})}
 			</Dropdown>
 			<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={onStartNewChat} />

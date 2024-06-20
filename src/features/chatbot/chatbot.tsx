@@ -12,7 +12,7 @@ import {Message} from './components/message';
 import {MessagesContainer} from './components/messages-container';
 import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
-import {useEnabledAIModels} from '@/hooks/useEnabledAIModels';
+import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useLLM} from './hooks/use-llm';
 
 export const Chatbot: React.FC = () => {
@@ -30,7 +30,7 @@ export const Chatbot: React.FC = () => {
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
 
-	const providers = useEnabledAIModels();
+	const enabledModels = useEnabledLLMModels();
 	const [currentModel, setCurrentModel] = useCurrentModel(settings);
 
 	const {allowReferenceCurrentNote} = useChatbotState();
@@ -126,7 +126,7 @@ export const Chatbot: React.FC = () => {
 	return (
 		<ChatbotContainer>
 			<ChatbotHeader
-				providers={providers}
+				providers={enabledModels}
 				botName={chatbotName}
 				currentModel={currentModel}
 				disabled={isStreaming}

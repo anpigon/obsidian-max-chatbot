@@ -80,6 +80,7 @@
 		"Enter the name of the agent you want to create.": "만들려는 에이전트의 이름을 입력합니다. 이렇게 하면 에이전트를 식별하는 데 도움이 됩니다.",
 		"Select the embedding model the agent will use to understand and process text.": "에이전트가 텍스트를 이해하고 처리하는 데 사용할 임베딩 모델을 선택합니다. 임베딩 모델은 텍스트를 숫자 표현으로 변환하여 에이전트가 정확하게 분석하고 응답할 수 있도록 도와줍니다.",
 		"Provide custom knowledge for the bot to reference when responding.": "봇이 응답할 때 참조할 수 있는 사용자 지정 지식을 제공합니다. 디렉토리 또는 개별 파일을 추가하도록 선택할 수 있습니다.",
-		"Describe how the bot should behave and respond to user messages.": "봇이 어떻게 행동하고 사용자 메시지에 어떻게 반응할지 설명하세요. 가능한 한 명확하고 구체적이어야 합니다."
+		"Describe how the bot should behave and respond to user messages.": "봇이 어떻게 행동하고 사용자 메시지에 어떻게 반응할지 설명하세요. 가능한 한 명확하고 구체적이어야 합니다.",
+		"Embedding model service providers": "임베딩 모델 서비스 제공업체"
 	}
 }

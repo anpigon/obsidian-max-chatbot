@@ -42,7 +42,7 @@ export interface LLMProviderSettings {
 
 export interface Agent {
 	id: string;
-	name: string;
+	agentName: string;
 	embeddingProvider: LLM_PROVIDERS;
 	embeddingModel: string;
 	knowledge: string[];
