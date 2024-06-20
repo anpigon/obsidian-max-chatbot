@@ -78,8 +78,11 @@
 	},
 	"add_agent": {
 		"Enter the name of the agent you want to create.": "Enter the name of the agent you want to create. This will help identify the agent in the obsidian.",
+		"Select the default response model for the agent.": "Select the default response model for the agent.",
+		"system_prompt_placeholder": "As a friendly chatbot, answer their requests in as much detail and kindness as possible.",
 		"Select the embedding model the agent will use to understand and process text.": "Select the embedding model the agent will use to understand and process text. Embedding models help convert text into numerical representations, enabling the agent to analyze and respond accurately.",
 		"Provide custom knowledge for the bot to reference when responding.": "Provide custom knowledge for the bot to reference when responding. You can choose to add a directory or individual files.",
-		"Describe how the bot should behave and respond to user messages.": "Describe how the bot should behave and respond to user messages. Be as clear and specific as possible."
+		"Describe how the bot should behave and respond to user messages.": "Describe how the bot should behave and respond to user messages. Be as clear and specific as possible.",
+		"Embedding model service providers": "Embedding model service providers"
 	}
 }
