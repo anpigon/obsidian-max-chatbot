@@ -90,7 +90,7 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 					</SettingItem>
 
 					<SettingItem name={t('Knowledge')} description={t('Provide custom knowledge for the bot to reference when responding.')}>
-						{/* Knowledge를 추가한다. 디렉토리를 추가할지 파일을 추가할지 선택하게 하자. */}
+						<input name="Knowledge" />
 					</SettingItem>
 
 					<SettingItem name="">
