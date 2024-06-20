@@ -40,6 +40,18 @@ export interface LLMProviderSettings {
 	[LLM_PROVIDERS.GROQ]: ProviderSettings;
 }
 
+export interface Agent {
+	id: string;
+	name: string;
+	embeddingProvider: LLM_PROVIDERS;
+	embeddingModel: string;
+	knowledge: string[];
+	vectorStore: string;
+	systemPrompt: '';
+	llmProvider: LLM_PROVIDERS;
+	llmModel: string;
+}
+
 export interface MAXSettings {
 	profiles: {
 		profile: string;
@@ -89,4 +101,5 @@ export interface MAXSettings {
 	allModels: string[];
 	isVerbose: boolean;
 	langSmithKey: string;
+	agents: Agent[];
 }
