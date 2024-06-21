@@ -1,9 +1,11 @@
-import {Dropdown, SettingItem} from '@/components';
+import {Dropdown, SettingItem, Toggle} from '@/components';
 import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import Logger from '@/utils/logging';
+import clsx from 'clsx';
 import mergeRefs from 'merge-refs';
-import {FormEventHandler, forwardRef, useRef} from 'react';
+import {FormEventHandler, forwardRef, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {twMerge} from 'tailwind-merge';
 
 export interface AddAgentModalReturn {
 	agentName: string;
@@ -21,8 +23,10 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 
 	const enabledLLMModels = useEnabledLLMModels();
 	const enabledEmbeddingModels = useEnabledEmbeddingModel();
-	console.log('enabledLLMModels', enabledLLMModels);
-	console.log('enabledEmbeddingModels', enabledEmbeddingModels);
+	Logger.debug('enabledLLMModels', enabledLLMModels);
+	Logger.debug('enabledEmbeddingModels', enabledEmbeddingModels);
+
+	const [enableKnowledge, setEnableKnowledge] = useState(false);
 
 	const handleClose = () => {
 		ref?.current?.close();
@@ -70,28 +74,43 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 						<textarea name="systemPrompt" placeholder={t('system_prompt_placeholder')} rows={3} className="w-72" />
 					</SettingItem>
 
-					<SettingItem name={t('Embedding Model')} description={t('Select the embedding model the agent will use to understand and process text.')}>
-						<Dropdown required name="embedding" aria-placeholder={t('Embedding model service providers')}>
-							{enabledEmbeddingModels.map(({provider, models}) => {
-								return (
-									<optgroup key={provider} label={provider}>
-										{models.map(model => {
-											const value = `${provider}/${model}`;
-											return (
-												<option key={value} value={value}>
-													{model}
-												</option>
-											);
-										})}
-									</optgroup>
-								);
-							})}
-						</Dropdown>
+					<SettingItem heading name={t('Add Knowledge')} className="bg-secondary rounded-lg px-3">
+						<Toggle
+							name="enableOllama"
+							checked={enableKnowledge}
+							onChange={event => {
+								const value = event.target.checked;
+								setEnableKnowledge(value);
+							}}
+						/>
 					</SettingItem>
+					<div className={twMerge(clsx('p-3 hidden', {block: enableKnowledge}))}>
+						<SettingItem
+							name={t('Embedding Model')}
+							description={t('Select the embedding model the agent will use to understand and process text.')}
+						>
+							<Dropdown required name="embedding" aria-placeholder={t('Embedding model service providers')}>
+								{enabledEmbeddingModels.map(({provider, models}) => {
+									return (
+										<optgroup key={provider} label={provider}>
+											{models.map(model => {
+												const value = `${provider}/${model}`;
+												return (
+													<option key={value} value={value}>
+														{model}
+													</option>
+												);
+											})}
+										</optgroup>
+									);
+								})}
+							</Dropdown>
+						</SettingItem>
 
-					<SettingItem name={t('Knowledge')} description={t('Provide custom knowledge for the bot to reference when responding.')}>
-						<input name="Knowledge" />
-					</SettingItem>
+						<SettingItem name={t('Knowledge')} description={t('Provide custom knowledge for the bot to reference when responding.')}>
+							<input name="Knowledge" />
+						</SettingItem>
+					</div>
 
 					<SettingItem name="">
 						<button type="button" onClick={handleClose}>
