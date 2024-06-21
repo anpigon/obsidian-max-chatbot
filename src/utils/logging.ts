@@ -17,7 +17,7 @@ class Logger {
 
 	static debug(...args: unknown[]): void {
 		if (Logger.logLevel <= LogLevel.DEBUG) {
-			console.debug('[MAX Chatbot]', ...args);
+			console.log('[MAX Chatbot]', ...args);
 		}
 	}
 
