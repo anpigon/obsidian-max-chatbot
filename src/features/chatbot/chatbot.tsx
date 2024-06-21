@@ -1,10 +1,13 @@
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
-import useOnceEffect from '@/hooks/useOnceEffect';
 import {Notice} from 'obsidian';
-import type {ChangeEvent, KeyboardEvent} from 'react';
+import type {ChangeEvent, FC, KeyboardEvent} from 'react';
 import {useEffect, useRef, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
+
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
+import useOnceEffect from '@/hooks/useOnceEffect';
+
 import {ChatBox} from './components/chat-box';
 import {ChatbotContainer} from './components/chatbot-container';
 import {ChatbotHeader} from './components/chatbot-header';
@@ -12,11 +15,10 @@ import {Message} from './components/message';
 import {MessagesContainer} from './components/messages-container';
 import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
-import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useLLM} from './hooks/use-llm';
 
-export const Chatbot: React.FC = () => {
-	const app = useApp();
+// eslint-disable-next-line no-undef
+export const Chatbot: FC = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const {t} = useTranslation('chatbot');

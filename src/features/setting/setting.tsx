@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
+
+import AgentSetting from './components/agents';
 import {ChatHistorySetting} from './components/chat-history-setting';
 import {CommandsSetting} from './components/commands-setting';
 import {DeveloperSetting} from './components/developer-setting';
@@ -9,11 +11,10 @@ import LanguageModels from './components/language-models';
 import {ProfileSetting} from './components/profile-setting';
 import {PromptSetting} from './components/prompt-setting';
 import {SettingProvider} from './context';
-import AgentSetting from './components/agents';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
-	const selectedTabCookie = Number(window.localStorage.getItem('max-selected-tab'));
+	const selectedTabCookie = Number(globalThis.localStorage.getItem('max-selected-tab'));
 	const [selectedTab, setSelectedTab] = useState(selectedTabCookie || 0);
 
 	const tabs = [

@@ -1,19 +1,19 @@
 import './set-process-env-mobile';
 
+import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
 import {Plugin, WorkspaceLeaf, normalizePath} from 'obsidian';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import type {MAXSettings} from '@/features/setting/types';
-import Logger, {LogLevel} from './utils/logging';
-import {ChatbotView, VIEW_TYPE_CHATBOT} from './views/chatbot-view';
-import {MAXSettingTab} from './views/setting-view';
+import {VectorStoreBackup} from '@/utils/local-vector-store';
+import Logger, {LogLevel} from '@/utils/logging';
+import {ChatbotView, VIEW_TYPE_CHATBOT} from '@/views/chatbot-view';
+import {MAXSettingTab} from '@/views/setting-view';
 
 import './i18n';
 
 import './styles.css';
-import {decode, encode} from '@msgpack/msgpack';
-import {VectorStoreBackup} from './utils/local-vector-store';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;

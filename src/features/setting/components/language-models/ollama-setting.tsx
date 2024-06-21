@@ -1,16 +1,19 @@
-import {requestOllamaModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {usePlugin} from '@/hooks/useApp';
 import clsx from 'clsx';
+import type {ChangeEventHandler} from 'react';
 import {useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
-import {OllamaSettingAdvanced} from './ollama-setting-advanced';
-import {Icon} from '@/components/icons/icon';
-import Logger from '@/utils/logging';
+
+import {requestOllamaModels} from '@/apis/fetch-model-list';
 import {Button} from '@/components';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import {SettingItem} from '@/components/settings/setting-item';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {usePlugin} from '@/hooks/useApp';
+import Logger from '@/utils/logging';
+
+import {OllamaSettingAdvanced} from './ollama-setting-advanced';
 
 export const OllamaSetting = () => {
 	const plugin = usePlugin();
@@ -23,7 +26,7 @@ export const OllamaSetting = () => {
 	const [error, setError] = useState('');
 	const [enable, setEnable] = useState(providerSettings?.enable);
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
-	const handleChangeAllowStream: React.ChangeEventHandler<HTMLInputElement> = event => {
+	const handleChangeAllowStream: ChangeEventHandler<HTMLInputElement> = event => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;

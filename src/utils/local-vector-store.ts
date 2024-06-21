@@ -6,8 +6,8 @@ import {Embeddings} from '@langchain/core/embeddings';
 import {VectorStore} from '@langchain/core/vectorstores';
 import {Orama, TypedDocument, create, insertMultiple, removeMultiple, search} from '@orama/orama';
 
-import Logger from './logging';
 import {hashString} from './hash';
+import Logger from './logging';
 
 const vectorStoreSchema = {
 	id: 'string',

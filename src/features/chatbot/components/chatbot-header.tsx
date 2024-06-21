@@ -1,8 +1,9 @@
+import {t} from 'i18next';
+import type {ChangeEventHandler, FC, PropsWithChildren} from 'react';
+
+import {IconButton} from '@/components/buttons/icon-button';
 import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/constants';
-import {PropsWithChildren} from 'react';
-import {IconButton} from '@/components/buttons/icon-button';
-import {t} from 'i18next';
 import {ProviderModels} from '@/hooks/useEnabledModels';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
@@ -13,12 +14,13 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 		provider: LLM_PROVIDERS;
 		model: string;
 	};
+	// eslint-disable-next-line no-unused-vars
 	onChangeModel: (provider: LLM_PROVIDERS, modelName: string) => void;
 	onStartNewChat: () => void;
 }
 
-export const ChatbotHeader: React.FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, onStartNewChat}) => {
-	const handleChangeModel: React.ChangeEventHandler<HTMLSelectElement> = e => {
+export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, onStartNewChat}) => {
+	const handleChangeModel: ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
 		if (value) {
 			const [provider, ...modelName] = value.split('/');

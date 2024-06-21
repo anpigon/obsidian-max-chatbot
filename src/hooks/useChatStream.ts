@@ -1,6 +1,7 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
-import {decodeStreamToJson, getStream} from '../utils/streams';
+
 import {UseChatStreamChatMessage, UseChatStreamInput} from '../types';
+import {decodeStreamToJson, getStream} from '../utils/streams';
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 

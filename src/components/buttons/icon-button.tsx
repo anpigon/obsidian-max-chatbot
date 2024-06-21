@@ -1,9 +1,10 @@
+import type {ButtonHTMLAttributes, FC, ReactNode} from 'react';
 import {twMerge} from 'tailwind-merge';
+
 import {Icon} from '../icons/icon';
-import {ReactNode} from 'react';
 import {Button} from './button';
 
-export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	label: string;
 	icon: ReactNode;
 	onClick: () => void;
@@ -12,7 +13,7 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 	disabled?: boolean;
 }
 
-export const IconButton: React.FC<IconButtonProps> = ({label, icon, onClick, className, iconClassName, disabled = false, ...props}) => {
+export const IconButton: FC<IconButtonProps> = ({label, icon, onClick, className, iconClassName, disabled = false, ...props}) => {
 	return (
 		<Button
 			className={twMerge('clickable-icon setting-editor-extra-setting-button', className)}

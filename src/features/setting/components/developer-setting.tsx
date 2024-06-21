@@ -1,17 +1,19 @@
-import {Toggle} from '@/components/form/toggle';
-import {SettingItem} from '@/components/settings/setting-item';
-import {usePlugin} from '@/hooks/useApp';
+import type {ChangeEventHandler, FC} from 'react';
 import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
-export const DeveloperSetting: React.FC = () => {
+import {Toggle} from '@/components/form/toggle';
+import {SettingItem} from '@/components/settings/setting-item';
+import {usePlugin} from '@/hooks/useApp';
+
+export const DeveloperSetting: FC = () => {
 	const plugin = usePlugin();
 	const settings = plugin.settings!;
 	const {t} = useTranslation('settings');
 
 	const [isVerbose, setIsVerbose] = useState(settings.isVerbose);
 
-	const handleChangeIsVerbose: React.ChangeEventHandler<HTMLInputElement> = event => {
+	const handleChangeIsVerbose: ChangeEventHandler<HTMLInputElement> = event => {
 		const value = event.target.checked;
 		setIsVerbose(value);
 		settings.isVerbose = value;
@@ -26,7 +28,7 @@ export const DeveloperSetting: React.FC = () => {
 				<Toggle name="enableOllama" checked={isVerbose} onChange={handleChangeIsVerbose} />
 			</SettingItem>
 
-			<SettingItem name={t('langsmith_key')} description={t('langsmith_key_desc')} className='hidden'>
+			<SettingItem name={t('langsmith_key')} description={t('langsmith_key_desc')} className="hidden">
 				<input
 					type="password"
 					spellCheck={false}
