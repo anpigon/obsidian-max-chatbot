@@ -113,7 +113,18 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 							className="flex-col items-start gap-3 *:w-full"
 						>
 							<div className="flex justify-between gap-2 w-full">
-								<Search name="Knowledge" placeholder={t('Enter knowledge notes folder path')} className="w-full" />
+								<Search
+									name="Knowledge"
+									placeholder={t('Enter knowledge notes folder path')}
+									className="w-full"
+									onInput={() => {
+										/* try {
+										new FileSuggest(this.app, cb.inputEl);
+									} catch {
+										// eslint-disable
+									} */
+									}}
+								/>
 								<Button>Add Knowledge</Button>
 							</div>
 						</SettingItem>
