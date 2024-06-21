@@ -4,5 +4,6 @@
 	"trailingComma": "es5",
 	"arrowParens": "avoid",
 	"semi": true,
-	"printWidth": 160
+	"printWidth": 160,
+	"plugins": ["prettier-plugin-organize-imports"]
 }
