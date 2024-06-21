@@ -1,18 +1,19 @@
 import {Button} from '@/components';
 import {SettingItem} from '@/components/settings/setting-item';
+import AddAgentModal from '@/features/add-agent-modal';
 import {usePlugin} from '@/hooks/useApp';
-import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
-import {useTranslation} from 'react-i18next';
 import {OramaStore} from '@/utils/local-vector-store';
 import Logger from '@/utils/logging';
 import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
-import {useAddAgentModal} from './hooks/use-add-agent-modal';
+import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
+import {useTranslation} from 'react-i18next';
+import {useAddAgentModal} from './hooks/useAddAgentModal';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();
 	const {t} = useTranslation('settings');
 
-	const [AddAgentModal, openAddAgentModal] = useAddAgentModal();
+	const modal = useAddAgentModal();
 
 	const handleTest = async () => {
 		const embeddings = new OllamaEmbeddings({
@@ -53,7 +54,7 @@ export default function AgentSetting() {
 	};
 
 	const handleAddAgent = async () => {
-		const data = await openAddAgentModal();
+		const data = await modal.open();
 		Logger.info('Modal confirmed with data:', data);
 	};
 

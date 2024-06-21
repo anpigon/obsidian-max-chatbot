@@ -1,9 +1,9 @@
 import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/constants';
 import {PropsWithChildren} from 'react';
-import {ProviderModels} from '../hooks/use-get-ai-models';
 import {IconButton} from '@/components/buttons/icon-button';
 import {t} from 'i18next';
+import {ProviderModels} from '@/hooks/useEnabledModels';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;
