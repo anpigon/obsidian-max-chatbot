@@ -1,15 +1,15 @@
-import clsx from 'clsx';
-import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useState} from 'react';
+import clsx from 'clsx';
 
-import AgentSetting from './components/agents';
 import {ChatHistorySetting} from './components/chat-history-setting';
-import {CommandsSetting} from './components/commands-setting';
 import {DeveloperSetting} from './components/developer-setting';
+import {CommandsSetting} from './components/commands-setting';
 import {GeneralSetting} from './components/general-setting';
-import LanguageModels from './components/language-models';
 import {ProfileSetting} from './components/profile-setting';
+import LanguageModels from './components/language-models';
 import {PromptSetting} from './components/prompt-setting';
+import AgentSetting from './components/agents';
 import {SettingProvider} from './context';
 
 export const Setting = () => {

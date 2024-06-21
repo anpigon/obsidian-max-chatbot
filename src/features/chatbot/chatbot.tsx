@@ -1,20 +1,21 @@
-import {Notice} from 'obsidian';
-import type {ChangeEvent, FC, KeyboardEvent} from 'react';
 import {useEffect, useRef, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Notice} from 'obsidian';
+
+import type {ChangeEvent, FC, KeyboardEvent} from 'react';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {usePlugin, useSettings} from '@/hooks/useApp';
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
+import {usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 
-import {ChatBox} from './components/chat-box';
+import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
 import {ChatbotHeader} from './components/chatbot-header';
-import {Message} from './components/message';
-import {MessagesContainer} from './components/messages-container';
-import {useChatbotState} from './context';
 import {useCurrentModel} from './hooks/use-current-model';
+import {ChatBox} from './components/chat-box';
+import {Message} from './components/message';
+import {useChatbotState} from './context';
 import {useLLM} from './hooks/use-llm';
 
 // eslint-disable-next-line no-undef

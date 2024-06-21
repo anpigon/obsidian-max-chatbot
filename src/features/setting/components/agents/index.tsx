@@ -1,13 +1,14 @@
-import {Button} from '@/components';
-import {SettingItem} from '@/components/settings/setting-item';
-import AddAgentModal from '@/features/add-agent-modal';
-import {usePlugin} from '@/hooks/useApp';
-import {OramaStore} from '@/utils/local-vector-store';
-import Logger from '@/utils/logging';
-import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
 import {useTranslation} from 'react-i18next';
+
+import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
+import {SettingItem} from '@/components/settings/setting-item';
 import {useAddAgentModal} from './hooks/useAddAgentModal';
+import AddAgentModal from '@/features/add-agent-modal';
+import {OramaStore} from '@/utils/local-vector-store';
+import {usePlugin} from '@/hooks/useApp';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();

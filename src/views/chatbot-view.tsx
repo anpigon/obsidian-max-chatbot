@@ -1,10 +1,11 @@
-import {ErrorBoundary} from '@/components';
-import {AppContext} from '@/context';
-import Chatbot from '@/features/chatbot';
-import MAXPlugin from '@/main';
+import {Root, createRoot} from 'react-dom/client';
 import {ItemView, WorkspaceLeaf} from 'obsidian';
 import React from 'react';
-import {Root, createRoot} from 'react-dom/client';
+
+import {ErrorBoundary} from '@/components';
+import Chatbot from '@/features/chatbot';
+import {AppContext} from '@/context';
+import MAXPlugin from '@/main';
 
 export const VIEW_TYPE_CHATBOT = 'max-chatbot-view';
 

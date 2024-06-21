@@ -9,6 +9,7 @@ import {
 	SIONIC_AI_BASE_URL,
 	UPSTAGE_BASE_URL,
 } from '@/constants';
+
 import type {MAXSettings} from '@/features/setting/types';
 
 export const DEFAULT_SETTINGS: MAXSettings = {

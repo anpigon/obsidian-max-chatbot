@@ -1,14 +1,15 @@
-import {Button} from '@/components';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
-import {SettingItem} from '@/components/settings/setting-item';
-import {UPSTAGE_MODELS} from '@/constants';
-import {usePlugin, useSettings} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
-import clsx from 'clsx';
 import {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
+
+import {SettingItem} from '@/components/settings/setting-item';
+import {usePlugin, useSettings} from '@/hooks/useApp';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import {UPSTAGE_MODELS} from '@/constants';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
 
 export const UpstageSetting = () => {
 	const {t} = useTranslation('settings');

@@ -1,6 +1,7 @@
-import {Document} from '@langchain/core/documents';
-import {RecursiveCharacterTextSplitter} from '@langchain/textsplitters';
 import {App, TFile} from 'obsidian';
+
+import {RecursiveCharacterTextSplitter} from '@langchain/textsplitters';
+import {Document} from '@langchain/core/documents';
 
 import {hashString} from './hash';
 import Logger from './logging';

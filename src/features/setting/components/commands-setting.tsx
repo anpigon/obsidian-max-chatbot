@@ -1,8 +1,9 @@
+import {Trans, useTranslation} from 'react-i18next';
+import {ChangeEventHandler} from 'react';
+
 import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin} from '@/hooks/useApp';
-import {ChangeEventHandler} from 'react';
-import {Trans, useTranslation} from 'react-i18next';
 
 export const CommandsSetting = () => {
 	const plugin = usePlugin();

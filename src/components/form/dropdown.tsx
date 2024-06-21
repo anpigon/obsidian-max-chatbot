@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import React, {SelectHTMLAttributes, forwardRef} from 'react';
+import clsx from 'clsx';
 
 type DropdownProps = SelectHTMLAttributes<HTMLSelectElement>;
 

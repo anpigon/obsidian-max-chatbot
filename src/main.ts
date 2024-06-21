@@ -1,15 +1,17 @@
+// sort-imports-ignore
 import './set-process-env-mobile';
 
+import {Plugin, WorkspaceLeaf, normalizePath} from 'obsidian';
 import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
-import {Plugin, WorkspaceLeaf, normalizePath} from 'obsidian';
 
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import type {MAXSettings} from '@/features/setting/types';
-import {VectorStoreBackup} from '@/utils/local-vector-store';
-import Logger, {LogLevel} from '@/utils/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from '@/views/chatbot-view';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {VectorStoreBackup} from '@/utils/local-vector-store';
 import {MAXSettingTab} from '@/views/setting-view';
+import Logger, {LogLevel} from '@/utils/logging';
+
+import type {MAXSettings} from '@/features/setting/types';
 
 import './i18n';
 

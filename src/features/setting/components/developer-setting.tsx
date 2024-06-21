@@ -1,9 +1,10 @@
-import type {ChangeEventHandler, FC} from 'react';
-import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useState} from 'react';
 
-import {Toggle} from '@/components/form/toggle';
+import type {ChangeEventHandler, FC} from 'react';
+
 import {SettingItem} from '@/components/settings/setting-item';
+import {Toggle} from '@/components/form/toggle';
 import {usePlugin} from '@/hooks/useApp';
 
 export const DeveloperSetting: FC = () => {

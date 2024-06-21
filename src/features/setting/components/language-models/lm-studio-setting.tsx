@@ -1,16 +1,16 @@
-import clsx from 'clsx';
-import {useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
+import {useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
 
-import {requestLMStudioModels} from '@/apis/fetch-model-list';
-import {Button} from '@/components';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
 import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {requestLMStudioModels} from '@/apis/fetch-model-list';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
 import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
+import {Button} from '@/components';
 
 export const LMStudioSetting = () => {
 	const plugin = usePlugin();

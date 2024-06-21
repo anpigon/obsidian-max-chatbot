@@ -1,10 +1,11 @@
+import {Root, createRoot} from 'react-dom/client';
+import {Modal} from 'obsidian';
+import React from 'react';
+
+import {AddAgentForm, AddAgentFormData} from './components/AddAgentForm';
 import {ErrorBoundary} from '@/components';
 import {AppContext} from '@/context';
 import MAXPlugin from '@/main';
-import {Modal} from 'obsidian';
-import React from 'react';
-import {Root, createRoot} from 'react-dom/client';
-import {AddAgentForm, AddAgentFormData} from './components/AddAgentForm';
 
 export default class AddAgentModal extends Modal {
 	private root: Root | null = null;

@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import {FC, InputHTMLAttributes} from 'react';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
 
 export type ToggleProps = InputHTMLAttributes<HTMLInputElement>;
 

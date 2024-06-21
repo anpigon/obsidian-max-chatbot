@@ -2,8 +2,8 @@ import {forwardRef, type TextareaHTMLAttributes} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {IconButton} from '@/components/buttons/icon-button';
-import {Toggle} from '@/components/form/toggle';
 import {IconStop} from '@/components/icons/icon-stop';
+import {Toggle} from '@/components/form/toggle';
 import {usePlugin} from '@/hooks/useApp';
 
 import {useChatbotDispatch, useChatbotState} from '../context';

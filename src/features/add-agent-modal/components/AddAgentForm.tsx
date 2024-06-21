@@ -1,10 +1,11 @@
-import {Button, Dropdown, Search, SettingItem, Toggle} from '@/components';
-import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
-import Logger from '@/utils/logging';
-import clsx from 'clsx';
 import {FC, FormEventHandler, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
+
+import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
+import {Button, Dropdown, Search, SettingItem, Toggle} from '@/components';
+import Logger from '@/utils/logging';
 
 export interface AddAgentFormData {
 	agentName: string;

@@ -1,7 +1,9 @@
-import {LLM_PROVIDERS, embeddingModelKeys} from '@/constants';
-import type {MAXSettings} from '@/features/setting/types';
 import {useEffect, useState} from 'react';
+
+import {LLM_PROVIDERS, embeddingModelKeys} from '@/constants';
 import {useSettings} from './useApp';
+
+import type {MAXSettings} from '@/features/setting/types';
 
 export interface ProviderModels {
 	provider: LLM_PROVIDERS;

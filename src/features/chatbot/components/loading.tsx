@@ -1,5 +1,6 @@
-import type {HTMLAttributes} from 'react';
 import {twMerge} from 'tailwind-merge';
+
+import type {HTMLAttributes} from 'react';
 
 export const Loading = ({className, ...props}: HTMLAttributes<HTMLDivElement>) => {
 	return (

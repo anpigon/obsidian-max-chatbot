@@ -1,10 +1,11 @@
-import {ErrorBoundary} from '@/components/error-boundary';
-import {AppContext} from '@/context';
-import {Setting} from '@/features/setting';
-import MAXPlugin from '@/main';
+import {Root, createRoot} from 'react-dom/client';
 import {App, PluginSettingTab} from 'obsidian';
 import React from 'react';
-import {Root, createRoot} from 'react-dom/client';
+
+import {ErrorBoundary} from '@/components/error-boundary';
+import {Setting} from '@/features/setting';
+import {AppContext} from '@/context';
+import MAXPlugin from '@/main';
 
 export class MAXSettingTab extends PluginSettingTab {
 	private root: Root | null = null;

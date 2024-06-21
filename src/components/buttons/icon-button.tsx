@@ -1,5 +1,6 @@
-import type {ButtonHTMLAttributes, FC, ReactNode} from 'react';
 import {twMerge} from 'tailwind-merge';
+
+import type {ButtonHTMLAttributes, FC, ReactNode} from 'react';
 
 import {Icon} from '../icons/icon';
 import {Button} from './button';

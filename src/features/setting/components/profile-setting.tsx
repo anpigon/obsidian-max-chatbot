@@ -1,12 +1,13 @@
-import {Dropdown} from '@/components/form/dropdown';
-import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {usePlugin} from '@/hooks/useApp';
-import {cleanFolderPath} from '@/utils/clean-folder-path';
-import clsx from 'clsx';
-import {TFolder} from 'obsidian';
 import {ChangeEventHandler, useEffect, useState, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
+import {TFolder} from 'obsidian';
+import clsx from 'clsx';
+
+import {SettingItem} from '@/components/settings/setting-item';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {cleanFolderPath} from '@/utils/clean-folder-path';
+import {Dropdown} from '@/components/form/dropdown';
+import {usePlugin} from '@/hooks/useApp';
 
 export const ProfileSetting: React.FC = () => {
 	const plugin = usePlugin();

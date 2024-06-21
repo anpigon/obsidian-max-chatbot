@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import {Document} from '@langchain/core/documents';
-import {Embeddings} from '@langchain/core/embeddings';
-import {VectorStore} from '@langchain/core/vectorstores';
 import {Orama, TypedDocument, create, insertMultiple, removeMultiple, search} from '@orama/orama';
+
+import {VectorStore} from '@langchain/core/vectorstores';
+import {Embeddings} from '@langchain/core/embeddings';
+import {Document} from '@langchain/core/documents';
 
 import {hashString} from './hash';
 import Logger from './logging';

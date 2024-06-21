@@ -1,6 +1,6 @@
+import {twMerge} from 'tailwind-merge';
 import {getIcon} from 'obsidian';
 import {SVGProps} from 'react';
-import {twMerge} from 'tailwind-merge';
 
 export interface IconProps extends SVGProps<SVGSVGElement> {
 	name: string; // https://lucide.dev/

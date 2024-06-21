@@ -1,10 +1,11 @@
 import {t} from 'i18next';
+
 import type {ChangeEventHandler, FC, PropsWithChildren} from 'react';
 
 import {IconButton} from '@/components/buttons/icon-button';
+import {ProviderModels} from '@/hooks/useEnabledModels';
 import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/constants';
-import {ProviderModels} from '@/hooks/useEnabledModels';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;

@@ -1,6 +1,7 @@
-import {LLM_PROVIDERS} from '@/constants';
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {useState} from 'react';
+
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {LLM_PROVIDERS} from '@/constants';
 
 import type {MAXSettings} from '@/features/setting/types';
 
