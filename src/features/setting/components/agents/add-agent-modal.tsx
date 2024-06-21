@@ -1,4 +1,4 @@
-import {Dropdown, SettingItem, Toggle} from '@/components';
+import {Button, Dropdown, Search, SettingItem, Toggle} from '@/components';
 import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import Logger from '@/utils/logging';
 import clsx from 'clsx';
@@ -74,7 +74,7 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 						<textarea name="systemPrompt" placeholder={t('system_prompt_placeholder')} rows={3} className="w-72" />
 					</SettingItem>
 
-					<SettingItem heading name={t('Add Knowledge')} className="bg-secondary rounded-lg px-3">
+					<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg px-3">
 						<Toggle
 							name="enableOllama"
 							checked={enableKnowledge}
@@ -107,8 +107,15 @@ export const AddAgentModal = forwardRef<HTMLDialogElement, AddAgentModalProps>((
 							</Dropdown>
 						</SettingItem>
 
-						<SettingItem name={t('Knowledge')} description={t('Provide custom knowledge for the bot to reference when responding.')}>
-							<input name="Knowledge" />
+						<SettingItem
+							name={t('Knowledge')}
+							description={t('Provide custom knowledge for the bot to reference when responding.')}
+							className="flex-col items-start gap-3 *:w-full"
+						>
+							<div className="flex justify-between gap-2 w-full">
+								<Search name="Knowledge" placeholder={t('Enter knowledge notes folder path')} className="w-full" />
+								<Button>Add Knowledge</Button>
+							</div>
 						</SettingItem>
 					</div>
 

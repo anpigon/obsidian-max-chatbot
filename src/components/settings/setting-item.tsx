@@ -1,15 +1,16 @@
-import {PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import {twMerge} from 'tailwind-merge';
 
 interface SettingItemProps extends PropsWithChildren {
-	as?: React.ReactNode;
+	as?: ReactNode;
 	className?: string;
 	heading?: boolean;
-	name: React.ReactNode;
-	description?: React.ReactNode;
+	name: ReactNode;
+	description?: ReactNode;
 }
 
-export const SettingItem: React.FC<SettingItemProps> = ({as = 'div', className, heading = false, name, description, children}) => {
+export const SettingItem: FC<SettingItemProps> = ({as = 'div', className, heading = false, name, description, children}) => {
+	// eslint-disable-next-line no-undef
 	const Container = as as keyof JSX.IntrinsicElements;
 
 	return (
