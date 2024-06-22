@@ -12,6 +12,10 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(({className, val
 	const internalRef = useRef<HTMLInputElement>(null);
 	const [internalValue, setInternalValue] = useState(value);
 
+	useEffect(() => {
+		setInternalValue(value);
+	}, [value]);
+
 	useImperativeHandle(ref, () => internalRef.current!);
 
 	useEffect(() => {
