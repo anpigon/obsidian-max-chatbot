@@ -1,14 +1,28 @@
-import {FC, FormEventHandler, useState} from 'react';
+import {FC, FormEventHandler, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
 import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
-import {Button, Dropdown, Search, SettingItem, Toggle} from '@/components';
+import {Button, Dropdown, IconButton, Search, SettingItem, Toggle} from '@/components';
+import {FolderSuggest} from '@/utils/suggesters/FolderSuggester';
+import {LLM_PROVIDERS} from '@/constants';
+import {useApp} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 
 export interface AddAgentFormData {
 	agentName: string;
+	description: string;
+	systemPrompt: string;
+	model: {
+		provider: LLM_PROVIDERS;
+		modelName: string;
+	};
+	embedding?: {
+		provider: LLM_PROVIDERS;
+		modelName: string;
+	};
+	knowledgeList?: string[];
 }
 
 export interface AddAgentFormProps {
@@ -17,59 +31,100 @@ export interface AddAgentFormProps {
 	onClose: () => void;
 }
 
-export const AddAgentForm: FC<AddAgentFormProps> = props => {
+export const AddAgentForm: FC<AddAgentFormProps> = ({onConfirm, onClose}) => {
+	const app = useApp();
 	const {t} = useTranslation('add_agent');
+
+	const [knowledge, setKnowledge] = useState('');
+	const [knowledgeList, setKnowledgeList] = useState<string[]>([]);
+	const [enableKnowledge, setEnableKnowledge] = useState(true);
+	const [enabledAddKnowledgeButton, setEnabledAddKnowledgeButton] = useState(false);
 
 	const enabledLLMModels = useEnabledLLMModels();
 	const enabledEmbeddingModels = useEnabledEmbeddingModel();
-	Logger.debug('enabledLLMModels', enabledLLMModels);
-	Logger.debug('enabledEmbeddingModels', enabledEmbeddingModels);
-
-	const [enableKnowledge, setEnableKnowledge] = useState(false);
+	// Logger.debug('enabledLLMModels', enabledLLMModels);
+	// Logger.debug('enabledEmbeddingModels', enabledEmbeddingModels);
 
 	const handleConfirm: FormEventHandler<HTMLFormElement> = event => {
 		Logger.info(event.target);
 		const data = new FormData(event.currentTarget);
-		props.onConfirm({
+		const [modelProvider, ...modelNames] = (data.get('llm')?.toString() || '')?.split('/') ?? [];
+		const [embeddingProvider, ...embeddingNames] = (data.get('embedding')?.toString() || '')?.split('/') ?? [];
+		onConfirm({
 			agentName: data.get('agentName')?.toString() || '',
+			description: data.get('description')?.toString() || '',
+			systemPrompt: data.get('systemPrompt')?.toString() || '',
+			model: {
+				provider: modelProvider as LLM_PROVIDERS,
+				modelName: modelNames.join('/'),
+			},
+			...(enableKnowledge && {
+				embedding: {
+					provider: embeddingProvider as LLM_PROVIDERS,
+					modelName: embeddingNames.join('/'),
+				},
+				knowledgeList,
+			}),
 		});
 	};
+
+	useEffect(() => {
+		const checkKnowledgeExists = async () => {
+			const trimmedKnowledge = knowledge?.trim();
+			if (trimmedKnowledge && !knowledgeList.includes(trimmedKnowledge)) {
+				const exists = await app.vault.adapter.exists(trimmedKnowledge);
+				setEnabledAddKnowledgeButton(exists);
+			} else {
+				setEnabledAddKnowledgeButton(false);
+			}
+		};
+
+		checkKnowledgeExists();
+	}, [knowledge]);
 
 	return (
 		<form onSubmit={handleConfirm}>
 			{/* <div className="modal-content flex-col"> */}
 			<SettingItem name={t('Add Agent')} heading />
 
-			<SettingItem name={t('Agent Name')} description={t('Enter the name of the agent you want to create.')}>
-				<input required type="text" name="agentName" placeholder={t('your agent name')} />
-			</SettingItem>
+			<SettingItem heading name={t('Agent Info')} className="bg-secondary rounded-lg px-3" />
+			<div className={twMerge(clsx('p-3'))}>
+				<SettingItem name={t('Agent Name')} description={t('Enter the name of the agent you want to create.')}>
+					<input required type="text" name="agentName" placeholder={t('your agent name')} />
+				</SettingItem>
+				<SettingItem name={t('Description')} description={t('Write a short description that identifies the  agent.')}>
+					<textarea name="description" placeholder={t('A QA chatbot that answers questions based on Obsidian notes.')} rows={2} className="w-72" />
+				</SettingItem>
+			</div>
 
-			<SettingItem name={t('Response Model')} description={t('Select the default response model for the agent.')}>
-				<Dropdown required name="llm">
-					{enabledLLMModels.map(({provider, models}) => {
-						return (
-							<optgroup key={provider} label={provider}>
-								{models.map(model => {
-									const value = `${provider}/${model}`;
-									return (
-										<option key={value} value={value}>
-											{model}
-										</option>
-									);
-								})}
-							</optgroup>
-						);
-					})}
-				</Dropdown>
-			</SettingItem>
-
-			<SettingItem name={t('System Prompt')} description={t('Describe how the bot should behave and respond to user messages.')}>
-				<textarea name="systemPrompt" placeholder={t('system_prompt_placeholder')} rows={3} className="w-72" />
-			</SettingItem>
+			<SettingItem heading name={t('AI Model')} className="bg-secondary rounded-lg px-3" />
+			<div className={twMerge(clsx('p-3'))}>
+				<SettingItem name={t('Response Model')} description={t('Select the default response model for the agent.')}>
+					<Dropdown required name="llm">
+						{enabledLLMModels.map(({provider, models}) => {
+							return (
+								<optgroup key={provider} label={provider}>
+									{models.map(model => {
+										const value = `${provider}/${model}`;
+										return (
+											<option key={value} value={value}>
+												{model}
+											</option>
+										);
+									})}
+								</optgroup>
+							);
+						})}
+					</Dropdown>
+				</SettingItem>
+				<SettingItem name={t('System Prompt')} description={t('Describe how the bot should behave and respond to user messages.')}>
+					<textarea name="systemPrompt" placeholder={t('system_prompt_placeholder')} rows={3} className="w-72" />
+				</SettingItem>
+			</div>
 
 			<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg px-3">
 				<Toggle
-					name="enableOllama"
+					name="enableKnowledge"
 					checked={enableKnowledge}
 					onChange={event => {
 						const value = event.target.checked;
@@ -107,21 +162,47 @@ export const AddAgentForm: FC<AddAgentFormProps> = props => {
 							name="Knowledge"
 							placeholder={t('Enter knowledge notes folder path')}
 							className="w-full"
-							onInput={() => {
-								/* try {
-										new FileSuggest(this.app, cb.inputEl);
-									} catch {
-										// eslint-disable
-									} */
+							value={knowledge}
+							onInput={e => setKnowledge(e.currentTarget.value)}
+							onSearch={e => {
+								try {
+									new FolderSuggest(app, e);
+								} catch {
+									// eslint-disable
+								}
 							}}
 						/>
-						<Button>Add Knowledge</Button>
+						<Button
+							disabled={!enabledAddKnowledgeButton}
+							onClick={() => {
+								setKnowledgeList(prev => [...prev, knowledge]);
+								setKnowledge('');
+							}}
+						>
+							Add Knowledge
+						</Button>
 					</div>
 				</SettingItem>
+
+				<div className="mt-2">
+					<SettingItem heading name={t('Knowledge List')} />
+					{knowledgeList.map(knowledge => (
+						<SettingItem name={knowledge} key={knowledge}>
+							<IconButton
+								label="delete"
+								icon="trash"
+								onClick={() => {
+									setKnowledgeList(prev => prev.filter(item => item !== knowledge));
+								}}
+							/>
+						</SettingItem>
+					))}
+					{knowledgeList.length === 0 && <span className="setting-item-description">Try adding a folder containing notes to Knowledge.</span>}
+				</div>
 			</div>
 
 			<SettingItem name="">
-				<button type="button" onClick={props.onClose}>
+				<button type="button" onClick={onClose}>
 					Cancel
 				</button>
 				<button type="submit" value="save" className="mod-cta">
