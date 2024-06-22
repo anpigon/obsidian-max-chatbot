@@ -1,18 +1,23 @@
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
 import {useTranslation} from 'react-i18next';
 
+import {useState} from 'react';
+
 import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
 import {SettingItem} from '@/components/settings/setting-item';
 import {useAddAgentModal} from './hooks/useAddAgentModal';
 import AddAgentModal from '@/features/add-agent-modal';
 import {OramaStore} from '@/utils/local-vector-store';
-import {usePlugin} from '@/hooks/useApp';
+import {usePlugin, useSettings} from '@/hooks/useApp';
 import Logger from '@/utils/logging';
 import {Button} from '@/components';
+import {Agent} from '../../types';
 
 export default function AgentSetting() {
 	const plugin = usePlugin();
+	const settings = useSettings();
 	const {t} = useTranslation('settings');
+	const [agents, setAgents] = useState<Agent[]>(settings.agents || []);
 
 	const modal = useAddAgentModal();
 
@@ -58,7 +63,7 @@ export default function AgentSetting() {
 		const data = await modal.open();
 		Logger.info('Modal confirmed with data:', data);
 
-		plugin.settings?.agents.push({
+		const newAgent: Agent = {
 			id: Date.now().toString(36),
 			agentName: data.agentName,
 			description: data.description,
@@ -70,8 +75,12 @@ export default function AgentSetting() {
 			knowledgeList: data.knowledgeList,
 			vectorStore: 'Local',
 			enable: true,
-		});
+		};
+
+		plugin.settings?.agents.push(newAgent);
 		await plugin.saveSettings();
+
+		setAgents(prev => [...prev, newAgent]);
 	};
 
 	return (
