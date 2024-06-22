@@ -43,11 +43,12 @@ export interface LLMProviderSettings {
 export interface Agent {
 	id: string;
 	agentName: string;
-	embeddingProvider: LLM_PROVIDERS;
-	embeddingModel: string;
-	knowledge: string[];
-	vectorStore: string;
-	systemPrompt: '';
+	description: string;
+	embeddingProvider?: LLM_PROVIDERS;
+	embeddingModel?: string;
+	knowledgeList?: string[];
+	vectorStore?: string;
+	systemPrompt: string;
 	llmProvider: LLM_PROVIDERS;
 	llmModel: string;
 	enable: boolean;

@@ -57,6 +57,21 @@ export default function AgentSetting() {
 	const handleAddAgent = async () => {
 		const data = await modal.open();
 		Logger.info('Modal confirmed with data:', data);
+
+		plugin.settings?.agents.push({
+			id: Date.now().toString(36),
+			agentName: data.agentName,
+			description: data.description,
+			systemPrompt: data.systemPrompt,
+			llmProvider: data.model.provider,
+			llmModel: data.model.modelName,
+			embeddingProvider: data.embedding?.provider,
+			embeddingModel: data.embedding?.modelName,
+			knowledgeList: data.knowledgeList,
+			vectorStore: 'Local',
+			enable: true,
+		});
+		await plugin.saveSettings();
 	};
 
 	return (
