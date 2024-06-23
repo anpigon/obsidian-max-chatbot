@@ -129,6 +129,7 @@ export default function AgentSetting() {
 						</SettingItem>
 					);
 				})}
+				{agents.length === 0 && <div className="setting-item-description">{t('No agents available. Click "Add Agents" to get started.')}</div>}
 			</>
 
 			{AddAgentModal}
