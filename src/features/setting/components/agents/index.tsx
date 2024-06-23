@@ -9,8 +9,8 @@ import {useAddAgentModal} from './hooks/useAddAgentModal';
 import AddAgentModal from '@/features/add-agent-modal';
 import {OramaStore} from '@/utils/local-vector-store';
 import {usePlugin, useSettings} from '@/hooks/useApp';
+import {Button, IconButton} from '@/components';
 import Logger from '@/utils/logging';
-import {Button} from '@/components';
 import {Agent} from '../../types';
 
 export default function AgentSetting() {
@@ -85,13 +85,22 @@ export default function AgentSetting() {
 
 	return (
 		<>
-			<SettingItem heading name={t('Agents')} />
-			<SettingItem name="">
+			<SettingItem heading name={t('Agents')}>
 				<Button onClick={handleAddAgent}>Add Agents</Button>
 			</SettingItem>
-			<SettingItem name="">
+			{/* <SettingItem name="">
 				<Button onClick={handleTest}>Test</Button>
-			</SettingItem>
+			</SettingItem> */}
+			<>
+				{agents.map(agent => {
+					return (
+						<SettingItem key={agent.id} name={agent.agentName} description={agent.description}>
+							<IconButton icon="edit" label="edit" onClick={() => {}} />
+							<IconButton icon="trash" label="delete" onClick={() => {}} />
+						</SettingItem>
+					);
+				})}
+			</>
 
 			{AddAgentModal}
 		</>
