@@ -1,5 +1,5 @@
+import {useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
-import {useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
@@ -15,9 +15,11 @@ import Logger from '@/utils/logging';
 import {Button} from '@/components';
 
 import {OllamaSettingAdvanced} from './ollama-setting-advanced';
+import {useSettingDispatch} from '../../context';
 
 export const OllamaSetting = () => {
 	const plugin = usePlugin();
+	const {refreshChatbotView} = useSettingDispatch();
 	const settings = plugin.settings!;
 	const providerSettings = settings.providers.OLLAMA;
 	const {t} = useTranslation('settings');
@@ -27,11 +29,17 @@ export const OllamaSetting = () => {
 	const [error, setError] = useState('');
 	const [enable, setEnable] = useState(providerSettings?.enable);
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
+
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
+	}, [plugin]);
+
 	const handleChangeAllowStream: ChangeEventHandler<HTMLInputElement> = event => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		plugin.saveSettings();
+		saveSettings();
 	};
 
 	const loadOllamaModels = async () => {
@@ -40,15 +48,15 @@ export const OllamaSetting = () => {
 
 		try {
 			const models = await requestOllamaModels(providerSettings?.baseUrl);
-			console.log('models', models);
+			Logger.debug('models', models);
 			setIsConnected(true);
 
 			providerSettings.models = models;
-			plugin.saveSettings();
+			saveSettings();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
-			setError(err.message);
+			setError(err?.message || 'Error');
 			setIsConnected(false);
 		} finally {
 			setIsLoading(false);
@@ -56,7 +64,9 @@ export const OllamaSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable) loadOllamaModels();
+		if (enable) {
+			loadOllamaModels();
+		}
 	}, [enable]);
 
 	return (
@@ -69,7 +79,8 @@ export const OllamaSetting = () => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						plugin.saveSettings();
+						saveSettings();
+						refreshChatbotView();
 					}}
 				/>
 			</SettingItem>
@@ -109,7 +120,7 @@ export const OllamaSetting = () => {
 						onChange={event => {
 							const value = event.target.value;
 							providerSettings.baseUrl = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>

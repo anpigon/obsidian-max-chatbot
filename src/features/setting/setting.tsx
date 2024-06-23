@@ -25,7 +25,7 @@ export const Setting = () => {
 
 	const handleTabChange = (index: number) => () => {
 		setSelectedTab(index);
-		window.localStorage.setItem('max-selected-tab', index.toString());
+		globalThis.localStorage.setItem('max-selected-tab', index.toString());
 	};
 
 	return (

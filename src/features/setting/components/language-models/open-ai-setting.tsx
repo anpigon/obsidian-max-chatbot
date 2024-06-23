@@ -1,11 +1,12 @@
+import {useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
-import {useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
 import {SettingItem} from '@/components/settings/setting-item';
 import {requestOpenAIModels} from '@/apis/fetch-model-list';
 import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import Logger from '@/utils/logging';
@@ -16,6 +17,7 @@ export const OpenAiSetting = () => {
 
 	const plugin = usePlugin();
 	const settings = useSettings();
+	const {refreshChatbotView} = useSettingDispatch();
 	const providerSettings = settings.providers.OPEN_AI;
 
 	const [error, setError] = useState('');
@@ -25,6 +27,11 @@ export const OpenAiSetting = () => {
 	const [baseUrl, setBaseUrl] = useState(providerSettings?.baseUrl ?? '');
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
+
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
+	}, [plugin]);
 
 	const loadModels = async () => {
 		if (!baseUrl) {
@@ -46,7 +53,7 @@ export const OpenAiSetting = () => {
 			Logger.info(models);
 			setIsConnected(true);
 			providerSettings.models = models;
-			plugin.saveSettings();
+			saveSettings();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
@@ -58,7 +65,9 @@ export const OpenAiSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable && baseUrl && apiKey) loadModels();
+		if (enable && baseUrl && apiKey) {
+			loadModels();
+		}
 	}, [enable]);
 
 	return (
@@ -70,7 +79,7 @@ export const OpenAiSetting = () => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						plugin.saveSettings();
+						saveSettings();
 					}}
 				/>
 			</SettingItem>
@@ -86,7 +95,7 @@ export const OpenAiSetting = () => {
 							const value = event.target.value?.trim();
 							setApiKey(value);
 							providerSettings.apiKey = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>
@@ -130,7 +139,7 @@ export const OpenAiSetting = () => {
 							const value = event.target.checked;
 							setAllowStream(value);
 							providerSettings.allowStream = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>

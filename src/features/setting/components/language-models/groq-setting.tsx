@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import {SettingItem} from '@/components/settings/setting-item';
 import {fetchGroqModels} from '@/apis/fetch-model-list';
 import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import Logger from '@/utils/logging';
@@ -15,6 +16,7 @@ export const GroqSetting = () => {
 	const {t} = useTranslation('settings');
 	const plugin = usePlugin();
 	const settings = useSettings();
+	const {refreshChatbotView} = useSettingDispatch();
 	const providerSettings = settings.providers.GROQ;
 
 	const [error, setError] = useState('');
@@ -24,8 +26,9 @@ export const GroqSetting = () => {
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const saveSettings = useCallback(() => {
-		plugin.saveSettings();
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
 	}, [plugin]);
 
 	const handleToggleChange = useCallback(

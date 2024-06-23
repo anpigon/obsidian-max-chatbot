@@ -1,11 +1,12 @@
+import {ChangeEventHandler, useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
-import {useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
 import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {requestLMStudioModels} from '@/apis/fetch-model-list';
+import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {usePlugin} from '@/hooks/useApp';
@@ -14,6 +15,7 @@ import {Button} from '@/components';
 
 export const LMStudioSetting = () => {
 	const plugin = usePlugin();
+	const {refreshChatbotView} = useSettingDispatch();
 	const settings = plugin.settings!;
 	const providerSettings = settings.providers.LM_STUDIO;
 	const {t} = useTranslation('settings');
@@ -24,11 +26,16 @@ export const LMStudioSetting = () => {
 	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const handleChangeAllowStream: React.ChangeEventHandler<HTMLInputElement> = event => {
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
+	}, [plugin]);
+
+	const handleChangeAllowStream: ChangeEventHandler<HTMLInputElement> = event => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		plugin.saveSettings();
+		saveSettings();
 	};
 
 	const loadModels = async () => {
@@ -39,7 +46,8 @@ export const LMStudioSetting = () => {
 			const models = await requestLMStudioModels(providerSettings);
 			setIsConnected(true);
 			providerSettings.models = models;
-			plugin.saveSettings();
+			saveSettings();
+			refreshChatbotView();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
@@ -63,7 +71,7 @@ export const LMStudioSetting = () => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						plugin.saveSettings();
+						saveSettings();
 					}}
 				/>
 			</SettingItem>
@@ -102,7 +110,7 @@ export const LMStudioSetting = () => {
 						onChange={event => {
 							const value = event.target.value;
 							providerSettings.baseUrl = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>

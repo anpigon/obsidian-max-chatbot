@@ -5,6 +5,7 @@ import clsx from 'clsx';
 
 import {SettingItem} from '@/components/settings/setting-item';
 import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {UPSTAGE_MODELS} from '@/constants';
@@ -15,6 +16,7 @@ export const UpstageSetting = () => {
 	const {t} = useTranslation('settings');
 	const plugin = usePlugin();
 	const settings = useSettings();
+	const {refreshChatbotView} = useSettingDispatch();
 	const providerSettings = settings.providers.UPSTAGE;
 
 	const [error, setError] = useState('');
@@ -25,8 +27,9 @@ export const UpstageSetting = () => {
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const saveSettings = useCallback(() => {
-		plugin.saveSettings();
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
 	}, [plugin]);
 
 	const handleToggleChange = useCallback(
@@ -89,7 +92,9 @@ export const UpstageSetting = () => {
 	}, [baseUrl, providerSettings, saveSettings]);
 
 	useEffect(() => {
-		if (enable && baseUrl && apiKey) loadModels();
+		if (enable && baseUrl && apiKey) {
+			loadModels();
+		}
 	}, [enable, baseUrl, apiKey, loadModels]);
 
 	return (

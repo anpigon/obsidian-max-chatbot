@@ -16,17 +16,17 @@ interface SettingState {
 
 interface SettingDispatch {
 	setModels: Dispatch<SetStateAction<Model[]>>;
+	refreshChatbotView: () => void;
 }
 
 const SettingStateContext = createContext<SettingState | undefined>(undefined);
 const SettingDispatchContext = createContext<SettingDispatch | undefined>(undefined);
 
 export const SettingProvider = ({children}: {children: ReactNode}) => {
-	const plugin = usePlugin();
 	const [models, setModels] = useState<Model[]>([]);
 
 	const refreshChatbotView = () => {
-		plugin.activateView();
+		globalThis.dispatchEvent(new Event('updateChatbotView', {}));
 	};
 
 	const state = useMemo(() => ({models}), [models]);
