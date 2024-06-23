@@ -122,82 +122,84 @@ export const AddAgentForm: FC<AddAgentFormProps> = ({onConfirm, onClose}) => {
 				</SettingItem>
 			</div>
 
-			<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg px-3">
-				<Toggle
-					name="enableKnowledge"
-					checked={enableKnowledge}
-					onChange={event => {
-						const value = event.target.checked;
-						setEnableKnowledge(value);
-					}}
-				/>
-			</SettingItem>
-			<div className={twMerge(clsx('p-3 hidden', {block: enableKnowledge}))}>
-				<SettingItem name={t('Embedding Model')} description={t('Select the embedding model the agent will use to understand and process text.')}>
-					<Dropdown required name="embedding" aria-placeholder={t('Embedding model service providers')}>
-						{enabledEmbeddingModels.map(({provider, models}) => {
-							return (
-								<optgroup key={provider} label={provider}>
-									{models.map(model => {
-										const value = `${provider}/${model}`;
-										return (
-											<option key={value} value={value}>
-												{model}
-											</option>
-										);
-									})}
-								</optgroup>
-							);
-						})}
-					</Dropdown>
+			<div className="hidden">
+				<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg px-3">
+					<Toggle
+						name="enableKnowledge"
+						checked={enableKnowledge}
+						onChange={event => {
+							const value = event.target.checked;
+							setEnableKnowledge(value);
+						}}
+					/>
 				</SettingItem>
+				<div className={twMerge(clsx('p-3 hidden', {block: enableKnowledge}))}>
+					<SettingItem name={t('Embedding Model')} description={t('Select the embedding model the agent will use to understand and process text.')}>
+						<Dropdown required name="embedding" aria-placeholder={t('Embedding model service providers')}>
+							{enabledEmbeddingModels.map(({provider, models}) => {
+								return (
+									<optgroup key={provider} label={provider}>
+										{models.map(model => {
+											const value = `${provider}/${model}`;
+											return (
+												<option key={value} value={value}>
+													{model}
+												</option>
+											);
+										})}
+									</optgroup>
+								);
+							})}
+						</Dropdown>
+					</SettingItem>
 
-				<SettingItem
-					name={t('Knowledge')}
-					description={t('Provide custom knowledge for the bot to reference when responding.')}
-					className="flex-col items-start gap-3 *:w-full"
-				>
-					<div className="flex justify-between gap-2 w-full">
-						<Search
-							name="Knowledge"
-							placeholder={t('Enter knowledge notes folder path')}
-							className="w-full"
-							value={knowledge}
-							onInput={e => setKnowledge(e.currentTarget.value)}
-							onSearch={e => {
-								try {
-									new FolderSuggest(app, e);
-								} catch {
-									// eslint-disable
-								}
-							}}
-						/>
-						<Button
-							disabled={!enabledAddKnowledgeButton}
-							onClick={() => {
-								setKnowledgeList(prev => [...prev, knowledge]);
-								setKnowledge('');
-							}}
-						>
-							Add Knowledge
-						</Button>
-					</div>
-				</SettingItem>
-
-				<div className="mt-2">
-					<SettingItem heading name={t('Knowledge List')} />
-					{knowledgeList.map(knowledge => (
-						<SettingItem name={knowledge} key={knowledge}>
-							<IconButton
-								label="delete"
-								icon="trash"
-								onClick={() => {
-									setKnowledgeList(prev => prev.filter(item => item !== knowledge));
+					<SettingItem
+						name={t('Knowledge')}
+						description={t('Provide custom knowledge for the bot to reference when responding.')}
+						className="flex-col items-start gap-3 *:w-full"
+					>
+						<div className="flex justify-between gap-2 w-full">
+							<Search
+								name="Knowledge"
+								placeholder={t('Enter knowledge notes folder path')}
+								className="w-full"
+								value={knowledge}
+								onInput={e => setKnowledge(e.currentTarget.value)}
+								onSearch={e => {
+									try {
+										new FolderSuggest(app, e);
+									} catch {
+										// eslint-disable
+									}
 								}}
 							/>
-						</SettingItem>
-					))}
-					{knowledgeList.length === 0 && <span className="setting-item-description">Try adding a folder containing notes to Knowledge.</span>}
+							<Button
+								disabled={!enabledAddKnowledgeButton}
+								onClick={() => {
+									setKnowledgeList(prev => [...prev, knowledge]);
+									setKnowledge('');
+								}}
+							>
+								Add Knowledge
+							</Button>
+						</div>
+					</SettingItem>
+
+					<div className="mt-2">
+						<SettingItem heading name={t('Knowledge List')} />
+						{knowledgeList.map(knowledge => (
+							<SettingItem name={knowledge} key={knowledge}>
+								<IconButton
+									label="delete"
+									icon="trash"
+									onClick={() => {
+										setKnowledgeList(prev => prev.filter(item => item !== knowledge));
+									}}
+								/>
+							</SettingItem>
+						))}
+						{knowledgeList.length === 0 && <span className="setting-item-description">Try adding a folder containing notes to Knowledge.</span>}
+					</div>
 				</div>
 			</div>
 
