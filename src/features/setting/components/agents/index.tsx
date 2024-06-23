@@ -1,7 +1,7 @@
 import {OllamaEmbeddings} from '@langchain/community/embeddings/ollama';
 import {useTranslation} from 'react-i18next';
 
-import {useState} from 'react';
+import {useState, useTransition} from 'react';
 
 import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
 import {SettingItem} from '@/components/settings/setting-item';
@@ -20,6 +20,7 @@ export default function AgentSetting() {
 	const [agents, setAgents] = useState<Agent[]>(settings.agents || []);
 
 	const modal = useAddAgentModal();
+	const [_, transition] = useTransition();
 
 	const handleTest = async () => {
 		const embeddings = new OllamaEmbeddings({
@@ -77,10 +78,38 @@ export default function AgentSetting() {
 			enable: true,
 		};
 
-		plugin.settings?.agents.push(newAgent);
-		await plugin.saveSettings();
+		transition(() => {
+			if (!settings.agents) settings.agents = [];
+			settings.agents.push(newAgent);
+			plugin
+				.saveSettings()
+				.then(() => {
+					setAgents(settings.agents);
+				})
+				.catch(() => {
+					globalThis.alert('An error occurred while saving the settings. Please try again.');
+				});
+		});
+	};
 
-		setAgents(prev => [...prev, newAgent]);
+	const handleDeleteAgent = (id: string) => {
+		if (!globalThis.confirm(t('Are you sure you want to delete?'))) return;
+		transition(() => {
+			if (settings.agents.length) {
+				const index = settings.agents.findIndex(agent => agent.id === id);
+				if (index !== -1) {
+					settings.agents.splice(index, 1);
+					plugin
+						.saveSettings()
+						.then(() => {
+							setAgents(settings.agents);
+						})
+						.catch(() => {
+							globalThis.alert('An error occurred while saving the settings. Please try again.');
+						});
+				}
+			}
+		});
 	};
 
 	return (
@@ -96,7 +125,7 @@ export default function AgentSetting() {
 					return (
 						<SettingItem key={agent.id} name={agent.agentName} description={agent.description}>
 							<IconButton icon="edit" label="edit" onClick={() => {}} />
-							<IconButton icon="trash" label="delete" onClick={() => {}} />
+							<IconButton icon="trash" label="delete" onClick={() => handleDeleteAgent(agent.id)} />
 						</SettingItem>
 					);
 				})}

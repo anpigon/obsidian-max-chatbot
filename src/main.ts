@@ -66,12 +66,12 @@ export default class MAXPlugin extends Plugin {
 		if (leaf) workspace.revealLeaf(leaf);
 	}
 
-	async loadSettings() {
+	async loadSettings(): Promise<void> {
 		const loadedData = (await this.loadData()) as MAXSettings;
 		this.settings = merge(DEFAULT_SETTINGS, loadedData);
 	}
 
-	async saveSettings() {
+	async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
 	}
 

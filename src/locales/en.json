@@ -74,7 +74,8 @@
 		"Provider API Key": "{{name}} API Key",
 		"Insert your provider API Key": "Insert your {{name}} API Key.",
 		"Agents": "Agents",
-		"Add Agent": "Add Agent"
+		"Add Agent": "Add Agent",
+		"Are you sure you want to delete?": "Are you sure you want to delete?"
 	},
 	"add_agent": {
 		"Enter the name of the agent you want to create.": "Enter the name of the agent you want to create. This will help identify the agent in the obsidian.",
