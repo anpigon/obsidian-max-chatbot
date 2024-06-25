@@ -37,7 +37,7 @@ interface UseChatStreamEventHandlers {
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
-const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
+export const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
 	const verbose = false;
 	const commonOptions = {...options, model, verbose};
 

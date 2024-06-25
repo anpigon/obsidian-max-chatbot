@@ -1,7 +1,7 @@
 // sort-imports-ignore
 import './set-process-env-mobile';
 
-import {Plugin, WorkspaceLeaf, normalizePath} from 'obsidian';
+import {Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
 
@@ -10,6 +10,8 @@ import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {VectorStoreBackup} from '@/utils/local-vector-store';
 import {MAXSettingTab} from '@/views/setting-view';
 import Logger, {LogLevel} from '@/utils/logging';
+import {StringOutputParser} from '@langchain/core/output_parsers';
+import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
 
 import type {MAXSettings} from '@/features/setting/types';
 
@@ -17,6 +19,8 @@ import './i18n';
 
 import './styles.css';
 import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
+import {getDefaultModelSetting} from './features/chatbot/hooks/use-current-model';
+import {getChatModel} from './features/chatbot/hooks/use-llm';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -34,10 +38,77 @@ export default class MAXPlugin extends Plugin {
 			name: 'Open MAX Chatbot',
 			callback: () => this.activateView(),
 		});
-
 		this.addRibbonIcon('bot', 'MAX Chatbot', () => this.activateView());
 
+		this.addCommand({
+			id: 'rename-note-title',
+			name: 'Rename Note Title',
+			callback: () => this.commandRenameFileTitle(),
+		});
+		this.registerEvent(
+			this.app.workspace.on('file-menu', (menu, file) => {
+				if (!(file instanceof TFile)) return;
+				menu.addItem(item => {
+					item.setTitle(`${this.manifest.name}: Rename Note Title`).onClick(() => this.commandRenameFileTitle());
+				});
+			})
+		);
+
 		this.addSettingTab(new MAXSettingTab(this.app, this));
+	}
+
+	async commandRenameFileTitle() {
+		const fileExtension = '.md';
+		const allFiles = this.app.vault.getFiles(); // Retrieve all files from the vault
+		const activeFile = this.app.workspace.getActiveFile();
+		if (!activeFile) {
+			return;
+		}
+
+		let folderName = this.app.vault.getAbstractFileByPath(activeFile?.path || '')?.parent?.path || '';
+		if (folderName && !folderName.endsWith('/')) folderName += '/';
+		Logger.debug('folderName', folderName);
+		Logger.debug('activeFile', activeFile);
+
+		// Function to check if a file name already exists
+		const fileNameExists = (fileName: string | null) => {
+			return allFiles.some(file => file.path === folderName + fileName + fileExtension);
+		};
+
+		try {
+			new Notice('Generating title...');
+
+			let uniqueNameFound = false;
+			let modelRenameTitle = '';
+			const fileContent = await this.app.vault.read(activeFile);
+			while (!uniqueNameFound) {
+				modelRenameTitle = await this.fetchModelRenameTitle(this.settings!, fileContent);
+				if (!fileNameExists(modelRenameTitle)) {
+					uniqueNameFound = true;
+				}
+			}
+
+			const fileName = folderName + modelRenameTitle + fileExtension;
+			await this.app.vault.rename(activeFile, fileName);
+
+			new Notice('Renamed note title.');
+		} catch (error) {
+			Logger.error(error);
+		}
+	}
+
+	async fetchModelRenameTitle(settings: MAXSettings, fileContent: string) {
+		const {provider, model} = getDefaultModelSetting(settings);
+		const llm = getChatModel(provider, model, settings.providers[provider]);
+		const prompt = [
+			new SystemMessage(
+				'You are a title generator. You will give succinct titles that does not contain backslashes, forward slashes, or colons. Generate a title as your response.'
+			),
+			new HumanMessage(fileContent),
+		];
+		const chain = llm.pipe(new StringOutputParser());
+		const response = await chain.invoke(prompt);
+		return response;
 	}
 
 	onunload() {

@@ -11,15 +11,15 @@ interface CurrentModel {
 }
 
 // 기본 설정을 가져오는 함수
-const getInitialSettings = (settings: MAXSettings) => ({
+export const getDefaultModelSetting = (settings: MAXSettings) => ({
 	provider: settings?.general.provider || DEFAULT_SETTINGS.general.provider,
 	model: settings?.general.model || DEFAULT_SETTINGS.general.model,
 });
 
 export const useCurrentModel = (settings: MAXSettings): [CurrentModel, (provider: LLM_PROVIDERS, model: string) => void] => {
-	const initialSettings = getInitialSettings(settings);
-	const [provider, setProvider] = useState<LLM_PROVIDERS>(initialSettings.provider);
-	const [model, setModel] = useState<string>(initialSettings.model);
+	const defaultModel = getDefaultModelSetting(settings);
+	const [provider, setProvider] = useState<LLM_PROVIDERS>(defaultModel.provider);
+	const [model, setModel] = useState<string>(defaultModel.model);
 
 	const setCurrentModel = (newProvider: LLM_PROVIDERS, newModel: string) => {
 		setProvider(newProvider);
