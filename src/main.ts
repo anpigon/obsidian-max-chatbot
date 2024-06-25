@@ -40,7 +40,7 @@ export default class MAXPlugin extends Plugin {
 		this.addCommand({
 			id: 'rename-note-title',
 			name: 'Rename Note Title',
-			callback: () => this.commandRenameFileTitle(),
+			editorCallback: () => this.commandRenameFileTitle(),
 		});
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file) => {
