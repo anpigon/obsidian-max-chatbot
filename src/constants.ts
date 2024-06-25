@@ -75,3 +75,6 @@ export const EMBEDDING_MODELS = {
 };
 
 export const embeddingModelKeys = Object.keys(EMBEDDING_MODELS);
+
+export const DEFAULT_VECTOR_STORE_NAME = 'vector_store';
+export const VECTOR_STORE_FILE_EXTENSION = '.bin';

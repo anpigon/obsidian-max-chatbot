@@ -16,6 +16,7 @@ import type {MAXSettings} from '@/features/setting/types';
 import './i18n';
 
 import './styles.css';
+import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -81,22 +82,33 @@ export default class MAXPlugin extends Plugin {
 			await this.app.vault.adapter.mkdir(vectorStoresDir);
 		}
 
-		const vectorStoreFilepath = normalizePath(vectorStoresDir + `/${storeName || 'vector_store'}` + '.bin');
+		const vectorStoreFilepath = normalizePath(vectorStoresDir + `/${storeName || DEFAULT_VECTOR_STORE_NAME}` + VECTOR_STORE_FILE_EXTENSION);
 		Logger.info('vectorStoreFilepath', vectorStoreFilepath);
 
 		return vectorStoreFilepath;
 	}
 
 	public async saveVectorStoreData(storeName: string, data: VectorStoreBackup): Promise<void> {
-		const normalizedPath = await this.getVectorStoreFilepath(storeName);
-		await this.app.vault.adapter.writeBinary(normalizedPath, encode(data));
-		Logger.info('Saved vector store data');
+		try {
+			const normalizedPath = await this.getVectorStoreFilepath(storeName);
+			await this.app.vault.adapter.writeBinary(normalizedPath, encode(data));
+			Logger.info('Saved vector store data');
+		} catch (error) {
+			Logger.error('Error saving vector store data', error);
+			// Handle error appropriately
+		}
 	}
 
 	public async loadVectorStoreData(storeName: string): Promise<VectorStoreBackup> {
-		const normalizedPath = await this.getVectorStoreFilepath(storeName);
-		const vectorStoreData = await this.app.vault.adapter.readBinary(normalizedPath);
-		Logger.info('Loaded vector store data');
-		return decode(vectorStoreData) as VectorStoreBackup;
+		try {
+			const normalizedPath = await this.getVectorStoreFilepath(storeName);
+			const vectorStoreData = await this.app.vault.adapter.readBinary(normalizedPath);
+			Logger.info('Loaded vector store data');
+			return decode(vectorStoreData) as VectorStoreBackup;
+		} catch (error) {
+			Logger.error('Error loading vector store data', error);
+			// Handle or rethrow error appropriately
+			throw error;
+		}
 	}
 }
