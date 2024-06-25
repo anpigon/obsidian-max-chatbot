@@ -1,12 +1,12 @@
 import {HumanMessage, SystemMessage} from '@langchain/core/messages';
 import {StringOutputParser} from '@langchain/core/output_parsers';
 
-import {getDefaultModelSetting} from '@/features/chatbot/hooks/use-current-model';
+import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
 import {getChatModel} from '@/features/chatbot/hooks/use-llm';
 import {MAXSettings} from '@/features/setting/types';
 
 export default async function generateTitleFromContent(settings: MAXSettings, fileContent: string) {
-	const {provider, model} = getDefaultModelSetting(settings);
+	const {provider, model} = getSelectedAIProviderAndModel(settings);
 	const llm = getChatModel(provider, model, settings.providers[provider]);
 	const prompt = [
 		new SystemMessage(

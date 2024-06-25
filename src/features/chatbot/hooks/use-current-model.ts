@@ -1,7 +1,8 @@
 import {useState} from 'react';
 
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {LLM_PROVIDERS} from '@/constants';
+
+import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
 
 import type {MAXSettings} from '@/features/setting/types';
 
@@ -10,14 +11,8 @@ interface CurrentModel {
 	model: string;
 }
 
-// 기본 설정을 가져오는 함수
-export const getDefaultModelSetting = (settings: MAXSettings) => ({
-	provider: settings?.general.provider || DEFAULT_SETTINGS.general.provider,
-	model: settings?.general.model || DEFAULT_SETTINGS.general.model,
-});
-
 export const useCurrentModel = (settings: MAXSettings): [CurrentModel, (provider: LLM_PROVIDERS, model: string) => void] => {
-	const defaultModel = getDefaultModelSetting(settings);
+	const defaultModel = getSelectedAIProviderAndModel(settings);
 	const [provider, setProvider] = useState<LLM_PROVIDERS>(defaultModel.provider);
 	const [model, setModel] = useState<string>(defaultModel.model);
 
