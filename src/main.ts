@@ -10,16 +10,13 @@ import {VectorStoreBackup} from '@/libs/local-vector-store';
 import Logger, {LogLevel} from '@/libs/logging';
 import {ChatbotView, VIEW_TYPE_CHATBOT} from '@/views/chatbot-view';
 import {MAXSettingTab} from '@/views/setting-view';
-import {HumanMessage, SystemMessage} from '@langchain/core/messages';
-import {StringOutputParser} from '@langchain/core/output_parsers';
 
 import type {MAXSettings} from '@/features/setting/types';
 
 import './i18n';
 
 import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
-import {getDefaultModelSetting} from './features/chatbot/hooks/use-current-model';
-import {getChatModel} from './features/chatbot/hooks/use-llm';
+import generateTitleFromContent from './libs/ai/generate/generateTitleFromContent';
 import './styles.css';
 
 export default class MAXPlugin extends Plugin {
@@ -82,7 +79,7 @@ export default class MAXPlugin extends Plugin {
 			let modelRenameTitle = '';
 			const fileContent = await this.app.vault.read(activeFile);
 			while (!uniqueNameFound) {
-				modelRenameTitle = await this.fetchModelRenameTitle(this.settings!, fileContent);
+				modelRenameTitle = await generateTitleFromContent(this.settings!, fileContent);
 				if (!fileNameExists(modelRenameTitle)) {
 					uniqueNameFound = true;
 				}
@@ -95,20 +92,6 @@ export default class MAXPlugin extends Plugin {
 		} catch (error) {
 			Logger.error(error);
 		}
-	}
-
-	async fetchModelRenameTitle(settings: MAXSettings, fileContent: string) {
-		const {provider, model} = getDefaultModelSetting(settings);
-		const llm = getChatModel(provider, model, settings.providers[provider]);
-		const prompt = [
-			new SystemMessage(
-				'You are a title generator. You will give succinct titles that does not contain backslashes, forward slashes, or colons. Generate a title as your response.'
-			),
-			new HumanMessage(fileContent),
-		];
-		const chain = llm.pipe(new StringOutputParser());
-		const response = await chain.invoke(prompt);
-		return response;
 	}
 
 	onunload() {
