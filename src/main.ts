@@ -68,8 +68,8 @@ export default class MAXPlugin extends Plugin {
 		Logger.debug('activeFile', activeFile);
 
 		// Function to check if a file name already exists
-		const fileNameExists = (fileName: string | null) => {
-			return allFiles.some(file => file.path === folderName + fileName + fileExtension);
+		const filenameExists = (filename: string | null) => {
+			return allFiles.some(file => file.path === folderName + filename + fileExtension);
 		};
 
 		try {
@@ -80,13 +80,14 @@ export default class MAXPlugin extends Plugin {
 			const fileContent = await this.app.vault.read(activeFile);
 			while (!uniqueNameFound) {
 				modelRenameTitle = await generateTitleFromContent(this.settings!, fileContent);
-				if (!fileNameExists(modelRenameTitle)) {
+				if (!filenameExists(modelRenameTitle)) {
 					uniqueNameFound = true;
 				}
 			}
 
-			const fileName = folderName + modelRenameTitle + fileExtension;
-			await this.app.vault.rename(activeFile, fileName);
+			const filename = folderName + modelRenameTitle + fileExtension;
+			Logger.debug('filename', filename);
+			await this.app.vault.rename(activeFile, filename);
 
 			new Notice('Renamed note title.');
 		} catch (error) {
