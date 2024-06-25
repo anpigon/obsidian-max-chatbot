@@ -1,12 +1,15 @@
-import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
-import {ProviderSettings} from '@/types';
-import {requestJson} from '@/utils/http';
 import {OpenAI} from 'openai';
+
+import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
+import {requestJson} from '@/utils/http';
+import Logger from '@/utils/logging';
+
+import type {ProviderSettings} from '@/features/setting/types';
 
 export async function requestOllamaModels(baseUrl: string) {
 	// const json = await requestJson<{models: []}>(`${baseUrl}/api/tags`);
-	const response = await fetch(`${baseUrl}/api/tags`);
-	const json = await response.json();
+	const response = await globalThis.fetch(`${baseUrl}/api/tags`);
+	const json = (await response.json()) as {models: {name: string}[]};
 	const models = json.models.map((model: {name: string}) => model.name);
 	return models;
 }
@@ -60,6 +63,7 @@ export async function fetchRestApiModels({baseUrl, apiKey}: ProviderSettings) {
 	try {
 		new URL(baseUrl);
 	} catch (error) {
+		Logger.error(error);
 		throw new Error('Invalid REST API URL: ' + baseUrl);
 	}
 

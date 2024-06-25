@@ -1,18 +1,20 @@
-import {LLM_PROVIDERS} from '@/constants';
-import {usePlugin} from '@/hooks/useApp';
-import useOnceEffect from '@/hooks/useOnceEffect';
-import {ProviderSettings} from '@/types';
-import Logger from '@/utils/logging';
 import {ChatOllama} from '@langchain/community/chat_models/ollama';
-import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
-import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
-import {StringOutputParser} from '@langchain/core/output_parsers';
-import {Runnable, RunnableConfig} from '@langchain/core/runnables';
-import {ChatOpenAI} from '@langchain/openai';
 import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
 import {TFile, getFrontMatterInfo} from 'obsidian';
 import {useState, useTransition} from 'react';
+import {ChatOpenAI} from '@langchain/openai';
 import {ChatGroq} from '@langchain/groq';
+
+import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
+import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
+import {Runnable, RunnableConfig} from '@langchain/core/runnables';
+import {StringOutputParser} from '@langchain/core/output_parsers';
+import useOnceEffect from '@/hooks/useOnceEffect';
+import {LLM_PROVIDERS} from '@/constants';
+import {usePlugin} from '@/hooks/useApp';
+import Logger from '@/utils/logging';
+
+import type {ProviderSettings} from '@/features/setting/types';
 
 interface UseLLMProps {
 	provider: LLM_PROVIDERS;
@@ -37,21 +39,21 @@ const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
 const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
 	const verbose = false;
-	const commonOptions = { ...options, model, verbose };
+	const commonOptions = {...options, model, verbose};
 
 	switch (provider) {
 		case LLM_PROVIDERS.OLLAMA:
-			return new ChatOllama({ ...commonOptions, baseUrl: options.baseUrl });
+			return new ChatOllama({...commonOptions, baseUrl: options.baseUrl});
 		case LLM_PROVIDERS.GOOGLE_GEMINI:
-			return new ChatGoogleGenerativeAI({ ...commonOptions, baseUrl: options.baseUrl });
+			return new ChatGoogleGenerativeAI({...commonOptions, baseUrl: options.baseUrl});
 		case LLM_PROVIDERS.GROQ:
 			return new ChatGroq(commonOptions);
 		default:
 			return new ChatOpenAI({
 				model,
 				apiKey: options.apiKey || 'api-key',
-				configuration: { baseURL: options.baseUrl },
-				verbose
+				configuration: {baseURL: options.baseUrl},
+				verbose,
 			});
 	}
 };

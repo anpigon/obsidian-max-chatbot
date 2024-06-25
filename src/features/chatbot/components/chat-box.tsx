@@ -1,12 +1,14 @@
-import {IconButton} from '@/components/buttons/icon-button';
-import {Toggle} from '@/components/form/toggle';
-import {IconStop} from '@/components/icons/icon-stop';
-import {forwardRef} from 'react';
+import {forwardRef, type TextareaHTMLAttributes} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useChatbotDispatch, useChatbotState} from '../context';
+
+import {IconButton} from '@/components/buttons/icon-button';
+import {IconStop} from '@/components/icons/icon-stop';
+import {Toggle} from '@/components/form/toggle';
 import {usePlugin} from '@/hooks/useApp';
 
-export interface ChatBoxProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+import {useChatbotDispatch, useChatbotState} from '../context';
+
+export interface ChatBoxProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	controller?: AbortController;
 	canStop?: boolean;
 }
@@ -38,7 +40,7 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, ChatBoxProps>(({controlle
 					autoFocus
 					className="w-full h-8 max-h-40 resize-none text-base overflow-y-auto text-[var(--text-normal)] placeholder:text-sm"
 					// contentEditable
-					placeholder={t("What can I help you with?")}
+					placeholder={t('What can I help you with?')}
 					{...props}
 				/>
 				{canStop && (

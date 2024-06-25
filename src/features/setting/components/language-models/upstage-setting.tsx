@@ -1,29 +1,35 @@
-import {fetchGroqModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
-import {SettingItem} from '@/components/settings/setting-item';
-import {usePlugin, useSettings} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
-import clsx from 'clsx';
 import {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
 
-export const GroqSetting = () => {
+import {SettingItem} from '@/components/settings/setting-item';
+import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import {UPSTAGE_MODELS} from '@/constants';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
+
+export const UpstageSetting = () => {
 	const {t} = useTranslation('settings');
 	const plugin = usePlugin();
 	const settings = useSettings();
-	const providerSettings = settings.providers.GROQ;
+	const {refreshChatbotView} = useSettingDispatch();
+	const providerSettings = settings.providers.UPSTAGE;
 
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isConnected, setIsConnected] = useState(false);
 	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
+	const [baseUrl, setBaseUrl] = useState(providerSettings?.baseUrl ?? '');
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const saveSettings = useCallback(() => {
-		plugin.saveSettings();
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
 	}, [plugin]);
 
 	const handleToggleChange = useCallback(
@@ -57,14 +63,19 @@ export const GroqSetting = () => {
 	);
 
 	const loadModels = useCallback(async () => {
+		if (!baseUrl) {
+			setError('Please enter a valid URL');
+			setIsConnected(false);
+			return;
+		}
+
 		setError('');
 		setIsLoading(true);
 
 		try {
-			const models = await fetchGroqModels({apiKey});
-			Logger.info('Groq Models:', models);
+			const models = UPSTAGE_MODELS;
 			setIsConnected(true);
-			providerSettings.models = models.filter(model => model.active && model.object === 'model').map(model => model.id);
+			providerSettings.models = models;
 			saveSettings();
 		} catch (err: unknown) {
 			if (err instanceof Error) {
@@ -78,21 +89,23 @@ export const GroqSetting = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [providerSettings, saveSettings]);
+	}, [baseUrl, providerSettings, saveSettings]);
 
 	useEffect(() => {
-		if (enable && apiKey) loadModels();
-	}, [enable, apiKey, loadModels]);
+		if (enable && baseUrl && apiKey) {
+			loadModels();
+		}
+	}, [enable, baseUrl, apiKey, loadModels]);
 
 	return (
 		<>
-			<SettingItem heading name={t('Groq')} className="bg-secondary rounded-lg px-3 mt-1">
+			<SettingItem heading name={t('Upstage')} className="bg-secondary rounded-lg px-3 mt-1">
 				<Toggle checked={enable} onChange={handleToggleChange} />
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
-				<SettingItem name={t('Provider API Key', {name: 'Groq'})} description={t('Insert your provider API Key', {name: 'Groq'})}>
-					<input type="password" spellCheck={false} placeholder="gsk_Im9...Rz4Qq" defaultValue={apiKey} onChange={handleApiKeyChange} />
+				<SettingItem name={t('Provider API Key', {name: 'Upstage'})} description={t('Insert your provider API Key', {name: 'Upstage'})}>
+					<input type="password" spellCheck={false} placeholder="up_fJN...ETmB" defaultValue={apiKey} onChange={handleApiKeyChange} />
 				</SettingItem>
 
 				<SettingItem
@@ -121,12 +134,12 @@ export const GroqSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
-				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Groq'})}>
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Upstage'})}>
 					<Toggle name="allowStream" checked={allowStream} onChange={handleAllowStreamChange} />
 				</SettingItem>
 			</div>

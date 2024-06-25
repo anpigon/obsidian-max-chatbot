@@ -1,21 +1,24 @@
-import {fetchRestApiModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
-import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
-import {usePlugin, useSettings} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
-import clsx from 'clsx';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
 
-export const RestApiSetting = () => {
+import {SettingItem} from '@/components/settings/setting-item';
+import {requestOpenAIModels} from '@/apis/fetch-model-list';
+import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
+
+export const OpenAiSetting = () => {
 	const {t} = useTranslation('settings');
 
 	const plugin = usePlugin();
 	const settings = useSettings();
-	const providerSettings = settings.providers.REST_API;
+	const {refreshChatbotView} = useSettingDispatch();
+	const providerSettings = settings.providers.OPEN_AI;
 
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +27,11 @@ export const RestApiSetting = () => {
 	const [baseUrl, setBaseUrl] = useState(providerSettings?.baseUrl ?? '');
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
+
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
+	}, [plugin]);
 
 	const loadModels = async () => {
 		if (!baseUrl) {
@@ -36,7 +44,7 @@ export const RestApiSetting = () => {
 		setIsLoading(true);
 
 		try {
-			const models = await fetchRestApiModels({
+			const models = await requestOpenAIModels({
 				...providerSettings,
 				baseUrl,
 				apiKey,
@@ -45,7 +53,7 @@ export const RestApiSetting = () => {
 			Logger.info(models);
 			setIsConnected(true);
 			providerSettings.models = models;
-			plugin.saveSettings();
+			saveSettings();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
@@ -57,50 +65,37 @@ export const RestApiSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable && baseUrl) loadModels();
+		if (enable && baseUrl && apiKey) {
+			loadModels();
+		}
 	}, [enable]);
 
 	return (
 		<>
-			<SettingItem heading name={t('REST API Connection')} className="bg-secondary rounded-lg px-3  mt-1">
+			<SettingItem heading name={t('OpenAI')} className="bg-secondary rounded-lg px-3  mt-1">
 				<Toggle
 					checked={enable}
 					onChange={event => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						plugin.saveSettings();
+						saveSettings();
 					}}
 				/>
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
-				<SettingItem name={t('REST API URL')} description={t('Enter your REST API URL')}>
-					<input
-						type="text"
-						spellCheck={false}
-						defaultValue={baseUrl}
-						placeholder='http://localhost:8000/v1'
-						onChange={event => {
-							const value = event.target.value?.trim();
-							setBaseUrl(value);
-							providerSettings.baseUrl = value;
-							plugin.saveSettings();
-						}}
-					/>
-				</SettingItem>
-
-				<SettingItem name={t('API Key (Optional)')} description={t('Insert API Key (Optional)')}>
+				<SettingItem name={t('Provider API Key', {name: 'OpenAI API'})} description={t('Insert your provider API Key', {name: 'OpenAI API'})}>
 					<input
 						type="password"
 						spellCheck={false}
-						placeholder="insert-api-key-here"
+						placeholder="sk-aOO-...Cvll"
 						defaultValue={apiKey}
 						onChange={event => {
 							const value = event.target.value?.trim();
 							setApiKey(value);
 							providerSettings.apiKey = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>
@@ -131,12 +126,12 @@ export const RestApiSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
-				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'REST API'})}>
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'OpenAI'})}>
 					<Toggle
 						name="allowStream"
 						checked={allowStream}
@@ -144,7 +139,7 @@ export const RestApiSetting = () => {
 							const value = event.target.checked;
 							setAllowStream(value);
 							providerSettings.allowStream = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>

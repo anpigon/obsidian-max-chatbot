@@ -1,45 +1,53 @@
-import {requestOllamaModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
-import {usePlugin} from '@/hooks/useApp';
-import clsx from 'clsx';
-import {useEffect, useState} from 'react';
+import {ChangeEventHandler, useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
-import {OllamaSettingAdvanced} from './ollama-setting-advanced';
-import {Icon} from '@/components/icons/icon';
-import Logger from '@/utils/logging';
+import clsx from 'clsx';
 
-export const OllamaSetting = () => {
+import {SettingItem} from '@/components/settings/setting-item';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {requestLMStudioModels} from '@/apis/fetch-model-list';
+import {useSettingDispatch} from '../../context';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import {usePlugin} from '@/hooks/useApp';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
+
+export const LMStudioSetting = () => {
 	const plugin = usePlugin();
+	const {refreshChatbotView} = useSettingDispatch();
 	const settings = plugin.settings!;
-	const providerSettings = settings.providers.OLLAMA;
+	const providerSettings = settings.providers.LM_STUDIO;
 	const {t} = useTranslation('settings');
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [isConnected, setIsConnected] = useState(false);
 	const [error, setError] = useState('');
-	const [enable, setEnable] = useState(providerSettings?.enable);
+	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
-	const handleChangeAllowStream: React.ChangeEventHandler<HTMLInputElement> = event => {
+
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
+	}, [plugin]);
+
+	const handleChangeAllowStream: ChangeEventHandler<HTMLInputElement> = event => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		plugin.saveSettings();
+		saveSettings();
 	};
 
-	const loadOllamaModels = async () => {
+	const loadModels = async () => {
 		setError('');
 		setIsLoading(true);
 
 		try {
-			const models = await requestOllamaModels(providerSettings?.baseUrl);
-			console.log('models', models);
+			const models = await requestLMStudioModels(providerSettings);
 			setIsConnected(true);
-
 			providerSettings.models = models;
-			plugin.saveSettings();
+			saveSettings();
+			refreshChatbotView();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
@@ -51,33 +59,32 @@ export const OllamaSetting = () => {
 	};
 
 	useEffect(() => {
-		if (enable) loadOllamaModels();
+		if (enable) loadModels();
 	}, [enable]);
 
 	return (
 		<>
-			<SettingItem heading name={t('Ollama')} className="bg-secondary rounded-lg px-3">
+			<SettingItem heading name={t('LM Studio')} className="bg-secondary rounded-lg px-3 mt-1">
 				<Toggle
-					name="enableOllama"
 					checked={enable}
 					onChange={event => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						plugin.saveSettings();
+						saveSettings();
 					}}
 				/>
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
 				<SettingItem
-					name={t('Ollama Base Url')}
+					name={t('LM Studio Base Url')}
 					description={
 						<>
 							<Trans
 								t={t}
-								i18nKey="Enter your Ollama Base Url using"
-								components={{a: <a href="https://ollama.ai/" target="_blank" rel="noopener noreferrer" />}}
+								i18nKey="Enter your LM Studio Base Url using"
+								components={{a: <a href="https://lmstudio.ai/" target="_blank" rel="noopener noreferrer" />}}
 							/>{' '}
 							<Trans
 								t={t}
@@ -85,7 +92,7 @@ export const OllamaSetting = () => {
 								components={{
 									a: (
 										<a
-											href="https://github.com/anpigon/obsidian-max-chatbot/wiki/How-to-setup-with-Ollama"
+											href="https://github.com/anpigon/obsidian-max-chatbot/wiki/How-to-setup-with-LM-Studio"
 											target="_blank"
 											rel="noopener noreferrer"
 										/>
@@ -98,13 +105,12 @@ export const OllamaSetting = () => {
 					<input
 						type="text"
 						spellCheck={false}
-						name="ollamaBaseUrl"
 						defaultValue={providerSettings?.baseUrl}
-						placeholder={DEFAULT_SETTINGS.providers.OLLAMA.baseUrl}
+						placeholder={DEFAULT_SETTINGS.providers.LM_STUDIO.baseUrl}
 						onChange={event => {
 							const value = event.target.value;
 							providerSettings.baseUrl = value;
-							plugin.saveSettings();
+							saveSettings();
 						}}
 					/>
 				</SettingItem>
@@ -135,16 +141,14 @@ export const OllamaSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadOllamaModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
-				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Ollama'})}>
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'LM Studio'})}>
 					<Toggle name="allowStream" checked={allowStream} onChange={handleChangeAllowStream} />
 				</SettingItem>
-
-				<OllamaSettingAdvanced />
 			</div>
 		</>
 	);

@@ -1,8 +1,9 @@
-import {usePlugin} from '@/hooks/useApp';
-import {t} from 'i18next';
-import {MarkdownRenderer, Notice} from 'obsidian';
 import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {MarkdownRenderer, Notice} from 'obsidian';
 import {useCopyToClipboard} from 'usehooks-ts';
+import {t} from 'i18next';
+
+import {usePlugin} from '@/hooks/useApp';
 
 interface MarkdownViewProps {
 	content: string;

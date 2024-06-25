@@ -1,5 +1,6 @@
-import {useSettings} from '@/hooks/useApp';
 import {ReactNode, createContext, useContext, useMemo, useState} from 'react';
+
+import {useSettings} from '@/hooks/useApp';
 
 interface ChatbotState {
 	allowReferenceCurrentNote: boolean;

@@ -1,5 +1,3 @@
-import {MAXSettings} from './types';
-
 export const DEFAULT_MODEL = 'xionic-ko-llama-3-70b';
 
 export const SIONIC_AI_BASE_URL = 'http://sionic.chat:8001/v1';
@@ -14,7 +12,7 @@ export const GROQ_BASE_URL = 'https://api.groq.com/openai/v1';
 
 export const UPSTAGE_MODELS = [
 	'solar-1-mini-chat', // GPT-3.5보다 뛰어난 성능을 제공하는 소형 LLM으로, 영어와 한국어를 모두 지원하는 강력한 다국어 기능을 갖추고 있어 더 작은 패키지로 높은 효율성을 제공합니다. Context Length: 32768
-	'solar-1-mini-chat-ja' // 영어와 한국어의 높은 효율성과 성능을 유지하면서 일본어에 특화된 solar-mini-chat의 기능을 확장한 소형 LLM입니다. Context Length: 32768
+	'solar-1-mini-chat-ja', // 영어와 한국어의 높은 효율성과 성능을 유지하면서 일본어에 특화된 solar-mini-chat의 기능을 확장한 소형 LLM입니다. Context Length: 32768
 ];
 export const ANTHROPIC_MODELS = ['claude-instant-1.2', 'claude-2.0', 'claude-2.1', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229'];
 export const OPEN_AI_MODELS = ['gpt-3.5-turbo', 'gpt-4o', 'gpt-4'];
@@ -33,146 +31,50 @@ export const enum LLM_PROVIDERS {
 	GROQ = 'GROQ',
 }
 
-export const DEFAULT_SETTINGS: MAXSettings = {
-	profiles: {
-		profile: 'MAX.md',
-		profileFolderPath: 'MAX/Profiles',
-	},
-	general: {
-		provider: LLM_PROVIDERS.SIONIC_AI,
-		model: DEFAULT_MODEL,
-		systemPrompt: '',
-		maxTokens: '',
-		temperature: '1.00',
-		allowReferenceCurrentNote: false,
-	},
-	appearance: {
-		userName: 'USER',
-		chatbotName: 'MAX',
-		allowHeader: true,
-	},
-	prompts: {
-		prompt: '',
-		promptFolderPath: 'MAX/Prompts',
-	},
-	editor: {
-		promptSelectGenerateSystemRole: 'Output user request.',
-	},
-	chatHistory: {
-		chatHistoryFolderPath: 'MAX/History',
-		templateFilePath: '',
-		allowRenameNoteTitle: false,
-	},
-	providers: {
-		[LLM_PROVIDERS.SIONIC_AI]: {
-			enable: true,
-			baseUrl: SIONIC_AI_BASE_URL,
-			apiKey: '934c4bbc-c384-4bea-af82-1450d7f8128d',
-			allowStream: true,
-			models: ['xionic-ko-llama-3-70b'],
-		},
-		[LLM_PROVIDERS.OLLAMA]: {
-			enable: false,
-			baseUrl: OLLAMA_BASE_URL,
-			apiKey: '',
-			allowStream: true,
-			models: [],
-			options: {
-				keepAlive: '',
-				mirostat: 0,
-				mirostatEta: 0.1,
-				mirostatTau: 5.0,
-				numCtx: 2048,
-				numGqa: 0,
-				numThread: 0,
-				repeatLastN: 64,
-				repeatPenalty: 1.1,
-				stop: [],
-				tfsZ: 1.0,
-				topK: 40,
-				topP: 0.9,
-			},
-		},
-		[LLM_PROVIDERS.LM_STUDIO]: {
-			enable: false,
-			apiKey: 'lm-studio',
-			baseUrl: LM_STUDIO_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.OPEN_AI]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: OPEN_AI_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.UPSTAGE]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: UPSTAGE_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.REST_API]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: false,
-			models: [],
-		},
-		[LLM_PROVIDERS.ANTHROPIC]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.GOOGLE_GEMINI]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: GOOGLE_GEMINI_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.GROQ]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: GROQ_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.MISTRAL]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.OPEN_ROUTER]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: false,
-			models: [],
-		},
-	},
-	toggleGeneralSettings: true,
-	toggleAppearanceSettings: false,
-	togglePromptSettings: false,
-	toggleEditorSettings: false,
-	toggleChatHistorySettings: false,
-	toggleProfileSettings: false,
-	toggleAPIConnectionSettings: true,
-	toggleOpenAISettings: false,
-	toggleMistralSettings: false,
-	toggleGoogleGeminiSettings: false,
-	toggleAnthropicSettings: false,
-	toggleRestApiSettings: true,
-	toggleOpenRouterSettings: false,
-	toggleOllamaSettings: true,
-	toggleAdvancedSettings: false,
-	allModels: [DEFAULT_MODEL],
-	isVerbose: false,
-	langSmithKey: '',
-} as const;
+export const MAX_TOKEN = {
+	'gpt-4o': 128_000,
+	'gpt-4o-2024-05-13': 128_000,
+	'gpt-4-turbo': 128_000,
+	'gpt-4-turbo-2024-04-09': 128_000,
+	'gpt-4-turbo-preview': 128_000,
+	'gpt-4-0125-preview': 128_000,
+	'gpt-4-1106-preview': 128_000,
+	'gpt-4-vision-preview': 128_000,
+	'gpt-4-1106-vision-preview': 128_000,
+	'gpt-4': 8_192,
+	'gpt-4-0613': 8_192,
+	'gpt-4-32k': 32_768,
+	'gpt-4-32k-0613': 32_768,
+	'gpt-3.5-turbo-0125': 16_385,
+	'gpt-3.5-turbo': 16_385,
+	'gpt-3.5-turbo-1106': 16_385,
+	'gpt-3.5-turbo-instruct': 4_096,
+	'gpt-3.5-turbo-16k': 16_385,
+	'gpt-3.5-turbo-0613': 4_096,
+	'gpt-3.5-turbo-16k-0613': 16_385,
+};
+
+export const EMBEDDING_MODELS = {
+	// local
+	'nomic-embed-text': {dimension: 1_024, sequenceLength: 8_192},
+	'mxbai-embed-large': {},
+	'snowflake-arctic-embed': {},
+	'bge-m3': {dimension: 1_024, sequenceLength: 8_192},
+	'bge-m3-unsupervised': {dimension: 1_024, sequenceLength: 8_192},
+	'bge-large-en-v1.5': {dimension: 1_024, sequenceLength: 512},
+	'bge-base-en-v1.5': {dimension: 768, sequenceLength: 512},
+	'bge-small-en-v1.5': {dimension: 384, sequenceLength: 512},
+	// openai
+	'text-embedding-3-small': {sequenceLength: 8_192},
+	'text-embedding-3-large': {sequenceLength: 8_192},
+	'text-embedding-ada-002': {sequenceLength: 8_192},
+	// UPSTAGE
+	// ANTHROPIC
+	// GOOGLE_GEMINI
+	// COHERE
+};
+
+export const embeddingModelKeys = Object.keys(EMBEDDING_MODELS);
+
+export const DEFAULT_VECTOR_STORE_NAME = 'vector_store';
+export const VECTOR_STORE_FILE_EXTENSION = '.bin';

@@ -1,45 +1,67 @@
-import {SettingItem} from '@/components/settings/setting-item';
 import {useTranslation} from 'react-i18next';
-import {OllamaSetting} from './components/ollama-setting';
-import {ProfileSetting} from './components/profile-setting';
-import {PromptSetting} from './components/prompt-setting';
-import {SettingProvider} from './context';
-import {DeveloperSetting} from './components/developer-setting';
-import {LMStudioSetting} from './components/lm-studio-setting';
-import {RestApiSetting} from './components/rest-api-setting';
-import {OpenAiSetting} from './components/open-ai-setting';
+import {useState} from 'react';
+import clsx from 'clsx';
+
 import {ChatHistorySetting} from './components/chat-history-setting';
+import {DeveloperSetting} from './components/developer-setting';
 import {CommandsSetting} from './components/commands-setting';
 import {GeneralSetting} from './components/general-setting';
-import { UpstageSetting } from './components/upstage-setting';
-import { GoogleSetting } from './components/google-setting';
-import { GroqSetting } from './components/groq-setting';
+import {ProfileSetting} from './components/profile-setting';
+import LanguageModels from './components/language-models';
+import {PromptSetting} from './components/prompt-setting';
+import AgentSetting from './components/agents';
+import {SettingProvider} from './context';
 
 export const Setting = () => {
 	const {t} = useTranslation('settings');
+	const selectedTabCookie = Number(globalThis.localStorage.getItem('max-selected-tab'));
+	const [selectedTab, setSelectedTab] = useState(selectedTabCookie || 0);
+
+	const tabs = [
+		{label: t('Language models'), component: <LanguageModels />},
+		{label: t('Agents'), component: <AgentSetting />},
+		{label: t('Developer options'), component: <DeveloperSetting />},
+	];
+
+	const handleTabChange = (index: number) => () => {
+		setSelectedTab(index);
+		globalThis.localStorage.setItem('max-selected-tab', index.toString());
+	};
 
 	return (
 		<SettingProvider>
-			<div className="hidden">
-				<ProfileSetting />
-				<GeneralSetting />
-				<PromptSetting />
-				<ChatHistorySetting />
-				<CommandsSetting />
+			<div className="workspace-tabs">
+				<div className="workspace-tab-header-container bg-transparent">
+					{tabs.map((tab, index) => (
+						<div key={index} className="workspace-tab-header-container-inner" onClick={handleTabChange(index)}>
+							<div
+								className={clsx('workspace-tab-header', {
+									'is-active': selectedTab === index,
+								})}
+								aria-label={tab.label}
+								data-tooltip-delay="300"
+							>
+								<div className="workspace-tab-header-inner">
+									<div className="workspace-tab-header-inner-title">{tab.label}</div>
+									<div className="workspace-tab-header-status-container" />
+								</div>
+							</div>
+						</div>
+					))}
+					<div className="workspace-tab-header-spacer" />
+				</div>
 			</div>
+			<div className="workspace-tab-container flex-col py-4">
+				<div className="hidden">
+					<ProfileSetting />
+					<GeneralSetting />
+					<PromptSetting />
+					<ChatHistorySetting />
+					<CommandsSetting />
+				</div>
 
-			{/* language models settings */}
-			<SettingItem heading name={t('Language models')} />
-			<OllamaSetting />
-			<LMStudioSetting />
-			<RestApiSetting />
-			<OpenAiSetting />
-			<GoogleSetting />
-			<GroqSetting />
-			<UpstageSetting />
-
-			{/* etc settings */}
-			<DeveloperSetting />
+				{tabs[selectedTab].component}
+			</div>
 		</SettingProvider>
 	);
 };

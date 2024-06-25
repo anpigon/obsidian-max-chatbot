@@ -1,8 +1,10 @@
+import {useContext} from 'react';
+import {App} from 'obsidian';
+
 import {AppContext} from '@/context';
 import MAXPlugin from '@/main';
-import {MAXSettings} from '@/types';
-import {App} from 'obsidian';
-import {useContext} from 'react';
+
+import type {MAXSettings} from '@/features/setting/types';
 
 export const usePlugin = (): MAXPlugin => {
 	const plugin = useContext(AppContext);

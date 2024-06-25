@@ -1,19 +1,23 @@
-import {fetchGoogleGeminiModels} from '@/apis/fetch-model-list';
-import {Toggle} from '@/components/form/toggle';
-import {Icon} from '@/components/icons/icon';
-import {SettingItem} from '@/components/settings/setting-item';
-import {usePlugin, useSettings} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
-import clsx from 'clsx';
 import {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Trans, useTranslation} from 'react-i18next';
 import {twMerge} from 'tailwind-merge';
+import clsx from 'clsx';
 
-export const GoogleSetting = () => {
+import {SettingItem} from '@/components/settings/setting-item';
+import {fetchGroqModels} from '@/apis/fetch-model-list';
+import {usePlugin, useSettings} from '@/hooks/useApp';
+import {useSettingDispatch} from '../../context';
+import {Toggle} from '@/components/form/toggle';
+import {Icon} from '@/components/icons/icon';
+import Logger from '@/utils/logging';
+import {Button} from '@/components';
+
+export const GroqSetting = () => {
 	const {t} = useTranslation('settings');
 	const plugin = usePlugin();
 	const settings = useSettings();
-	const providerSettings = settings.providers.GOOGLE_GEMINI;
+	const {refreshChatbotView} = useSettingDispatch();
+	const providerSettings = settings.providers.GROQ;
 
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -22,8 +26,9 @@ export const GoogleSetting = () => {
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
-	const saveSettings = useCallback(() => {
-		plugin.saveSettings();
+	const saveSettings = useCallback(async () => {
+		await plugin.saveSettings();
+		refreshChatbotView();
 	}, [plugin]);
 
 	const handleToggleChange = useCallback(
@@ -61,13 +66,11 @@ export const GoogleSetting = () => {
 		setIsLoading(true);
 
 		try {
-			const models = await fetchGoogleGeminiModels({apiKey});
-			providerSettings.models = models
-				.map((model: {name: string}) => model.name)
-				.filter((model: string) => model.startsWith('models/gemini-') && (model.endsWith('-pro') || model.endsWith('-flash'))).map((model: string) => model.replace('models/', ''));
-			Logger.info('Google Gemini Models:', providerSettings.models);
-			saveSettings();
+			const models = await fetchGroqModels({apiKey});
+			Logger.info('Groq Models:', models);
 			setIsConnected(true);
+			providerSettings.models = models.filter(model => model.active && model.object === 'model').map(model => model.id);
+			saveSettings();
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				Logger.error(err);
@@ -88,13 +91,13 @@ export const GoogleSetting = () => {
 
 	return (
 		<>
-			<SettingItem heading name={t('Google Gemini')} className="bg-secondary rounded-lg px-3 mt-1">
+			<SettingItem heading name={t('Groq')} className="bg-secondary rounded-lg px-3 mt-1">
 				<Toggle checked={enable} onChange={handleToggleChange} />
 			</SettingItem>
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
-				<SettingItem name={t('Provider API Key', {name: 'Google'})} description={t('Insert your provider API Key', {name: 'Google'})}>
-					<input type="password" spellCheck={false} placeholder="up_fJN...ETmB" defaultValue={apiKey} onChange={handleApiKeyChange} />
+				<SettingItem name={t('Provider API Key', {name: 'Groq'})} description={t('Insert your provider API Key', {name: 'Groq'})}>
+					<input type="password" spellCheck={false} placeholder="gsk_Im9...Rz4Qq" defaultValue={apiKey} onChange={handleApiKeyChange} />
 				</SettingItem>
 
 				<SettingItem
@@ -123,12 +126,12 @@ export const GoogleSetting = () => {
 							</>
 						)}
 					</div>
-					<button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
+					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
 						{t('Connectivity Check')}
-					</button>
+					</Button>
 				</SettingItem>
 
-				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Google'})}>
+				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'Groq'})}>
 					<Toggle name="allowStream" checked={allowStream} onChange={handleAllowStreamChange} />
 				</SettingItem>
 			</div>

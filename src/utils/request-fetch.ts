@@ -1,5 +1,6 @@
 import {ClientOptions} from '@langchain/openai';
 import {requestUrl} from 'obsidian';
+
 import Logger from './logging';
 
 export const requestFetch: ClientOptions['fetch'] = async (req, init) => {

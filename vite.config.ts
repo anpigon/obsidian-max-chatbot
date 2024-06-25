@@ -54,7 +54,7 @@ export default defineConfig(({mode}) => {
 			},
 			outDir: './build',
 			emptyOutDir: false,
-			sourcemap: mode === 'development',
+			sourcemap: true,
 		},
 		css: {
 			devSourcemap: true,

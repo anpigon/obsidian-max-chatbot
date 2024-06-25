@@ -4,5 +4,9 @@
 	"trailingComma": "es5",
 	"arrowParens": "avoid",
 	"semi": true,
-	"printWidth": 160
+	"printWidth": 160,
+	"sortingMethod": "lineLength",
+	"newlineBetweenTypes": true,
+	"importTypeOrder": ["NPMPackages", "localImportsValue", "localImportsType"],
+	"plugins": ["./node_modules/prettier-plugin-sort-imports/dist/index.js"]
 }

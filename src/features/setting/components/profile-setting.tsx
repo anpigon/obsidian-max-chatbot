@@ -1,13 +1,13 @@
-import {Dropdown} from '@/components/form/dropdown';
-import {SettingItem} from '@/components/settings/setting-item';
-import {DEFAULT_SETTINGS} from '@/constants';
-import {usePlugin} from '@/hooks/useApp';
-import {updateSettingsFromFrontMatter} from '@/main';
-import {cleanFolderPath} from '@/utils/clean-folder-path';
-import clsx from 'clsx';
-import {TFile, TFolder} from 'obsidian';
 import {ChangeEventHandler, useEffect, useState, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
+import {TFolder} from 'obsidian';
+import clsx from 'clsx';
+
+import {SettingItem} from '@/components/settings/setting-item';
+import {DEFAULT_SETTINGS} from '@/features/setting/constants';
+import {cleanFolderPath} from '@/utils/clean-folder-path';
+import {Dropdown} from '@/components/form/dropdown';
+import {usePlugin} from '@/hooks/useApp';
 
 export const ProfileSetting: React.FC = () => {
 	const plugin = usePlugin();
@@ -39,15 +39,12 @@ export const ProfileSetting: React.FC = () => {
 
 		if (plugin?.settings) {
 			plugin.settings.profiles.profile = profileName ?? DEFAULT_SETTINGS.profiles.profile;
-			const profileFilePath = `${plugin.settings.profiles.profileFolderPath}/${plugin.settings.profiles.profile}.md`;
-			const currentProfile = plugin.app.vault.getAbstractFileByPath(profileFilePath) as TFile;
 			plugin.activateView();
-			await updateSettingsFromFrontMatter(plugin, currentProfile);
 			await plugin.saveSettings();
 		}
 	};
 
-	const handleChangeProfile: ChangeEventHandler<HTMLSelectElement> =  event => {
+	const handleChangeProfile: ChangeEventHandler<HTMLSelectElement> = event => {
 		const value = event.target.value;
 		setProfile(value);
 	};

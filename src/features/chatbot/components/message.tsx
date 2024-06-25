@@ -1,15 +1,16 @@
-import clsx from 'clsx';
 import {useCopyToClipboard} from 'usehooks-ts';
+import clsx from 'clsx';
 
+import {IconTrash} from '@/components/icons/icon-trash';
 import {IconCopy} from '@/components/icons/icon-copy';
 import {IconEdit} from '@/components/icons/icon-edit';
-import {IconTrash} from '@/components/icons/icon-trash';
 
-import {MarkdownView} from '@/components';
-import {t} from 'i18next';
+import {twMerge} from 'tailwind-merge';
 import {Notice} from 'obsidian';
 import {useState} from 'react';
-import {twMerge} from 'tailwind-merge';
+import {t} from 'i18next';
+
+import {MarkdownView} from '@/components';
 import {SmallButton} from './button';
 import {Loading} from './loading';
 

@@ -1,6 +1,9 @@
+import {createContext, useContext, useMemo, useState} from 'react';
+
+import type {Dispatch, ReactNode, SetStateAction} from 'react';
+
 import {LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
-import {ReactNode, createContext, useContext, useEffect, useMemo, useState} from 'react';
 
 interface Model {
 	provider: LLM_PROVIDERS;
@@ -12,25 +15,28 @@ interface SettingState {
 }
 
 interface SettingDispatch {
-	setModels: React.Dispatch<React.SetStateAction<Model[]>>;
+	setModels: Dispatch<SetStateAction<Model[]>>;
+	refreshChatbotView: () => void;
 }
 
 const SettingStateContext = createContext<SettingState | undefined>(undefined);
 const SettingDispatchContext = createContext<SettingDispatch | undefined>(undefined);
 
 export const SettingProvider = ({children}: {children: ReactNode}) => {
-	const plugin = usePlugin();
 	const [models, setModels] = useState<Model[]>([]);
 
 	const refreshChatbotView = () => {
-		plugin.activateView();
+		globalThis.dispatchEvent(new Event('updateChatbotView', {}));
 	};
 
 	const state = useMemo(() => ({models}), [models]);
-	const actions = useMemo(() => ({
-		setModels, 
-		refreshChatbotView
-	}), [setModels]);
+	const actions = useMemo(
+		() => ({
+			setModels,
+			refreshChatbotView,
+		}),
+		[setModels]
+	);
 
 	return (
 		<SettingStateContext.Provider value={state}>
