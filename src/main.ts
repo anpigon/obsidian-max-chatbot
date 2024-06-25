@@ -35,6 +35,8 @@ export default class MAXPlugin extends Plugin {
 			callback: () => this.activateView(),
 		});
 
+		this.addRibbonIcon('bot', 'MAX Chatbot', () => this.activateView());
+
 		this.addSettingTab(new MAXSettingTab(this.app, this));
 	}
 
