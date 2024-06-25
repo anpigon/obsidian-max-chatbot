@@ -1,7 +1,9 @@
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {MarkdownRenderer, Notice} from 'obsidian';
 import {useCopyToClipboard} from 'usehooks-ts';
 import {t} from 'i18next';
+
+import type {FC} from 'react';
 
 import {usePlugin} from '@/hooks/useApp';
 
@@ -9,40 +11,57 @@ interface MarkdownViewProps {
 	content: string;
 }
 
-export const MarkdownView: React.FC<MarkdownViewProps> = ({content}) => {
+const wrapDataviewBlocks = (content: string): string => {
+	const regex = /(```(?:dataview|dataviewjs)[\s\S]*?```)/g;
+	return content.replace(regex, '````$1````');
+};
+
+export const MarkdownView: FC<MarkdownViewProps> = ({content}) => {
 	const plugin = usePlugin();
 	const [, copyToClipboard] = useCopyToClipboard();
 	const containerRef = useRef<HTMLDivElement>(null);
+	const [renderedHTML, setRenderedHTML] = useState<string>('');
 
-	const handleCopyClick = useCallback(async (event: MouseEvent) => {
-		const target = event.target as HTMLElement;
-		if (target.classList.contains('copy-code-button')) {
-			try {
+	const handleCopyClick = useCallback(
+		(event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			if (target.classList.contains('copy-code-button')) {
 				const previousElement = target.previousElementSibling as HTMLElement;
 				const textToCopy = previousElement?.innerText || '';
-				await copyToClipboard(textToCopy);
-				new Notice(t('Text copied to clipboard'));
-			} catch (error) {
-				new Notice(t('Failed to copy text to clipboard'));
+				copyToClipboard(textToCopy)
+					.then(() => new Notice(t('Text copied to clipboard')))
+					.catch(() => new Notice(t('Failed to copy text to clipboard')));
 			}
-		}
-	}, []);
+		},
+		[copyToClipboard]
+	);
 
 	useEffect(() => {
 		const container = containerRef.current;
 
-		container?.addEventListener('click', handleCopyClick);
+		if (container) {
+			container.addEventListener('click', handleCopyClick);
+		}
 
 		return () => {
-			container?.removeEventListener('click', handleCopyClick);
+			if (container) {
+				container.removeEventListener('click', handleCopyClick);
+			}
 		};
-	}, [containerRef.current]);
+	}, [handleCopyClick]);
 
-	const renderedHTML = useMemo(() => {
-		const tempDiv = document.createElement('div');
-		MarkdownRenderer.render(plugin.app, content, tempDiv, '', plugin);
-		return tempDiv.innerHTML;
-	}, [content]);
+	useEffect(() => {
+		const renderMarkdown = async () => {
+			if (typeof content === 'string' && content.trim()) {
+				const processedContent = wrapDataviewBlocks(content.trim());
+				const tempDiv = globalThis.document.createElement('div');
+				await MarkdownRenderer.render(plugin.app, processedContent, tempDiv, '', plugin);
+				setRenderedHTML(tempDiv.innerHTML);
+			}
+		};
+
+		renderMarkdown().catch(() => {});
+	}, [content, plugin]);
 
 	if (typeof content !== 'string' || !content.trim()) {
 		return null;
