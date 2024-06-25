@@ -14,6 +14,8 @@ import {LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 
+import createChatModelInstance from '@/libs/ai/createChatModelInstance';
+
 import type {ProviderSettings} from '@/features/setting/types';
 
 interface UseLLMProps {
@@ -36,27 +38,6 @@ interface UseChatStreamEventHandlers {
 }
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
-
-export const getChatModel = (provider: LLM_PROVIDERS, model: string, options: ProviderSettings) => {
-	const verbose = false;
-	const commonOptions = {...options, model, verbose};
-
-	switch (provider) {
-		case LLM_PROVIDERS.OLLAMA:
-			return new ChatOllama({...commonOptions, baseUrl: options.baseUrl});
-		case LLM_PROVIDERS.GOOGLE_GEMINI:
-			return new ChatGoogleGenerativeAI({...commonOptions, baseUrl: options.baseUrl});
-		case LLM_PROVIDERS.GROQ:
-			return new ChatGroq(commonOptions);
-		default:
-			return new ChatOpenAI({
-				model,
-				apiKey: options.apiKey || 'api-key',
-				configuration: {baseURL: options.baseUrl},
-				verbose,
-			});
-	}
-};
 
 const createMessageHistory = (messages: UseChatMessage[], message: string) => {
 	const history = messages
@@ -90,7 +71,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
 
-	const llm = getChatModel(provider, model, options);
+	const llm = createChatModelInstance(provider, model, settings);
 	const outputParser = new StringOutputParser();
 
 	const prepareMessages = (message: string) => {
