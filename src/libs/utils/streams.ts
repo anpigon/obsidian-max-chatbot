@@ -1,4 +1,5 @@
-import {UseChatStreamHttpOptions, UseChatStreamInputMethod} from '../types';
+import {UseChatStreamHttpOptions, UseChatStreamInputMethod} from '@/types';
+import Logger from '../logging';
 
 const DEFAULT_HEADERS = {
 	'Content-Type': 'application/json',
@@ -16,7 +17,7 @@ export const getStream = async (input: string, options: UseChatStreamHttpOptions
 
 	const params = '?' + new URLSearchParams(options.query).toString();
 
-	const response = await fetch(options.url + params, {
+	const response = await globalThis.fetch(options.url + params, {
 		method: options.method,
 		headers: {...DEFAULT_HEADERS, ...options.headers},
 		body: JSON.stringify(options.body, (_k, v) => (v === null ? undefined : v)),
@@ -41,7 +42,7 @@ export async function* decodeStreamToJson(data: ReadableStream<Uint8Array> | nul
 			try {
 				yield decoder.decode(value);
 			} catch (error) {
-				console.error(error);
+				Logger.error(error);
 			}
 		}
 	}

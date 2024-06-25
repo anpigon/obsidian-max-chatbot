@@ -1,8 +1,8 @@
 import {OpenAI} from 'openai';
 
 import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
-import {requestJson} from '@/utils/http';
-import Logger from '@/utils/logging';
+import {requestJson} from '@/libs/http';
+import Logger from '@/libs/logging';
 
 import type {ProviderSettings} from '@/features/setting/types';
 

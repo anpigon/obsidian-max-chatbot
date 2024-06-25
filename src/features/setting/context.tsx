@@ -3,7 +3,6 @@ import {createContext, useContext, useMemo, useState} from 'react';
 import type {Dispatch, ReactNode, SetStateAction} from 'react';
 
 import {LLM_PROVIDERS} from '@/constants';
-import {usePlugin} from '@/hooks/useApp';
 
 interface Model {
 	provider: LLM_PROVIDERS;

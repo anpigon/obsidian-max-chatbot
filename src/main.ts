@@ -1,26 +1,26 @@
 // sort-imports-ignore
 import './set-process-env-mobile';
 
-import {Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
+import {Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 
-import {ChatbotView, VIEW_TYPE_CHATBOT} from '@/views/chatbot-view';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {VectorStoreBackup} from '@/utils/local-vector-store';
+import {VectorStoreBackup} from '@/libs/local-vector-store';
+import Logger, {LogLevel} from '@/libs/logging';
+import {ChatbotView, VIEW_TYPE_CHATBOT} from '@/views/chatbot-view';
 import {MAXSettingTab} from '@/views/setting-view';
-import Logger, {LogLevel} from '@/utils/logging';
+import {HumanMessage, SystemMessage} from '@langchain/core/messages';
 import {StringOutputParser} from '@langchain/core/output_parsers';
-import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
 
 import type {MAXSettings} from '@/features/setting/types';
 
 import './i18n';
 
-import './styles.css';
 import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
 import {getDefaultModelSetting} from './features/chatbot/hooks/use-current-model';
 import {getChatModel} from './features/chatbot/hooks/use-llm';
+import './styles.css';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;

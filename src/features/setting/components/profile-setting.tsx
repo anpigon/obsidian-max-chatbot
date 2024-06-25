@@ -4,8 +4,8 @@ import {TFolder} from 'obsidian';
 import clsx from 'clsx';
 
 import {SettingItem} from '@/components/settings/setting-item';
+import {cleanFolderPath} from '@/libs/utils/clean-folder-path';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {cleanFolderPath} from '@/utils/clean-folder-path';
 import {Dropdown} from '@/components/form/dropdown';
 import {usePlugin} from '@/hooks/useApp';
 

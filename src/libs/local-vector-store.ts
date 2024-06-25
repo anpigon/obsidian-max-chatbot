@@ -7,7 +7,7 @@ import {VectorStore} from '@langchain/core/vectorstores';
 import {Embeddings} from '@langchain/core/embeddings';
 import {Document} from '@langchain/core/documents';
 
-import {hashString} from './hash';
+import {hashString} from './utils/hash';
 import Logger from './logging';
 
 const vectorStoreSchema = {

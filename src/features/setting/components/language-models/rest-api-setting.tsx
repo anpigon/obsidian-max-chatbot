@@ -9,7 +9,7 @@ import {usePlugin, useSettings} from '@/hooks/useApp';
 import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 import {Button} from '@/components';
 
 export const RestApiSetting = () => {

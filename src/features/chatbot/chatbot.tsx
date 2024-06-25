@@ -17,7 +17,7 @@ import {ChatBox} from './components/chat-box';
 import {Message} from './components/message';
 import {useChatbotState} from './context';
 import {useLLM} from './hooks/use-llm';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 
 // eslint-disable-next-line no-undef
 export const Chatbot: FC = () => {

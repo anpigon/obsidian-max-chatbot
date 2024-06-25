@@ -10,7 +10,7 @@ import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {usePlugin} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 import {Button} from '@/components';
 
 export const LMStudioSetting = () => {
@@ -27,8 +27,12 @@ export const LMStudioSetting = () => {
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
 
 	const saveSettings = useCallback(async () => {
-		await plugin.saveSettings();
-		refreshChatbotView();
+		try {
+			await plugin.saveSettings();
+			refreshChatbotView();
+		} catch (error) {
+			Logger.error(error);
+		}
 	}, [plugin]);
 
 	const handleChangeAllowStream: ChangeEventHandler<HTMLInputElement> = event => {

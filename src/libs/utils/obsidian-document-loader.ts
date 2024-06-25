@@ -4,7 +4,7 @@ import {RecursiveCharacterTextSplitter} from '@langchain/textsplitters';
 import {Document} from '@langchain/core/documents';
 
 import {hashString} from './hash';
-import Logger from './logging';
+import Logger from '../logging';
 
 export async function obsidianDocumentLoader(app: App, files: TFile[]): Promise<Document[]> {
 	const splitter = RecursiveCharacterTextSplitter.fromLanguage('markdown', {

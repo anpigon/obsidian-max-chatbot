@@ -9,7 +9,7 @@ import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
 import {UPSTAGE_MODELS} from '@/constants';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 import {Button} from '@/components';
 
 export const UpstageSetting = () => {

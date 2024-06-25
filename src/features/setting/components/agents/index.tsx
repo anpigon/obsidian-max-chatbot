@@ -3,14 +3,14 @@ import {useTranslation} from 'react-i18next';
 
 import {useState, useTransition} from 'react';
 
-import {obsidianDocumentLoader} from '@/utils/obsidian-document-loader';
+import {obsidianDocumentLoader} from '@/libs/utils/obsidian-document-loader';
 import {SettingItem} from '@/components/settings/setting-item';
 import {useAddAgentModal} from './hooks/useAddAgentModal';
 import AddAgentModal from '@/features/add-agent-modal';
-import {OramaStore} from '@/utils/local-vector-store';
 import {usePlugin, useSettings} from '@/hooks/useApp';
+import {OramaStore} from '@/libs/local-vector-store';
 import {Button, IconButton} from '@/components';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 import {Agent} from '../../types';
 
 export default function AgentSetting() {

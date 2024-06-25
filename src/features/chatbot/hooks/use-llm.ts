@@ -12,7 +12,7 @@ import {StringOutputParser} from '@langchain/core/output_parsers';
 import useOnceEffect from '@/hooks/useOnceEffect';
 import {LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 
 import type {ProviderSettings} from '@/features/setting/types';
 

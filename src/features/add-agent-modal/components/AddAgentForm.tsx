@@ -5,10 +5,10 @@ import clsx from 'clsx';
 
 import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {Button, Dropdown, IconButton, Search, SettingItem, Toggle} from '@/components';
-import {FolderSuggest} from '@/utils/suggesters/FolderSuggester';
+import {FolderSuggest} from '@/libs/suggesters/FolderSuggester';
 import {LLM_PROVIDERS} from '@/constants';
 import {useApp} from '@/hooks/useApp';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 
 export interface AddAgentFormData {
 	agentName: string;

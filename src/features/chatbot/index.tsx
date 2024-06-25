@@ -2,7 +2,7 @@ import {Key, useState} from 'react';
 
 import useOnceEffect from '@/hooks/useOnceEffect';
 import {ChatbotProvider} from './context';
-import Logger from '@/utils/logging';
+import Logger from '@/libs/logging';
 import {Chatbot} from './chatbot';
 
 export default () => {
