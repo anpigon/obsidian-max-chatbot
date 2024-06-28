@@ -6,7 +6,8 @@
 		"Start new chat": "새 채팅 시작",
 		"Text copied to clipboard": "클립보드에 텍스트가 복사되었습니다.",
 		"Failed to copy text to clipboard": "클립보드에 텍스트를 복사하지 못했습니다.",
-		"copy": "복사"
+		"copy": "복사",
+		"view history": "이전 대화 기록 보기"
 	},
 	"settings": {
 		"Profiles": "프로필 설정",

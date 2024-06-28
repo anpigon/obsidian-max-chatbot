@@ -6,7 +6,8 @@
 		"Start new chat": "Start new chat",
 		"Text copied to clipboard": "Text copied to clipboard",
 		"Failed to copy text to clipboard": "Failed to copy text to clipboard",
-		"copy": "copy"
+		"copy": "copy",
+		"view history": "previous chat history"
 	},
 	"settings": {
 		"Profiles": "Profiles",

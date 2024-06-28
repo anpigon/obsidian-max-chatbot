@@ -29,6 +29,8 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 		}
 	};
 
+	const handleViewHistory = () => {}
+
 	return (
 		<div className="py-4 px-0 text-center relative">
 			<h2 className="mt-0 mb-0 p-0 text-xl w-full text-center">{botName}</h2>
@@ -56,6 +58,7 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 					})}
 			</Dropdown>
 			<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={onStartNewChat} />
+			<IconButton className="absolute top-2 left-2" label={t("view history")} icon="history" onClick={handleViewHistory} />
 		</div>
 	);
 };
