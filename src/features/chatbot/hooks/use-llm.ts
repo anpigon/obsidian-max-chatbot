@@ -1,5 +1,5 @@
 import {TFile, getFrontMatterInfo} from 'obsidian';
-import {useState, useTransition} from 'react';
+import {useState} from 'react';
 
 import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
 import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
@@ -12,7 +12,7 @@ import Logger from '@/libs/logging';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
 
-interface UseLLMProps {
+export interface UseLLMProps {
 	provider: LLM_PROVIDERS;
 	model: string;
 	systemPrompt: string;
@@ -20,7 +20,7 @@ interface UseLLMProps {
 	handlers?: UseChatStreamEventHandlers;
 }
 
-interface UseChatMessage {
+export interface UseChatMessage {
 	role: MessageType;
 	content: string;
 	id: string;
@@ -52,13 +52,29 @@ const createMessageHistory = (messages: UseChatMessage[], message: string) => {
 	return [...history, new HumanMessage({content: message})];
 };
 
+const messageUtils = {
+	create: (message: Omit<UseChatMessage, 'id'>): UseChatMessage => ({
+		...message,
+		id: Date.now().toString(36) + '-' + message.role,
+	}),
+
+	append: (messages: UseChatMessage[], content: string): UseChatMessage[] => {
+		const latestMessage = messages[messages.length - 1];
+		return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + content}];
+	},
+
+	updateLoading: (messages: UseChatMessage[]): UseChatMessage[] => {
+		const latestMessage = messages[messages.length - 1];
+		return [...messages.slice(0, -1), {...latestMessage, showLoading: false}];
+	},
+};
+
 export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
 	const plugin = usePlugin();
 	const app = plugin.app;
 	const settings = plugin.settings!;
 	const options = settings.providers[provider];
 
-	const [, startTransition] = useTransition();
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
 	const [messages, setMessages] = useState<UseChatMessage[]>([]);
@@ -68,11 +84,21 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	const llm = createChatModelInstance(provider, model, settings);
 	const outputParser = new StringOutputParser();
 
-	const prepareMessages = (message: string) => {
-		const humanMessage = addMessage({content: message, role: 'human'});
-		const aiMessage = addMessage({content: '', role: 'ai', showLoading: true});
-		return {humanMessage, aiMessage};
+	const handleMessageOperation = (operation: 'delete' | 'edit', id: string, newContent?: string) => {
+		setMessages(messages => {
+			if (operation === 'delete') {
+				return messages.filter(message => message.id !== id);
+			} else if (operation === 'edit' && newContent) {
+				return messages.map(message => (message.id === id ? {...message, content: newContent} : message));
+			}
+			return messages;
+		});
 	};
+
+	const prepareMessages = (message: string) => ({
+		humanMessage: addMessage({content: message, role: 'human'}),
+		aiMessage: addMessage({content: '', role: 'ai', showLoading: true}),
+	});
 
 	const getCurrentNoteContent = async () => {
 		if (currentActiveFile?.extension === 'md') {
@@ -100,17 +126,11 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 	const processMessage = async (message: string) => {
 		setIsStreaming(true);
-
-		console.log('Processing message:', message);
-		console.log('Current active file:', currentActiveFile);
-		console.log('Allow reference current note:', allowReferenceCurrentNote);
 		const currentNote = allowReferenceCurrentNote ? await getCurrentNoteContent() : '';
-
-		const systemPromptTemplate: UseChatMessage = {
+		const systemPromptTemplate = messageUtils.create({
 			content: (settings.general.systemPrompt || systemPrompt) + currentNote,
 			role: 'system',
-			id: Date.now().toString(36) + '-system',
-		};
+		});
 
 		const messageHistory = createMessageHistory([systemPromptTemplate, ...messages], message);
 		const {humanMessage, aiMessage} = prepareMessages(message);
@@ -127,13 +147,12 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 			Logger.info('Sending message to LLM:', messageHistory);
 			const response = await (options.allowStream ? handleStreaming(chain, messageHistory) : handleInvocation(chain, messageHistory));
 			Logger.info('Response from LLM:', response);
-
 			await handlers?.onMessageAdded?.({...aiMessage, content: response});
 		} catch (error) {
 			handleError(error, aiMessage);
 		} finally {
 			setIsStreaming(false);
-			updateLoadingState();
+			setMessages(messages => messageUtils.updateLoading(messages));
 		}
 	};
 
@@ -156,62 +175,24 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	};
 
 	const addMessage = (message: Omit<UseChatMessage, 'id'>) => {
-		const messageWithId = {...message, id: Date.now().toString(36) + '-' + message.role};
-		startTransition(() => {
-			setMessages(messages => [...messages, messageWithId]);
-		});
-		return messageWithId;
+		const newMessage = messageUtils.create(message);
+		setMessages(messages => [...messages, newMessage]);
+		return newMessage;
 	};
 
-	const appendMessageToChat = (message: string) => {
-		startTransition(() => {
-			setMessages(messages => {
-				const latestMessage = messages[messages.length - 1];
-				return [
-					...messages.slice(0, -1),
-					{
-						...latestMessage,
-						content: latestMessage.content + message,
-					},
-				];
-			});
-		});
+	const appendMessageToChat = (content: string) => {
+		setMessages(messages => messageUtils.append(messages, content));
 	};
 
 	const handleError = (error: any, aiMessage: UseChatMessage) => {
 		if (error instanceof Error && error.message === 'AbortError') {
-			handleAbortError();
+			setMessages(messages => messageUtils.append(messages, ' (Request aborted)'));
 			return;
 		}
 		Logger.error('Error invoking LLM:', error);
-
 		const errorMessage = (error as Error)?.message || BOT_ERROR_MESSAGE;
 		appendMessageToChat(errorMessage);
 		handlers?.onMessageAdded?.({...aiMessage, content: errorMessage});
-	};
-
-	const handleAbortError = () => {
-		setMessages(messages => {
-			if (messages.length === 0) return messages;
-			const latestMessage = messages[messages.length - 1];
-			if (latestMessage.role === 'ai' && latestMessage.content === '') {
-				return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + ' (Request aborted)'}];
-			}
-			return messages;
-		});
-	};
-
-	const updateLoadingState = () => {
-		setMessages(messages => {
-			const latestMessage = messages[messages.length - 1];
-			return [
-				...messages.slice(0, -1),
-				{
-					...latestMessage,
-					showLoading: false,
-				},
-			];
-		});
 	};
 
 	return {
@@ -222,5 +203,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		setMessage,
 		isStreaming,
 		processMessage,
+		deleteMessage: (id: string) => handleMessageOperation('delete', id),
+		updateMessage: (id: string, newContent: string) => handleMessageOperation('edit', id, newContent),
 	};
 };

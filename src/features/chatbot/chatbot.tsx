@@ -1,5 +1,5 @@
-import {useEffect, useRef, useTransition} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useEffect, useRef} from 'react';
 import {Notice} from 'obsidian';
 
 import type {ChangeEvent, FC, KeyboardEvent} from 'react';
@@ -11,19 +11,19 @@ import useOnceEffect from '@/hooks/useOnceEffect';
 
 import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
+import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
 import {ChatbotHeader} from './components/chatbot-header';
 import {useCurrentModel} from './hooks/use-current-model';
 import {ChatBox} from './components/chat-box';
 import {Message} from './components/message';
+import {LLM_PROVIDERS} from '@/constants';
 import {useChatbotState} from './context';
 import {useLLM} from './hooks/use-llm';
-import Logger from '@/libs/logging';
 
 export const Chatbot: FC = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const {t} = useTranslation('chatbot');
-	const [, startTransition] = useTransition();
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const chatBoxRef = useRef<HTMLTextAreaElement>(null);
@@ -40,25 +40,15 @@ export const Chatbot: FC = () => {
 
 	const defaultSystemPrompt = t('You are a helpful assistant');
 
-	const {messages, setMessages, isStreaming, controller, setMessage, processMessage} = useLLM({
+	const scrollToBottom = useScrollToBottom(messageContainerRef);
+
+	const {messages, setMessages, isStreaming, controller, setMessage, processMessage, deleteMessage, updateMessage} = useLLM({
 		provider: currentModel.provider,
 		model: currentModel.model,
 		systemPrompt: defaultSystemPrompt,
 		allowReferenceCurrentNote,
-		handlers: {
-			onMessageAdded() {
-				scrollToBottom();
-			},
-		},
+		handlers: {onMessageAdded: scrollToBottom},
 	});
-
-	const scrollToBottom = () => {
-		// messageContainerRef.current?.scrollTo(0, messageContainerRef.current.scrollHeight);
-		messageContainerRef.current?.scroll({
-			top: messageContainerRef.current?.scrollHeight,
-			behavior: 'smooth',
-		});
-	};
 
 	useOnceEffect(() => {
 		chatBoxRef.current?.focus();
@@ -114,16 +104,19 @@ export const Chatbot: FC = () => {
 		}
 	};
 
-	const handleDeleteMessage = (id: string) => {
-		setMessages(messages.filter(message => message.id !== id));
+	const handleChangeModel = (newProvider: LLM_PROVIDERS, newModel: string) => {
+		setCurrentModel(newProvider, newModel);
+		settings.general.provider = newProvider;
+		settings.general.model = newModel;
+		plugin.saveSettings();
 	};
 
-	const handleEditMessage = (id: string, message: string) => {
-		const messageToEdit = messages.find(m => m.id === id);
-		if (messageToEdit) {
-			messageToEdit.content = message;
-			setMessages([...messages]);
-		}
+	const handleStartNewChat = () => {
+		controller?.abort();
+		setMessages([]);
+		setMessage('');
+		resetInputForm();
+		scrollToBottom();
 	};
 
 	return (
@@ -133,21 +126,8 @@ export const Chatbot: FC = () => {
 				botName={chatbotName}
 				currentModel={currentModel}
 				disabled={isStreaming}
-				onChangeModel={(newProvider, newModel) => {
-					setCurrentModel(newProvider, newModel);
-					settings.general.provider = newProvider;
-					settings.general.model = newModel;
-					plugin.saveSettings();
-				}}
-				onStartNewChat={() => {
-					controller?.abort();
-					startTransition(() => {
-						setMessages([]);
-						setMessage('');
-						resetInputForm();
-						scrollToBottom();
-					});
-				}}
+				onChangeModel={handleChangeModel}
+				onStartNewChat={handleStartNewChat}
 			/>
 
 			<MessagesContainer ref={messageContainerRef}>
@@ -160,19 +140,11 @@ export const Chatbot: FC = () => {
 							name={chatbotName}
 							message={content}
 							showLoading={showLoading}
-							onDeleteMessage={handleDeleteMessage}
-							onEditMessage={handleEditMessage}
+							onDeleteMessage={deleteMessage}
+							onEditMessage={updateMessage}
 						/>
 					) : (
-						<Message
-							key={i}
-							id={id}
-							type="user"
-							name={username}
-							message={content}
-							onDeleteMessage={handleDeleteMessage}
-							onEditMessage={handleEditMessage}
-						/>
+						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={deleteMessage} onEditMessage={updateMessage} />
 					)
 				)}
 				<div ref={messageEndRef} />
