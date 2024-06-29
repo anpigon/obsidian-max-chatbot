@@ -1,5 +1,5 @@
-import {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useEffect, useRef} from 'react';
 import {Notice} from 'obsidian';
 
 import type {ChangeEvent, FC, KeyboardEvent} from 'react';
@@ -8,6 +8,8 @@ import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
+
+import {useBoolean} from 'usehooks-ts';
 
 import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
@@ -33,13 +35,7 @@ export const Chatbot: FC = () => {
 	const messageContainerRef = useRef<HTMLDivElement>(null);
 	const messageEndRef = useRef<HTMLDivElement>(null);
 
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const handleViewHistory = () => {
-		setIsDrawerOpen(true);
-	};
-	const handleCloseDrawer = () => {
-		setIsDrawerOpen(false);
-	};
+	const {value: isDrawerOpen, setTrue: handleViewHistory, setFalse: handleCloseDrawer} = useBoolean(false);
 
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
