@@ -1,9 +1,5 @@
-import {ChatOllama} from '@langchain/community/chat_models/ollama';
-import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
 import {TFile, getFrontMatterInfo} from 'obsidian';
 import {useState, useTransition} from 'react';
-import {ChatOpenAI} from '@langchain/openai';
-import {ChatGroq} from '@langchain/groq';
 
 import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
 import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
@@ -15,8 +11,6 @@ import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
-
-import type {ProviderSettings} from '@/features/setting/types';
 
 interface UseLLMProps {
 	provider: LLM_PROVIDERS;

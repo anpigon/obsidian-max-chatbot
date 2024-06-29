@@ -19,7 +19,6 @@ import {useChatbotState} from './context';
 import {useLLM} from './hooks/use-llm';
 import Logger from '@/libs/logging';
 
-// eslint-disable-next-line no-undef
 export const Chatbot: FC = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();

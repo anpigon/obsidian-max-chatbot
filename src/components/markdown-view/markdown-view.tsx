@@ -6,6 +6,7 @@ import {t} from 'i18next';
 import type {FC} from 'react';
 
 import {usePlugin} from '@/hooks/useApp';
+import Logger from '@/libs/logging';
 
 interface MarkdownViewProps {
 	content: string;
@@ -25,11 +26,12 @@ export const MarkdownView: FC<MarkdownViewProps> = ({content}) => {
 	const handleCopyClick = useCallback(
 		(event: MouseEvent) => {
 			const target = event.target as HTMLElement;
+			Logger.debug('target', target);
 			if (target.classList.contains('copy-code-button')) {
 				const previousElement = target.previousElementSibling as HTMLElement;
 				const textToCopy = previousElement?.innerText || '';
 				copyToClipboard(textToCopy)
-					.then(() => new Notice(t('Text copied to clipboard')))
+					.then(() => new Notice(t('Code copied to clipboard')))
 					.catch(() => new Notice(t('Failed to copy text to clipboard')));
 			}
 		},
@@ -48,7 +50,7 @@ export const MarkdownView: FC<MarkdownViewProps> = ({content}) => {
 				container.removeEventListener('click', handleCopyClick);
 			}
 		};
-	}, [handleCopyClick]);
+	}, [containerRef.current, handleCopyClick]);
 
 	useEffect(() => {
 		const renderMarkdown = async () => {
