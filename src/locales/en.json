@@ -1,4 +1,28 @@
 {
+	"common": {
+		"close": "Close",
+		"cancel": "Cancel",
+		"save": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"add": "Add",
+		"yes": "Yes",
+		"no": "No",
+		"ok": "OK",
+		"confirm": "Confirm",
+		"back": "Back",
+		"next": "Next",
+		"done": "Done",
+		"loading": "Loading...",
+		"error": "Error",
+		"warning": "Warning",
+		"success": "Success",
+		"info": "Info",
+		"search": "Search",
+		"search_placeholder": "Search...",
+		"search_no_result": "No results found",
+		"search_no_result_desc": "Try different keywords or remove search filters"
+	},
 	"chatbot": {
 		"You are a helpful assistant": "You are a helpful assistant.",
 		"Refer to the current note": "Refer to the current note",
@@ -7,7 +31,8 @@
 		"Text copied to clipboard": "Text copied to clipboard",
 		"Failed to copy text to clipboard": "Failed to copy text to clipboard",
 		"copy": "copy",
-		"view history": "previous chat history"
+		"view history": "previous chat history",
+		"Chat History": "Chat History"
 	},
 	"settings": {
 		"Profiles": "Profiles",

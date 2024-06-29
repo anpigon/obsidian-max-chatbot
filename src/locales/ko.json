@@ -1,4 +1,28 @@
 {
+	"common": {
+		"close": "닫기",
+		"cancel": "취소",
+		"save": "저장",
+		"delete": "삭제",
+		"edit": "수정",
+		"add": "추가",
+		"yes": "예",
+		"no": "아니요",
+		"ok": "확인",
+		"confirm": "확인",
+		"back": "뒤로",
+		"next": "다음",
+		"done": "완료",
+		"loading": "로딩 중...",
+		"error": "오류",
+		"warning": "경고",
+		"success": "성공",
+		"info": "정보",
+		"search": "검색",
+		"search_placeholder": "검색...",
+		"search_no_result": "결과 없음",
+		"search_no_result_desc": "다른 키워드를 사용하거나 검색 필터를 제거하세요"
+	},
 	"chatbot": {
 		"You are a helpful assistant": "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘.",
 		"Refer to the current note": "현재 노트 참조",
@@ -7,7 +31,8 @@
 		"Text copied to clipboard": "클립보드에 텍스트가 복사되었습니다.",
 		"Failed to copy text to clipboard": "클립보드에 텍스트를 복사하지 못했습니다.",
 		"copy": "복사",
-		"view history": "이전 대화 기록 보기"
+		"view history": "이전 대화 기록 보기",
+		"Chat History": "채팅 기록"
 	},
 	"settings": {
 		"Profiles": "프로필 설정",

@@ -1,6 +1,6 @@
-import {t} from 'i18next';
-
 import {useState, type ChangeEventHandler, type FC, type PropsWithChildren} from 'react';
+
+import {useTranslation} from 'react-i18next';
 
 import {IconButton} from '@/components/buttons/icon-button';
 import {ProviderModels} from '@/hooks/useEnabledModels';
@@ -22,6 +22,8 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 }
 
 export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, onStartNewChat}) => {
+	const {t} = useTranslation('chatbot');
+
 	const handleChangeModel: ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
 		if (value) {
@@ -70,7 +72,7 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 				<Drawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} side="left">
 					<div className="p-4 relative">
 						<h3 className="text-lg font-semibold mb-4">{t('Chat History')}</h3>
-						<IconButton className="absolute top-4 right-4" label={t('Close')} icon="x" onClick={handleCloseDrawer} />
+						<IconButton className="absolute top-4 right-4" label={t('close', {ns: 'common'})} icon="x" onClick={handleCloseDrawer} />
 						{/* 여기에 챗 이력 목록을 추가하세요 */}
 					</div>
 				</Drawer>
