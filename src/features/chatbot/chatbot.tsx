@@ -1,5 +1,5 @@
+import {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useEffect, useRef} from 'react';
 import {Notice} from 'obsidian';
 
 import type {ChangeEvent, FC, KeyboardEvent} from 'react';
@@ -12,12 +12,15 @@ import useOnceEffect from '@/hooks/useOnceEffect';
 import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
+import {ChatHistories} from './components/chat-histories';
 import {ChatbotHeader} from './components/chatbot-header';
 import {useCurrentModel} from './hooks/use-current-model';
 import {ChatBox} from './components/chat-box';
 import {Message} from './components/message';
+import {Drawer} from './components/drawer';
 import {LLM_PROVIDERS} from '@/constants';
 import {useChatbotState} from './context';
+import {IconButton} from '@/components';
 import {useLLM} from './hooks/use-llm';
 
 export const Chatbot: FC = () => {
@@ -29,6 +32,14 @@ export const Chatbot: FC = () => {
 	const chatBoxRef = useRef<HTMLTextAreaElement>(null);
 	const messageContainerRef = useRef<HTMLDivElement>(null);
 	const messageEndRef = useRef<HTMLDivElement>(null);
+
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const handleViewHistory = () => {
+		setIsDrawerOpen(true);
+	};
+	const handleCloseDrawer = () => {
+		setIsDrawerOpen(false);
+	};
 
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
@@ -42,13 +53,19 @@ export const Chatbot: FC = () => {
 
 	const scrollToBottom = useScrollToBottom(messageContainerRef);
 
-	const {messages, setMessages, isStreaming, controller, setMessage, processMessage, deleteMessage, updateMessage} = useLLM({
+	const {newSession, sessionID, loadChatHistory, messages, isStreaming, controller, setMessage, processMessage, deleteMessage, updateMessage} = useLLM({
 		provider: currentModel.provider,
 		model: currentModel.model,
 		systemPrompt: defaultSystemPrompt,
 		allowReferenceCurrentNote,
 		handlers: {onMessageAdded: scrollToBottom},
 	});
+
+	useEffect(() => {
+		if (!sessionID || !messages.length) return;
+		// Save chat history to the file
+		plugin.saveChatHistory(sessionID, messages);
+	}, [sessionID, messages]);
 
 	useOnceEffect(() => {
 		chatBoxRef.current?.focus();
@@ -113,8 +130,7 @@ export const Chatbot: FC = () => {
 
 	const handleStartNewChat = () => {
 		controller?.abort();
-		setMessages([]);
-		setMessage('');
+		newSession();
 		resetInputForm();
 		scrollToBottom();
 	};
@@ -127,8 +143,16 @@ export const Chatbot: FC = () => {
 				currentModel={currentModel}
 				disabled={isStreaming}
 				onChangeModel={handleChangeModel}
-				onStartNewChat={handleStartNewChat}
+				leftComponent={<IconButton label={t('chat history')} icon="history" onClick={handleViewHistory} />}
+				rightComponent={<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />}
 			/>
+			<Drawer side="left" isOpen={isDrawerOpen} onClose={handleCloseDrawer}>
+				<div className="p-4 relative">
+					<h3 className="text-lg font-semibold p-0 mt-0 mb-4">{t('Chat History')}</h3>
+					<IconButton className="absolute top-4 right-4" label={t('close', {ns: 'common'})} icon="x" onClick={handleCloseDrawer} />
+					{isDrawerOpen && <ChatHistories />}
+				</div>
+			</Drawer>
 
 			<MessagesContainer ref={messageContainerRef}>
 				{messages.map(({role, content, id, showLoading}, i) =>
