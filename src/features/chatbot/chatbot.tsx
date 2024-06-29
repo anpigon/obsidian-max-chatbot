@@ -56,7 +56,7 @@ export const Chatbot: FC = () => {
 	});
 
 	useEffect(() => {
-		messageEndRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
+		messageEndRef.current?.scrollIntoView({behavior: 'auto', block: 'end'});
 	}, [messages]);
 
 	useEffect(() => {

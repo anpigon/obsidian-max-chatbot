@@ -77,6 +77,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
+	const [sessionID, setSessionID] = useState<string>(Date.now().toString(36));
 	const [messages, setMessages] = useState<UseChatMessage[]>([]);
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
