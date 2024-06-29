@@ -9,6 +9,7 @@ import useOnceEffect from '@/hooks/useOnceEffect';
 import {LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
+import {v4 as uuidv4} from 'uuid';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
 
@@ -20,7 +21,7 @@ export interface UseLLMProps {
 	handlers?: UseChatStreamEventHandlers;
 }
 
-export interface UseChatMessage {
+export interface ChatMessage {
 	role: MessageType;
 	content: string;
 	id: string;
@@ -28,12 +29,12 @@ export interface UseChatMessage {
 }
 
 interface UseChatStreamEventHandlers {
-	onMessageAdded: (message: UseChatMessage) => any | Promise<any>;
+	onMessageAdded: (message: ChatMessage) => any | Promise<any>;
 }
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
-const createMessageHistory = (messages: UseChatMessage[], message: string) => {
+const createMessageHistory = (messages: ChatMessage[], message: string) => {
 	const history = messages
 		.map(({role, content}) => {
 			switch (role) {
@@ -53,17 +54,17 @@ const createMessageHistory = (messages: UseChatMessage[], message: string) => {
 };
 
 const messageUtils = {
-	create: (message: Omit<UseChatMessage, 'id'>): UseChatMessage => ({
+	create: (message: Omit<ChatMessage, 'id'>): ChatMessage => ({
 		...message,
 		id: Date.now().toString(36) + '-' + message.role,
 	}),
 
-	append: (messages: UseChatMessage[], content: string): UseChatMessage[] => {
+	append: (messages: ChatMessage[], content: string): ChatMessage[] => {
 		const latestMessage = messages[messages.length - 1];
 		return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + content}];
 	},
 
-	updateLoading: (messages: UseChatMessage[]): UseChatMessage[] => {
+	updateLoading: (messages: ChatMessage[]): ChatMessage[] => {
 		const latestMessage = messages[messages.length - 1];
 		return [...messages.slice(0, -1), {...latestMessage, showLoading: false}];
 	},
@@ -77,13 +78,27 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
-	const [sessionID, setSessionID] = useState<string>(Date.now().toString(36));
-	const [messages, setMessages] = useState<UseChatMessage[]>([]);
+	const [sessionID, setSessionID] = useState<string>(uuidv4());
+	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
 
 	const llm = createChatModelInstance(provider, model, settings);
 	const outputParser = new StringOutputParser();
+
+	const loadChatHistory = async (sessionID: string) => {
+		const chatHistory = await plugin.loadChatHistory(sessionID);
+		if (chatHistory) {
+			setSessionID(sessionID);
+			setMessages(chatHistory);
+		}
+	};
+
+	const handleNewSession = () => {
+		setSessionID(uuidv4());
+		setMessages([]);
+		setMessage('');
+	};
 
 	const handleMessageOperation = (operation: 'delete' | 'edit', id: string, newContent?: string) => {
 		setMessages(messages => {
@@ -175,7 +190,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		return response;
 	};
 
-	const addMessage = (message: Omit<UseChatMessage, 'id'>) => {
+	const addMessage = (message: Omit<ChatMessage, 'id'>) => {
 		const newMessage = messageUtils.create(message);
 		setMessages(messages => [...messages, newMessage]);
 		return newMessage;
@@ -185,7 +200,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		setMessages(messages => messageUtils.append(messages, content));
 	};
 
-	const handleError = (error: any, aiMessage: UseChatMessage) => {
+	const handleError = (error: any, aiMessage: ChatMessage) => {
 		if (error instanceof Error && error.message === 'AbortError') {
 			setMessages(messages => messageUtils.append(messages, ' (Request aborted)'));
 			return;
@@ -203,7 +218,10 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		message,
 		setMessage,
 		isStreaming,
+		sessionID,
 		processMessage,
+		loadChatHistory,
+		newSession: handleNewSession,
 		deleteMessage: (id: string) => handleMessageOperation('delete', id),
 		updateMessage: (id: string, newContent: string) => handleMessageOperation('edit', id, newContent),
 	};
