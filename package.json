@@ -7,7 +7,7 @@
     "dev": "VITE_CJS_IGNORE_WARNING=true vite build --mode development --watch",
     "build": "VITE_CJS_IGNORE_WARNING=true vite build --mode production",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
-    "format": "prettier ./src --write",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "prepare": "husky",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
