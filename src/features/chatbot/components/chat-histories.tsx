@@ -6,7 +6,11 @@ import {usePlugin} from '@/hooks/useApp';
 import {IconButton} from '@/components';
 import Logger from '@/libs/logging';
 
-export const ChatHistories: FC = () => {
+export interface ChatHistoriesProps {
+	onSelect: (sessionID: string) => void;
+}
+
+export const ChatHistories: FC<ChatHistoriesProps> = ({onSelect}) => {
 	const plugin = usePlugin();
 	const [histories, setHistories] = useState<
 		{
@@ -37,6 +41,10 @@ export const ChatHistories: FC = () => {
 		});
 	};
 
+	const handleSelect = (sessionID: string) => () => {
+		onSelect(sessionID);
+	};
+
 	return (
 		<div className="flex">
 			<div className="vertical-tab-header-group flex-1 *:text-left">
@@ -47,7 +55,9 @@ export const ChatHistories: FC = () => {
 						<div key={history.sessionID}>
 							{showRelativeTime && <div className="vertical-tab-header-group-title">{history.relativeTime}</div>}
 							<div className="vertical-tab-nav-item group relative">
-								<div className="line-clamp-2 overflow-hidden text-ellipsis break-words pr-8">{history.title}</div>
+								<div className="line-clamp-2 overflow-hidden text-ellipsis break-words pr-8" onClick={handleSelect(history.sessionID)}>
+									{history.title}
+								</div>
 								<IconButton
 									className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
 									onClick={() => handleDelete(history.sessionID)}

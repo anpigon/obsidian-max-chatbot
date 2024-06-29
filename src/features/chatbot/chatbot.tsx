@@ -65,7 +65,6 @@ export const Chatbot: FC = () => {
 
 	useOnceEffect(() => {
 		chatBoxRef.current?.focus();
-		scrollToBottom();
 	});
 
 	useEffect(() => {
@@ -146,7 +145,14 @@ export const Chatbot: FC = () => {
 				<div className="p-4 relative">
 					<h3 className="text-lg font-semibold p-0 mt-0 mb-4">{t('Chat History')}</h3>
 					<IconButton className="absolute top-4 right-4" label={t('close', {ns: 'common'})} icon="x" onClick={handleCloseDrawer} />
-					{isDrawerOpen && <ChatHistories />}
+					{isDrawerOpen && (
+						<ChatHistories
+							onSelect={(sessionID: string) => {
+								handleCloseDrawer();
+								loadChatHistory(sessionID);
+							}}
+						/>
+					)}
 				</div>
 			</Drawer>
 
