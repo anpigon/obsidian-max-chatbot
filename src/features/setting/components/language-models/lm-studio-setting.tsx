@@ -68,7 +68,7 @@ export const LMStudioSetting = () => {
 
 	return (
 		<>
-			<SettingItem heading name={t('LM Studio')} className="bg-secondary rounded-lg px-3 mt-1">
+			<SettingItem heading name={t('LM Studio')} className="bg-secondary rounded-lg !px-3 mt-1">
 				<Toggle
 					checked={enable}
 					onChange={event => {

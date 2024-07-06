@@ -87,7 +87,7 @@ export const AddAgentForm: FC<AddAgentFormProps> = ({onConfirm, onClose}) => {
 			{/* <div className="modal-content flex-col"> */}
 			<SettingItem name={t('Add Agent')} heading />
 
-			<SettingItem heading name={t('Agent Info')} className="bg-secondary rounded-lg px-3" />
+			<SettingItem heading name={t('Agent Info')} className="bg-secondary rounded-lg !px-3" />
 			<div className={twMerge(clsx('p-3'))}>
 				<SettingItem name={t('Agent Name')} description={t('Enter the name of the agent you want to create.')}>
 					<input required type="text" name="agentName" placeholder={t('your agent name')} />
@@ -97,7 +97,7 @@ export const AddAgentForm: FC<AddAgentFormProps> = ({onConfirm, onClose}) => {
 				</SettingItem>
 			</div>
 
-			<SettingItem heading name={t('AI Model')} className="bg-secondary rounded-lg px-3" />
+			<SettingItem heading name={t('AI Model')} className="bg-secondary rounded-lg !px-3" />
 			<div className={twMerge(clsx('p-3'))}>
 				<SettingItem name={t('Response Model')} description={t('Select the default response model for the agent.')}>
 					<Dropdown required name="llm">
@@ -123,7 +123,7 @@ export const AddAgentForm: FC<AddAgentFormProps> = ({onConfirm, onClose}) => {
 			</div>
 
 			<div className="hidden">
-				<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg px-3">
+				<SettingItem heading name={t('Use Knowledge')} className="bg-secondary rounded-lg !px-3">
 					<Toggle
 						name="enableKnowledge"
 						checked={enableKnowledge}

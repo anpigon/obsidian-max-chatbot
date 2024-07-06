@@ -72,7 +72,7 @@ export const RestApiSetting = () => {
 
 	return (
 		<>
-			<SettingItem heading name={t('REST API Connection')} className="bg-secondary rounded-lg px-3  mt-1">
+			<SettingItem heading name={t('REST API Connection')} className="bg-secondary rounded-lg !px-3  mt-1">
 				<Toggle
 					checked={enable}
 					onChange={event => {

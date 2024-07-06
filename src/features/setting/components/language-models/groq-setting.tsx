@@ -91,7 +91,7 @@ export const GroqSetting = () => {
 
 	return (
 		<>
-			<SettingItem heading name={t('Groq')} className="bg-secondary rounded-lg px-3 mt-1">
+			<SettingItem heading name={t('Groq')} className="bg-secondary rounded-lg !px-3 mt-1">
 				<Toggle checked={enable} onChange={handleToggleChange} />
 			</SettingItem>
 

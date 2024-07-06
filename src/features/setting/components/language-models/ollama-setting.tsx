@@ -39,7 +39,7 @@ export const OllamaSetting = () => {
 		const value = event.target.checked;
 		setAllowStream(value);
 		providerSettings.allowStream = value;
-		saveSettings();
+		void saveSettings();
 	};
 
 	const loadOllamaModels = async () => {
@@ -52,7 +52,7 @@ export const OllamaSetting = () => {
 			setIsConnected(true);
 
 			providerSettings.models = models;
-			saveSettings();
+			void saveSettings();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			Logger.error(err);
@@ -65,13 +65,13 @@ export const OllamaSetting = () => {
 
 	useEffect(() => {
 		if (enable) {
-			loadOllamaModels();
+			void loadOllamaModels();
 		}
 	}, [enable]);
 
 	return (
 		<>
-			<SettingItem heading name={t('Ollama')} className="bg-secondary rounded-lg px-3">
+			<SettingItem heading name={t('Ollama')} className="bg-secondary rounded-lg !px-3">
 				<Toggle
 					name="enableOllama"
 					checked={enable}
@@ -79,7 +79,7 @@ export const OllamaSetting = () => {
 						const value = event.target.checked;
 						setEnable(value);
 						providerSettings.enable = value;
-						saveSettings();
+						void saveSettings();
 						refreshChatbotView();
 					}}
 				/>

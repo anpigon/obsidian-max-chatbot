@@ -72,7 +72,7 @@ export const OpenAiSetting = () => {
 
 	return (
 		<>
-			<SettingItem heading name={t('OpenAI')} className="bg-secondary rounded-lg px-3  mt-1">
+			<SettingItem heading name={t('OpenAI')} className="bg-secondary rounded-lg !px-3  mt-1">
 				<Toggle
 					checked={enable}
 					onChange={event => {
