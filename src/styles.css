@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-	.dialog {
+	.max-dialog {
 		--checkbox-size: var(--font-ui-medium);
 		background-color: var(--modal-background);
 		border-radius: var(--modal-radius);
@@ -15,6 +15,60 @@
 		max-height: var(--dialog-max-height);
 		flex-direction: column;
 		overflow: auto;
+	}
+
+	.max-tabs {
+		@apply overflow-hidden flex flex-col relative;
+	}
+
+	.max-tab-header-container {
+		@apply flex relative bg-transparent;
+
+		flex: 0 0 auto;
+		height: var(--header-height);
+		border-bottom: var(--tab-outline-width) solid var(--tab-outline-color);
+		padding-left: var(--size-4-2);
+		padding-right: var(--size-4-2);
+	}
+
+	.max-tab-header-container-inner {
+		@apply flex overflow-auto;
+
+		-webkit-app-region: drag;
+		flex: 0 1 auto;
+		margin: 6px -5px calc(var(--tab-outline-width) * -1);
+		padding: 1px 15px 0;
+	}
+
+	.max-tab-header {
+		@apply flex relative text-center;
+
+		-webkit-app-region: no-drag;
+		color: var(--tab-text-color);
+		scroll-margin-inline-start: var(--size-2-3);
+		scroll-margin-inline-end: var(--size-4-1);
+		border-radius: var(--tab-radius-active);
+	}
+
+	.max-tab-header.is-active {
+		box-shadow: 0 0 0 var(--tab-outline-width) var(--tab-outline-color);
+		color: var(--tab-text-color-active);
+		background-color: var(--tab-background-active);
+	}
+
+	.max-tab-header-inner {
+		@apply flex justify-center items-center h-full overflow-hidden px-2 w-full;
+
+		gap: var(--size-2-1);
+		border-radius: var(--tab-radius);
+	}
+
+	.max-tab-header-inner-title {
+		@apply flex-auto overflow-hidden text-left truncate whitespace-nowrap w-full;
+
+		font-size: var(--tab-font-size);
+		font-weight: var(--tab-font-weight);
+		unicode-bidi: plaintext;
 	}
 }
 

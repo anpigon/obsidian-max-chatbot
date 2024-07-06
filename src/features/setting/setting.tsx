@@ -33,25 +33,23 @@ export const Setting = () => {
 
 	return (
 		<SettingProvider>
-			<div className="workspace-tabs">
-				<div className="workspace-tab-header-container bg-transparent">
+			<div className="max-tabs">
+				<div className="max-tab-header-container">
 					{tabs.map((tab, index) => (
-						<div key={index} className="workspace-tab-header-container-inner" onClick={handleTabChange(index)}>
+						<div key={index} className="max-tab-header-container-inner" onClick={handleTabChange(index)}>
 							<div
-								className={clsx('workspace-tab-header', {
+								aria-label={tab.label}
+								className={clsx('max-tab-header', {
 									'is-active': selectedTab === index,
 								})}
-								aria-label={tab.label}
-								data-tooltip-delay="300"
 							>
-								<div className="workspace-tab-header-inner">
-									<div className="workspace-tab-header-inner-title">{tab.label}</div>
-									<div className="workspace-tab-header-status-container" />
+								<div className="max-tab-header-inner">
+									<div className="max-tab-header-inner-title">{tab.label}</div>
 								</div>
 							</div>
 						</div>
 					))}
-					<div className="workspace-tab-header-spacer" />
+					<div className="flex flex-grow" />
 				</div>
 			</div>
 			<div className="workspace-tab-container flex-col py-4">
