@@ -1,3 +1,9 @@
+## [0.8.1] - 2024-07-06
+
+### Changed
+
+-   Refactor: improve tab styling in Settings component
+
 ## [0.8.0] - 2024-07-06
 
 ### Added
