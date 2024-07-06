@@ -12,7 +12,7 @@ export default async function generateTitleFromContent(settings: MAXSettings, fi
 	const llm = createChatModelInstance(provider, model, settings);
 	const prompt = [
 		new SystemMessage(
-			'You are a title generator. You will give succinct titles that does not contain backslashes, forward slashes, or colons. Generate a title as your response.'
+			`You are a title generator. You will give succinct titles that do not contain backslashes, forward slashes, or colons. Generate a title as your response. Answer language is ${globalThis.moment().locale()}`
 		),
 		new HumanMessage(fileContent),
 	];
