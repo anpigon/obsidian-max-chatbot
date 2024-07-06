@@ -1,14 +1,20 @@
+import {StringOutputParser, JsonOutputParser} from '@langchain/core/output_parsers';
 import {HumanMessage, SystemMessage} from '@langchain/core/messages';
-import {StringOutputParser} from '@langchain/core/output_parsers';
 
 import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
 import createChatModelInstance from '../createChatModelInstance';
 import {MAXSettings} from '@/features/setting/types';
 import Logger from '@/libs/logging';
 
+interface Summary {
+	Missing_Entities: string;
+	Denser_Summary: string;
+}
+
 export default async function generateSummaryFromContent(settings: MAXSettings, fileContent: string) {
 	const {provider, model} = getSelectedAIProviderAndModel(settings);
 	const llm = createChatModelInstance(provider, model, settings);
+	// TODO: model의 performance와 max context length에 따라서 prompt를 수정해야 함
 	const prompt = [
 		new SystemMessage(
 			`You will generate increasingly concise, entity-dense summaries of the above article.
@@ -35,13 +41,13 @@ Guidelines:
 
 Ensure that each summary has exactly the same number of words.
 Respond in JSON format. The JSON should be a list (length 5) of dictionaries with keys "Missing_Entities" and "Denser_Summary".
-Use the ${globalThis.moment().locale()} language for your response.`
+!IMPORTANT: Answer language is ${globalThis.moment().locale()}`
 		),
 		new HumanMessage(`#Article:\n\n${fileContent}`),
 	];
 	Logger.debug(prompt);
-	const chain = llm.pipe(new StringOutputParser());
+	const chain = llm.pipe<Summary[]>(new JsonOutputParser());
 	const response = await chain.invoke(prompt);
 	Logger.debug(response);
-	return response;
+	return response.last()?.Denser_Summary;
 }
