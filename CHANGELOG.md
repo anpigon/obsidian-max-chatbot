@@ -1,3 +1,9 @@
+## [0.8.2] - 2024-07-06
+
+### Changed
+
+-   Enhanced `generateSummaryFromContent` function.
+
 ## [0.8.1] - 2024-07-06
 
 ### Changed
