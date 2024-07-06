@@ -19,6 +19,7 @@ import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constant
 import {ChatMessage} from './features/chatbot/hooks/use-llm';
 import generateTitleFromContent from './libs/ai/generate/generateTitleFromContent';
 import './styles.css';
+import generateSummaryFromContent from './libs/ai/generate/generateSummaryFromContent';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -73,6 +74,18 @@ export default class MAXPlugin extends Plugin {
 		} catch (error) {
 			Logger.error('Error renaming file title', error);
 			new Notice('Failed to rename note title.');
+		}
+	}
+
+	async commandSummaryText(text: string) {
+		try {
+			new Notice('Generating summary...');
+			const response = await generateSummaryFromContent(this.settings!, text);
+			Logger.debug('response', response);
+			new Notice('Summary generated.');
+		} catch (error) {
+			Logger.error('Error generating summary', error);
+			new Notice('Failed to generate summary.');
 		}
 	}
 
@@ -136,6 +149,19 @@ export default class MAXPlugin extends Plugin {
 			id: 'rename-note-title',
 			name: 'Rename Note Title',
 			editorCallback: () => this.commandRenameFileTitle(),
+		});
+
+		this.addCommand({
+			id: 'summary-selected-text',
+			name: 'Summary Selected Text',
+			editorCheckCallback: (checking, editor) => {
+				if (checking) {
+					return !!editor.getSelection();
+				}
+				const selectedText = editor.getSelection();
+				Logger.debug('selectedText', selectedText);
+				void this.commandSummaryText(selectedText);
+			},
 		});
 
 		this.registerFileMenuEvent();
