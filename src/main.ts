@@ -3,7 +3,7 @@ import './set-process-env-mobile';
 
 import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
-import {Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
+import {Editor, Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {VectorStoreBackup} from '@/libs/local-vector-store';
@@ -77,11 +77,16 @@ export default class MAXPlugin extends Plugin {
 		}
 	}
 
-	async commandSummaryText(text: string) {
+	async commandSummaryText(editor: Editor) {
 		try {
 			new Notice('Generating summary...');
-			const response = await generateSummaryFromContent(this.settings!, text);
+			const anchor = editor.getCursor('to');
+			const selectedText = editor.getSelection();
+			Logger.debug('selectedText', selectedText);
+			const response = await generateSummaryFromContent(this.settings!, selectedText);
+			// TODO: Show response in a modal or a new note
 			Logger.debug('response', response);
+			editor.replaceRange(`\n\n## Summary\n${response}\n\n`, anchor, anchor);
 			new Notice('Summary generated.');
 		} catch (error) {
 			Logger.error('Error generating summary', error);
@@ -158,9 +163,7 @@ export default class MAXPlugin extends Plugin {
 				if (checking) {
 					return !!editor.getSelection();
 				}
-				const selectedText = editor.getSelection();
-				Logger.debug('selectedText', selectedText);
-				void this.commandSummaryText(selectedText);
+				void this.commandSummaryText(editor);
 			},
 		});
 
