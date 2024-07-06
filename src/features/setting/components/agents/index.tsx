@@ -115,7 +115,9 @@ export default function AgentSetting() {
 	return (
 		<>
 			<SettingItem heading name={t('Agents')}>
-				<Button onClick={handleAddAgent}>Add Agents</Button>
+				<Button className="!max-w-[50%]" onClick={handleAddAgent}>
+					Add Agents
+				</Button>
 			</SettingItem>
 			{/* <SettingItem name="">
 				<Button onClick={handleTest}>Test</Button>

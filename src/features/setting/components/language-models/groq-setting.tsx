@@ -126,7 +126,7 @@ export const GroqSetting = () => {
 							</>
 						)}
 					</div>
-					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
+					<Button className="mod-cta !max-w-[50%]" onClick={loadModels} disabled={isLoading || !providerSettings.apiKey}>
 						{t('Connectivity Check')}
 					</Button>
 				</SettingItem>

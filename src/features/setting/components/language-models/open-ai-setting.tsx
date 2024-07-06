@@ -126,7 +126,11 @@ export const OpenAiSetting = () => {
 							</>
 						)}
 					</div>
-					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}>
+					<Button
+						className="mod-cta !max-w-[50%]"
+						onClick={loadModels}
+						disabled={isLoading || !(providerSettings.baseUrl && providerSettings.apiKey)}
+					>
 						{t('Connectivity Check')}
 					</Button>
 				</SettingItem>

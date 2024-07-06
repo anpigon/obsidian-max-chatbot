@@ -145,7 +145,7 @@ export const LMStudioSetting = () => {
 							</>
 						)}
 					</div>
-					<Button className="mod-cta" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta !max-w-[50%]" onClick={loadModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
 					</Button>
 				</SettingItem>

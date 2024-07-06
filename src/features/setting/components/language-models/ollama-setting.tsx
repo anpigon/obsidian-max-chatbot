@@ -151,7 +151,7 @@ export const OllamaSetting = () => {
 							</>
 						)}
 					</div>
-					<Button className="mod-cta" onClick={loadOllamaModels} disabled={isLoading || !providerSettings.baseUrl}>
+					<Button className="mod-cta !max-w-[50%]" onClick={loadOllamaModels} disabled={isLoading || !providerSettings.baseUrl}>
 						{t('Connectivity Check')}
 					</Button>
 				</SettingItem>
