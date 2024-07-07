@@ -24,7 +24,7 @@ export default function LanguageModels() {
 			<GoogleSetting />
 			<GroqSetting />
 			<UpstageSetting />
-			<AnthropicSetting />
+			{/* <AnthropicSetting /> */}{/* Anthropic API는 CORS 에러가 발생해서 일단 보류 */}
 		</>
 	);
 }
