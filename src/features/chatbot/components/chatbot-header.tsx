@@ -2,7 +2,7 @@ import {ReactNode, type ChangeEventHandler, type FC, type PropsWithChildren} fro
 
 import {ProviderModels} from '@/hooks/useEnabledModels';
 import {Dropdown} from '@/components/form/dropdown';
-import {LLM_PROVIDERS} from '@/constants';
+import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/constants';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;
@@ -39,6 +39,11 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 				{providers
 					?.filter(({provider, models}) => models.length > 0)
 					.map(({provider, models}) => {
+						if(!models?.length) {
+							if(provider === LLM_PROVIDERS.ANTHROPIC) {
+								models = ANTHROPIC_MODELS;
+							}
+						}
 						return (
 							<optgroup key={provider} label={provider}>
 								{models.map(model => {
