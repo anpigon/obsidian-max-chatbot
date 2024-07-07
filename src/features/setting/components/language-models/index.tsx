@@ -2,6 +2,7 @@ import {useTranslation} from 'react-i18next';
 
 import {SettingItem} from '@/components/settings/setting-item';
 
+import {AnthropicSetting} from './anthropic-setting';
 import {LMStudioSetting} from './lm-studio-setting';
 import {RestApiSetting} from './rest-api-setting';
 import {UpstageSetting} from './upstage-setting';
@@ -23,6 +24,7 @@ export default function LanguageModels() {
 			<GoogleSetting />
 			<GroqSetting />
 			<UpstageSetting />
+			<AnthropicSetting />
 		</>
 	);
 }
