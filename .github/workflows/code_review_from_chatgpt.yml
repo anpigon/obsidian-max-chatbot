@@ -3,8 +3,9 @@ permissions:
     contents: read
     pull-requests: write
 on:
-    pull_request:
-        types: [opened, synchronize]
+    workflow_dispatch:
+    # pull_request:
+    # types: [opened, synchronize]
 jobs:
     code-review:
         runs-on: ubuntu-latest
