@@ -18,7 +18,7 @@ export const AnthropicSetting = () => {
 
 	const [enable, setEnable] = useState(providerSettings?.enable ?? false);
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
-	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream);
+	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream ?? false);
 
 	const saveSettings = useCallback(async () => {
 		await plugin.saveSettings();
@@ -32,9 +32,10 @@ export const AnthropicSetting = () => {
 					checked={enable}
 					onChange={event => {
 						const value = event.target.checked;
+						if (value === enable) return;
 						setEnable(value);
 						providerSettings.enable = value;
-						saveSettings();
+						void saveSettings();
 					}}
 				/>
 			</SettingItem>
@@ -48,9 +49,10 @@ export const AnthropicSetting = () => {
 						defaultValue={apiKey}
 						onChange={event => {
 							const value = event.target.value?.trim();
+							if (value === apiKey) return;
 							setApiKey(value);
 							providerSettings.apiKey = value;
-							saveSettings();
+							void saveSettings();
 						}}
 					/>
 				</SettingItem>
@@ -61,9 +63,10 @@ export const AnthropicSetting = () => {
 						checked={allowStream}
 						onChange={event => {
 							const value = event.target.checked;
+							if (value === allowStream) return;
 							setAllowStream(value);
 							providerSettings.allowStream = value;
-							saveSettings();
+							void saveSettings();
 						}}
 					/>
 				</SettingItem>
