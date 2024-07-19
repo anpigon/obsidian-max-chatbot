@@ -37,16 +37,17 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 				disabled={disabled}
 			>
 				{providers
-					?.filter(({provider, models}) => models.length > 0)
+					?.filter(({models}) => models.length > 0)
 					.map(({provider, models}) => {
-						if (!models?.length) {
+						let currentModels = models.filter(model => model !== 'embed');
+						if (!currentModels?.length) {
 							if (provider === LLM_PROVIDERS.ANTHROPIC) {
-								models = ANTHROPIC_MODELS;
+								currentModels = ANTHROPIC_MODELS;
 							}
 						}
 						return (
 							<optgroup key={provider} label={provider}>
-								{models.map(model => {
+								{currentModels.map(model => {
 									const value = `${provider}/${model}`;
 									return (
 										<option key={value} value={value}>
