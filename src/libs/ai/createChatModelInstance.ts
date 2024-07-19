@@ -1,5 +1,6 @@
 import {ChatOllama} from '@langchain/community/chat_models/ollama';
 import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
+import {ChatAnthropic} from '@langchain/anthropic';
 import {ChatOpenAI} from '@langchain/openai';
 import {ChatGroq} from '@langchain/groq';
 
@@ -20,6 +21,8 @@ export default function createChatModelInstance(provider: LLM_PROVIDERS, model: 
 				return new ChatGoogleGenerativeAI(options);
 			case LLM_PROVIDERS.GROQ:
 				return new ChatGroq(options);
+			case LLM_PROVIDERS.ANTHROPIC:
+				return new ChatAnthropic(options);
 			default:
 				return new ChatOpenAI({
 					...options,

@@ -1,8 +1,8 @@
 import {ReactNode, type ChangeEventHandler, type FC, type PropsWithChildren} from 'react';
 
+import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/constants';
 import {ProviderModels} from '@/hooks/useEnabledModels';
 import {Dropdown} from '@/components/form/dropdown';
-import {LLM_PROVIDERS} from '@/constants';
 
 interface ChatbotHeaderProps extends PropsWithChildren {
 	botName: string;
@@ -16,6 +16,14 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 	onChangeModel: (provider: LLM_PROVIDERS, modelName: string) => void;
 	leftComponent?: ReactNode;
 	rightComponent?: ReactNode;
+}
+
+function getModels(provider: LLM_PROVIDERS, models: string[]) {
+	let currentModels = models.filter(model => model !== 'embed');
+	if (provider === LLM_PROVIDERS.ANTHROPIC && !currentModels?.length) {
+		currentModels = ANTHROPIC_MODELS;
+	}
+	return currentModels;
 }
 
 export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, leftComponent, rightComponent, children}) => {
@@ -37,11 +45,12 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 				disabled={disabled}
 			>
 				{providers
-					?.filter(({provider, models}) => models.length > 0)
+					?.filter(({models}) => models.length > 0)
 					.map(({provider, models}) => {
+						const currentModels = getModels(provider, models);
 						return (
 							<optgroup key={provider} label={provider}>
-								{models.map(model => {
+								{currentModels.map(model => {
 									const value = `${provider}/${model}`;
 									return (
 										<option key={value} value={value}>
