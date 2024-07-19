@@ -2,7 +2,6 @@ import {useTranslation} from 'react-i18next';
 
 import {SettingItem} from '@/components/settings/setting-item';
 
-import {AnthropicSetting} from './anthropic-setting';
 import {LMStudioSetting} from './lm-studio-setting';
 import {RestApiSetting} from './rest-api-setting';
 import {UpstageSetting} from './upstage-setting';
@@ -24,7 +23,8 @@ export default function LanguageModels() {
 			<GoogleSetting />
 			<GroqSetting />
 			<UpstageSetting />
-			{/* <AnthropicSetting /> */}{/* Anthropic API는 CORS 에러가 발생해서 일단 보류 */}
+			{/* TODO: Anthropic API의 CORS 에러로 인해 현재는 주석 처리 됨. 이후 CORS 문제 해결 시 주석 해제 요망 */}
+			{/* <AnthropicSetting /> */}
 		</>
 	);
 }
