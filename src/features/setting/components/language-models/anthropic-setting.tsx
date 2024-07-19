@@ -1,5 +1,5 @@
+import {useCallback, useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useCallback, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
@@ -20,10 +20,13 @@ export const AnthropicSetting = () => {
 	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
 	const [allowStream, setAllowStream] = useState(providerSettings?.allowStream ?? false);
 
-	const saveSettings = useCallback(async () => {
-		await plugin.saveSettings();
-		refreshChatbotView();
-	}, [plugin]);
+	useEffect(() => {
+		const save = async () => {
+			await plugin.saveSettings();
+			refreshChatbotView();
+		};
+		void save();
+	}, [enable, apiKey, allowStream, plugin]);
 
 	return (
 		<>
@@ -32,10 +35,8 @@ export const AnthropicSetting = () => {
 					checked={enable}
 					onChange={event => {
 						const value = event.target.checked;
-						if (value === enable) return;
 						setEnable(value);
 						providerSettings.enable = value;
-						void saveSettings();
 					}}
 				/>
 			</SettingItem>
@@ -49,10 +50,8 @@ export const AnthropicSetting = () => {
 						defaultValue={apiKey}
 						onChange={event => {
 							const value = event.target.value?.trim();
-							if (value === apiKey) return;
 							setApiKey(value);
 							providerSettings.apiKey = value;
-							void saveSettings();
 						}}
 					/>
 				</SettingItem>
@@ -63,10 +62,8 @@ export const AnthropicSetting = () => {
 						checked={allowStream}
 						onChange={event => {
 							const value = event.target.checked;
-							if (value === allowStream) return;
 							setAllowStream(value);
 							providerSettings.allowStream = value;
-							void saveSettings();
 						}}
 					/>
 				</SettingItem>
