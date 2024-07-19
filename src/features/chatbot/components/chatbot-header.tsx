@@ -18,6 +18,14 @@ interface ChatbotHeaderProps extends PropsWithChildren {
 	rightComponent?: ReactNode;
 }
 
+function getModels(provider: LLM_PROVIDERS, models: string[]) {
+	let currentModels = models.filter(model => model !== 'embed');
+	if (provider === LLM_PROVIDERS.ANTHROPIC && !currentModels?.length) {
+		currentModels = ANTHROPIC_MODELS;
+	}
+	return currentModels;
+}
+
 export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disabled, currentModel, onChangeModel, leftComponent, rightComponent, children}) => {
 	const handleChangeModel: ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
@@ -39,12 +47,7 @@ export const ChatbotHeader: FC<ChatbotHeaderProps> = ({botName, providers, disab
 				{providers
 					?.filter(({models}) => models.length > 0)
 					.map(({provider, models}) => {
-						let currentModels = models.filter(model => model !== 'embed');
-						if (!currentModels?.length) {
-							if (provider === LLM_PROVIDERS.ANTHROPIC) {
-								currentModels = ANTHROPIC_MODELS;
-							}
-						}
+						const currentModels = getModels(provider, models);
 						return (
 							<optgroup key={provider} label={provider}>
 								{currentModels.map(model => {
