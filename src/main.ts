@@ -3,6 +3,7 @@ import './set-process-env-mobile';
 
 import {decode, encode} from '@msgpack/msgpack';
 import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
 import {Editor, Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
@@ -29,7 +30,20 @@ export default class MAXPlugin extends Plugin {
 		this.initializeLogger();
 		this.registerViews();
 		this.addCommands();
+		this.updateModels();
 		this.addSettingTab(new MAXSettingTab(this.app, this));
+	}
+
+	updateModels() {
+		this.app.workspace.onLayoutReady(() => {
+			Logger.debug('updateModels');
+			// this.app.workspace.trigger('max:update-models');
+			if (this.settings) {
+				this.settings.providers.SIONIC_AI = DEFAULT_SETTINGS.providers.SIONIC_AI;
+
+				void this.saveData(this.settings);
+			}
+		});
 	}
 
 	async generateUniqueFilepath(activeFile: TFile): Promise<string> {
@@ -98,7 +112,7 @@ export default class MAXPlugin extends Plugin {
 		this.app.workspace.getLeavesOfType(VIEW_TYPE_CHATBOT).forEach(leaf => {
 			const maxView = leaf.view as ChatbotView;
 			if (maxView) {
-				this.saveSettings().catch(error => Logger.error(error));
+				void this.saveSettings();
 			}
 		});
 	}
@@ -124,11 +138,16 @@ export default class MAXPlugin extends Plugin {
 	// 설정 관련 메서드
 	async loadSettings(): Promise<void> {
 		const loadedData = (await this.loadData()) as MAXSettings;
-		this.settings = merge(DEFAULT_SETTINGS, loadedData);
+		this.settings = merge(cloneDeep(DEFAULT_SETTINGS), loadedData);
 	}
 
 	async saveSettings(): Promise<void> {
-		await this.saveData(this.settings);
+		try {
+			await this.saveData(this.settings);
+		} catch (error) {
+			Logger.error('Error saving settings', error);
+			// Handle error appropriately
+		}
 	}
 
 	// 로거 초기화
