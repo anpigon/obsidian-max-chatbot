@@ -6,7 +6,9 @@ import {
 	LM_STUDIO_BASE_URL,
 	OLLAMA_BASE_URL,
 	OPEN_AI_BASE_URL,
+	SIONIC_AI_API_KEY,
 	SIONIC_AI_BASE_URL,
+	SIONIC_AI_MODELS,
 	UPSTAGE_BASE_URL,
 } from '@/constants';
 
@@ -46,9 +48,9 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		[LLM_PROVIDERS.SIONIC_AI]: {
 			enable: true,
 			baseUrl: SIONIC_AI_BASE_URL,
-			apiKey: '934c4bbc-c384-4bea-af82-1450d7f8128d',
+			apiKey: SIONIC_AI_API_KEY,
+			models: SIONIC_AI_MODELS,
 			allowStream: true,
-			models: ['xionic-ko-llama-3-70b'],
 		},
 		[LLM_PROVIDERS.OLLAMA]: {
 			enable: false,

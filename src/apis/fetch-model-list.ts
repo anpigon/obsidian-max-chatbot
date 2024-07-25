@@ -1,10 +1,14 @@
 import {OpenAI} from 'openai';
 
-import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
+import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL, SIONIC_AI_MODELS} from '@/constants';
 import {requestJson} from '@/libs/http';
 import Logger from '@/libs/logging';
 
 import type {ProviderSettings} from '@/features/setting/types';
+
+export function requestSionicAiModels() {
+	return SIONIC_AI_MODELS;
+}
 
 export async function requestOllamaModels(baseUrl: string) {
 	// const json = await requestJson<{models: []}>(`${baseUrl}/api/tags`);
