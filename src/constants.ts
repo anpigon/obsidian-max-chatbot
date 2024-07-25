@@ -1,7 +1,6 @@
 export const DEFAULT_MODEL = 'xionic-ko-llama-3-70b';
 
 export const SIONIC_AI_BASE_URL = 'http://sionic.tech:28000/v1';
-export const SIONIC_AI_API_KEY = '934c4bbc-c384-4bea-af82-1450d7f8128d';
 export const SIONIC_AI_MODELS = ['llama-3.1-xionic-ko-70b'];
 
 export const OLLAMA_BASE_URL = 'http://localhost:11434';

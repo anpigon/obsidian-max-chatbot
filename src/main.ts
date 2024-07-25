@@ -38,12 +38,10 @@ export default class MAXPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(() => {
 			Logger.debug('updateModels');
 			// this.app.workspace.trigger('max:update-models');
-			Logger.debug('DEFAULT_SETTINGS', DEFAULT_SETTINGS);
-			Logger.debug('before updateModels', this.settings?.providers.SIONIC_AI);
 			if (this.settings) {
 				this.settings.providers.SIONIC_AI = DEFAULT_SETTINGS.providers.SIONIC_AI;
+
 				void this.saveData(this.settings);
-				Logger.debug('after updateModels', this.settings.providers.SIONIC_AI);
 			}
 		});
 	}
