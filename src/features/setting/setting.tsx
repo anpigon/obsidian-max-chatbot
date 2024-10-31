@@ -21,7 +21,7 @@ export const Setting = () => {
 		{label: t('Language models'), component: <LanguageModels />},
 		// {label: t('Prompts'), component: <PromptsSetting />},
 		// {label: t('Commands'), component: <CommandsSetting />},
-		{label: t('Agents'), component: <AgentSetting />},
+		// {label: t('Agents'), component: <AgentSetting />},
 		// {label: t('Knowledge'), component: <KnowledgeSetting />},
 		{label: t('Developer options'), component: <DeveloperSetting />},
 	];
