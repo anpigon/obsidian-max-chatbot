@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
 import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
 

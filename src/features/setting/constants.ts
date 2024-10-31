@@ -6,7 +6,7 @@ import {
 	OLLAMA_BASE_URL,
 	OPEN_AI_BASE_URL,
 	UPSTAGE_BASE_URL,
-} from '@/constants';
+} from '@/libs/constants';
 
 import type {MAXSettings} from '@/features/setting/types';
 

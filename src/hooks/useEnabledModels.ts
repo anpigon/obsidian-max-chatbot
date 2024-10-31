@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {LLM_PROVIDERS, embeddingModelKeys} from '@/constants';
+import {LLM_PROVIDERS, embeddingModelKeys} from '@/libs/constants';
 import {useSettings} from './useApp';
 
 import type {MAXSettings} from '@/features/setting/types';

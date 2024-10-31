@@ -5,7 +5,7 @@ import {ChatOpenAI} from '@langchain/openai';
 import {ChatGroq} from '@langchain/groq';
 
 import {MAXSettings, ProviderSettings} from '@/features/setting/types';
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 import Logger from '../logging';
 
 export default function createChatModelInstance(provider: LLM_PROVIDERS, model: string, setting: MAXSettings) {

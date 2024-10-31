@@ -2,7 +2,7 @@ import {createContext, useContext, useMemo, useState} from 'react';
 
 import type {Dispatch, ReactNode, SetStateAction} from 'react';
 
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
 interface Model {
 	provider: LLM_PROVIDERS;

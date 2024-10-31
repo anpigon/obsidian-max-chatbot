@@ -1,4 +1,4 @@
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
 import type {MAXSettings} from '@/features/setting/types';
 

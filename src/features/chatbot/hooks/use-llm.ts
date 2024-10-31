@@ -6,7 +6,7 @@ import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
 import {Runnable, RunnableConfig} from '@langchain/core/runnables';
 import {StringOutputParser} from '@langchain/core/output_parsers';
 import useOnceEffect from '@/hooks/useOnceEffect';
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 import {v4 as uuidv4} from 'uuid';

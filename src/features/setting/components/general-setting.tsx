@@ -5,7 +5,7 @@ import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {Dropdown} from '@/components/form/dropdown';
 import {Toggle} from '@/components/form/toggle';
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 import {usePlugin} from '@/hooks/useApp';
 
 export const GeneralSetting = () => {

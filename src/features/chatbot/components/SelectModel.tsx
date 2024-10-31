@@ -2,7 +2,7 @@ import {type ChangeEventHandler} from 'react';
 import {twMerge} from 'tailwind-merge';
 
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
-import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/constants';
+import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/libs/constants';
 import {useCurrentModel} from '../hooks/use-current-model';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import {Dropdown} from '@/components/form/dropdown';

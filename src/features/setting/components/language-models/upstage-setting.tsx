@@ -8,7 +8,7 @@ import {usePlugin, useSettings} from '@/hooks/useApp';
 import {useSettingDispatch} from '../../context';
 import {Toggle} from '@/components/form/toggle';
 import {Icon} from '@/components/icons/icon';
-import {UPSTAGE_MODELS} from '@/constants';
+import {UPSTAGE_MODELS} from '@/libs/constants';
 import Logger from '@/libs/logging';
 import {Button} from '@/components';
 

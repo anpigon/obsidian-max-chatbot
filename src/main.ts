@@ -16,7 +16,7 @@ import type {MAXSettings} from '@/features/setting/types';
 
 import './i18n';
 
-import {DEFAULT_VECTOR_STORE_NAME, SESSIONS_DIR, SESSIONS_FILENAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
+import {DEFAULT_VECTOR_STORE_NAME, SESSIONS_DIR, SESSIONS_FILENAME, VECTOR_STORE_FILE_EXTENSION} from '@/libs/constants';
 import {ChatMessage} from './features/chatbot/hooks/use-llm';
 import generateSummaryFromContent from './libs/ai/generate/generateSummaryFromContent';
 import generateTitleFromContent from './libs/ai/generate/generateTitleFromContent';

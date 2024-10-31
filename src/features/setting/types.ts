@@ -1,4 +1,4 @@
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
 export interface ProviderSettings {
 	enable: boolean;

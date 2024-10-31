@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import {useEnabledEmbeddingModel, useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {Button, Dropdown, IconButton, Search, SettingItem, Toggle} from '@/components';
 import {FolderSuggest} from '@/libs/suggesters/FolderSuggester';
-import {LLM_PROVIDERS} from '@/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 import {useApp} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 
