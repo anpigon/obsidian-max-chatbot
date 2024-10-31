@@ -12,7 +12,7 @@ import {t} from 'i18next';
 
 import {MarkdownView} from '@/components';
 import {Loading} from './loading';
-import SmallButton from '@/components/buttons/small-button';
+import {SmallButton} from '@/components/buttons/small-button';
 
 interface MessageProps {
 	id: string;

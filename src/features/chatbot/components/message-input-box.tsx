@@ -7,7 +7,7 @@ import TextArea, {TextAreaProps} from './TextArea';
 import ReferenceToggle from './ReferenceToggle';
 import {SelectModel} from './SelectModel';
 
-export const ChatBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({controller, canStop, disabled, ...props}, ref) => {
+export const MessageInputBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({controller, canStop, disabled, ...props}, ref) => {
 	const plugin = usePlugin();
 
 	const {allowReferenceCurrentNote} = useChatbotState();
@@ -34,4 +34,4 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({controll
 	);
 });
 
-ChatBox.displayName = 'ChatBox';
+MessageInputBox.displayName = 'MessageInputBox';

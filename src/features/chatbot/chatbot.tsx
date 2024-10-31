@@ -15,7 +15,7 @@ import {ChatbotContainer} from './components/chatbot-container';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
 import {ChatHistories} from './components/chat-histories';
 import {useCurrentModel} from './hooks/use-current-model';
-import {ChatBox} from './components/chat-box';
+import {MessageInputBox} from './components/message-input-box';
 import {Message} from './components/message';
 import {Drawer} from './components/drawer';
 import {useChatbotState} from './context';
@@ -162,7 +162,7 @@ export const Chatbot: FC = () => {
 			</MessagesContainer>
 
 			<form ref={formRef}>
-				<ChatBox
+				<MessageInputBox
 					ref={chatBoxRef}
 					canStop={isStreaming}
 					disabled={isStreaming}
