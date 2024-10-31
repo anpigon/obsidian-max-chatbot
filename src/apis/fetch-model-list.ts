@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {OpenAI} from 'openai';
 
 import {GOOGLE_GEMINI_BASE_URL, GROQ_BASE_URL, MISTRAL_BASE_URL, OPEN_AI_MODELS, OPEN_ROUTER_BASE_URL} from '@/constants';
@@ -67,12 +72,12 @@ export async function fetchRestApiModels({baseUrl, apiKey}: ProviderSettings) {
 		throw new Error('Invalid REST API URL: ' + baseUrl);
 	}
 
-	const jsonData = await requestJson(`${baseUrl}/models`, {
+	const jsonData: any = await requestJson(`${baseUrl}/models`, {
 		headers: {Authorization: `Bearer ${apiKey}`},
 	});
 
 	// Check if the response is valid
-	if (jsonData && (jsonData.data || Array.isArray(jsonData))) {
+	if (jsonData && ('data' in jsonData ? jsonData['data'] : Array.isArray(jsonData))) {
 		let models;
 		if (Array.isArray(jsonData)) {
 			models = jsonData.map((model: {id: number}) => model.id);
@@ -105,7 +110,7 @@ export async function fetchGoogleGeminiModels({apiKey}: Pick<ProviderSettings, '
 }
 
 export async function fetchMistralModels({apiKey}: ProviderSettings) {
-	const jsonData = await requestJson(`${MISTRAL_BASE_URL}/models`, {
+	const jsonData: any = await requestJson(`${MISTRAL_BASE_URL}/models`, {
 		headers: {
 			Authorization: `Bearer ${apiKey}`,
 		},
