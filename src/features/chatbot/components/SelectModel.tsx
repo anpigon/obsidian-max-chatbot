@@ -1,8 +1,8 @@
 import {type ChangeEventHandler} from 'react';
 import {twMerge} from 'tailwind-merge';
 
-import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/libs/constants';
+import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useCurrentModel} from '../hooks/use-current-model';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import {Dropdown} from '@/components/form/dropdown';
@@ -48,21 +48,17 @@ export const SelectModel = ({disabled, className}: SelectModelProps) => {
 
 	// 모델 옵션 렌더링
 	const renderModelOptions = () => {
-		return providers
-			?.filter(({models}) => models.length > 0)
-			.map(({provider, models}) => {
-				const availableModels = filterModels(provider, models);
-
-				return (
-					<optgroup key={provider} label={provider}>
-						{availableModels.map(model => (
-							<option key={`${provider}/${model}`} value={`${provider}/${model}`}>
-								{model}
-							</option>
-						))}
-					</optgroup>
-				);
-			});
+		return providers.map(({provider, models}) => {
+			return (
+				<optgroup key={provider} label={provider}>
+					{models.map(model => (
+						<option key={`${provider}/${model.id}`} value={`${provider}/${model.id}`}>
+							{model.name}
+						</option>
+					))}
+				</optgroup>
+			);
+		});
 	};
 
 	return (

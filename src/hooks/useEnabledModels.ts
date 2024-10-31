@@ -20,7 +20,8 @@ export const useEnabledLLMModels = () => {
 		if (!settings?.providers) return;
 
 		const filteredModels = Object.entries<ChatModelOption[]>(CHAT_MODEL_OPTIONS)
-			.filter(([provider]) => {
+			.filter(([provider, models]) => {
+				if (!models?.length) return false;
 				if (!(provider in settings.providers)) return false;
 				const setting = settings.providers[provider as keyof LLMProviderSettings];
 				return setting.apiKey || setting.enable;
