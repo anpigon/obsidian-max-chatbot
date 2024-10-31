@@ -9,6 +9,7 @@ import {Dropdown} from '@/components/form/dropdown';
 
 interface SelectModelProps {
 	disabled?: boolean;
+	className?: string;
 }
 
 // 모델 목록 필터링 함수
@@ -23,7 +24,7 @@ const filterModels = (provider: LLM_PROVIDERS, models: string[]): string[] => {
 	return filteredModels;
 };
 
-export const SelectModel = ({disabled}: SelectModelProps) => {
+export const SelectModel = ({disabled, className}: SelectModelProps) => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const providers = useEnabledLLMModels();
@@ -75,7 +76,8 @@ export const SelectModel = ({disabled}: SelectModelProps) => {
 				'cursor-pointer',
 				'text-xs',
 				'h-4',
-				'w-40 min-w-[10rem]'
+				'w-40 min-w-[10rem]',
+				className
 			)}
 		>
 			{renderModelOptions()}
