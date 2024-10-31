@@ -1,28 +1,16 @@
 import {type ChangeEventHandler} from 'react';
 import {twMerge} from 'tailwind-merge';
 
-import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/libs/constants';
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useCurrentModel} from '../hooks/use-current-model';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import {Dropdown} from '@/components/form/dropdown';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
 interface SelectModelProps {
 	disabled?: boolean;
 	className?: string;
 }
-
-// 모델 목록 필터링 함수
-const filterModels = (provider: LLM_PROVIDERS, models: string[]): string[] => {
-	const filteredModels = models.filter(model => model !== 'embed');
-
-	// Anthropic 프로바이더이고 모델이 없는 경우 기본 모델 사용
-	if (provider === LLM_PROVIDERS.ANTHROPIC && !filteredModels.length) {
-		return ANTHROPIC_MODELS;
-	}
-
-	return filteredModels;
-};
 
 export const SelectModel = ({disabled, className}: SelectModelProps) => {
 	const plugin = usePlugin();
