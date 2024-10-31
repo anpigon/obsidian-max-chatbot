@@ -26,11 +26,15 @@ export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
 
 	async onload() {
+		// workspace가 준비된 후 실행되어야 하는 작업들은 onLayoutReady 안으로
+		this.app.workspace.onLayoutReady(() => {
+			this.updateModels();
+		});
+
 		await this.loadSettings();
 		this.initializeLogger();
 		this.registerViews();
 		this.addCommands();
-		this.updateModels();
 		this.addSettingTab(new MAXSettingTab(this.app, this));
 	}
 
