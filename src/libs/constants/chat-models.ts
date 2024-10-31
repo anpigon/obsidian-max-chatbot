@@ -97,8 +97,22 @@ export const CHAT_MODEL_OPTIONS = {
 			max_output_tokens: 4_096,
 		},
 	],
-	[LLM_PROVIDERS.GROQ]: [],
-	[LLM_PROVIDERS.UPSTAGE]: [],
+	// https://console.upstage.ai/docs/capabilities/chat
+	[LLM_PROVIDERS.UPSTAGE]: [
+		{
+			id: 'solar-pro-preview-240910',
+			name: 'Solar Pro',
+			context_window: 4_096,
+			max_output_tokens: 4_096,
+		},
+		{
+			id: 'solar-mini-240612',
+			name: 'Solar Mini',
+			context_window: 32_768,
+			max_output_tokens: 4_096,
+		},
+	],
 	[LLM_PROVIDERS.MISTRAL]: [],
+	[LLM_PROVIDERS.GROQ]: [],
 	[LLM_PROVIDERS.OPEN_ROUTER]: [],
 };
