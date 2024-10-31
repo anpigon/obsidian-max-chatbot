@@ -57,11 +57,9 @@ export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => 
 			className={twMerge(
 				'bg-none bg-transparent hover:bg-transparent',
 				'focus:outline-none shadow-none focus:shadow-none hover:shadow-none',
+				'text-xs text-[var(--text-faint)]',
+				'h-4 w-40 min-w-[10rem]',
 				'cursor-pointer',
-				'text-xs',
-				'h-4',
-				'w-40 min-w-[10rem]',
-				'text-[var(--text-faint)]',
 				className
 			)}
 		>
