@@ -14,7 +14,7 @@ function getModels(provider: LLM_PROVIDERS, models: string[]) {
 	return currentModels;
 }
 
-export const SelectModel = ({disabled}: {disabled: boolean}) => {
+export const SelectModel = ({disabled}: {disabled?: boolean}) => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const providers = useEnabledLLMModels();

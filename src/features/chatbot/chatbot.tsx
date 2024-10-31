@@ -5,7 +5,6 @@ import {Notice} from 'obsidian';
 import type {ChangeEvent, FC, KeyboardEvent} from 'react';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 
@@ -15,12 +14,10 @@ import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
 import {ChatHistories} from './components/chat-histories';
-import {ChatbotHeader} from './components/chatbot-header';
 import {useCurrentModel} from './hooks/use-current-model';
 import {ChatBox} from './components/chat-box';
 import {Message} from './components/message';
 import {Drawer} from './components/drawer';
-import {LLM_PROVIDERS} from '@/constants';
 import {useChatbotState} from './context';
 import {IconButton} from '@/components';
 import {useLLM} from './hooks/use-llm';
@@ -40,8 +37,7 @@ export const Chatbot: FC = () => {
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
 
-	const enabledModels = useEnabledLLMModels();
-	const [currentModel, setCurrentModel] = useCurrentModel(settings);
+	const [currentModel] = useCurrentModel(settings);
 
 	const {allowReferenceCurrentNote} = useChatbotState();
 
@@ -60,7 +56,7 @@ export const Chatbot: FC = () => {
 	useEffect(() => {
 		if (!sessionID || !messages.length) return;
 		// Save chat history to the file
-		plugin.saveChatHistory(sessionID, messages);
+		void plugin.saveChatHistory(sessionID, messages);
 	}, [sessionID, messages]);
 
 	useOnceEffect(() => {
@@ -116,13 +112,6 @@ export const Chatbot: FC = () => {
 		}
 	};
 
-	const handleChangeModel = (newProvider: LLM_PROVIDERS, newModel: string) => {
-		setCurrentModel(newProvider, newModel);
-		settings.general.provider = newProvider;
-		settings.general.model = newModel;
-		plugin.saveSettings();
-	};
-
 	const handleStartNewChat = () => {
 		controller?.abort();
 		newSession();
@@ -132,15 +121,14 @@ export const Chatbot: FC = () => {
 
 	return (
 		<ChatbotContainer>
-			<ChatbotHeader
-				providers={enabledModels}
-				botName={chatbotName}
-				currentModel={currentModel}
-				disabled={isStreaming}
-				onChangeModel={handleChangeModel}
-				leftComponent={<IconButton label={t('chat history')} icon="history" onClick={handleViewHistory} />}
-				rightComponent={<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />}
-			/>
+			<div className="py-4 px-0 text-center relative">
+				<div className="absolute top-2 left-2">
+					<IconButton label={t('chat history')} icon="history" onClick={handleViewHistory} />
+				</div>
+				<div className="absolute top-2 right-2">
+					<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />
+				</div>
+			</div>
 			<Drawer side="left" isOpen={isDrawerOpen} onClose={handleCloseDrawer}>
 				<div className="p-4 relative">
 					<h3 className="text-lg font-semibold p-0 mt-0 mb-4">{t('Chat History')}</h3>
@@ -149,7 +137,7 @@ export const Chatbot: FC = () => {
 						<ChatHistories
 							onSelect={(sessionID: string) => {
 								handleCloseDrawer();
-								loadChatHistory(sessionID);
+								void loadChatHistory(sessionID);
 							}}
 						/>
 					)}
