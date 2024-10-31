@@ -28,7 +28,7 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, ChatBoxProps>(({controlle
 					onChange={e => {
 						setAllowReferenceCurrentNote(e.target.checked);
 						plugin.settings!.general.allowReferenceCurrentNote = e.target.checked;
-						plugin.saveSettings();
+						void plugin.saveSettings();
 					}}
 					className="scale-50 mx-[-5px]"
 				/>
