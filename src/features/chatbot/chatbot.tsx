@@ -122,12 +122,8 @@ export const Chatbot: FC = () => {
 	return (
 		<ChatbotContainer>
 			<div className="py-4 px-0 text-center relative">
-				<div className="absolute top-2 left-2">
-					<IconButton label={t('chat history')} icon="history" onClick={handleViewHistory} />
-				</div>
-				<div className="absolute top-2 right-2">
-					<IconButton label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />
-				</div>
+				<IconButton className="absolute top-2 left-2" label={t('chat history')} icon="history" onClick={handleViewHistory} />
+				<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />
 			</div>
 
 			<Drawer side="left" isOpen={isDrawerOpen} onClose={handleCloseDrawer}>
