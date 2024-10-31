@@ -5,14 +5,14 @@ import {IconTrash} from '@/components/icons/icon-trash';
 import {IconCopy} from '@/components/icons/icon-copy';
 import {IconEdit} from '@/components/icons/icon-edit';
 
+import {FC, FormEventHandler, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import {Notice} from 'obsidian';
-import {useState} from 'react';
 import {t} from 'i18next';
 
+import {SmallButton} from '@/components/buttons/small-button';
 import {MarkdownView} from '@/components';
 import {Loading} from './loading';
-import {SmallButton} from '@/components/buttons/small-button';
 
 interface MessageProps {
 	id: string;
@@ -24,21 +24,20 @@ interface MessageProps {
 	onEditMessage: (id: string, message: string) => void;
 }
 
-export const Message: React.FC<MessageProps> = ({id, type, name, message, showLoading = false, onDeleteMessage, onEditMessage}) => {
+export const Message: FC<MessageProps> = ({id, type, name, message, showLoading = false, onDeleteMessage, onEditMessage}) => {
 	const [, copy] = useCopyToClipboard();
 	const [editing, setEditing] = useState(false);
 
-	const handleCopy = async () => {
-		try {
-			await copy(message?.toString() || '');
-			new Notice(t('Text copied to clipboard'));
-		} catch (error) {
-			console.error(error);
-			new Notice(t('Failed to copy text to clipboard'));
-		}
+	const handleCopy = () => {
+		copy(message?.toString() || '')
+			.then(() => new Notice(t('Text copied to clipboard')))
+			.catch(error => {
+				console.error(error);
+				new Notice(t('Failed to copy text to clipboard'));
+			});
 	};
 
-	const handleEdit: React.FormEventHandler<HTMLFormElement> = event => {
+	const handleEdit: FormEventHandler<HTMLFormElement> = event => {
 		event.preventDefault();
 		const form = new FormData(event.currentTarget);
 		const message = form.get('message')?.toString() ?? '';
@@ -64,7 +63,7 @@ export const Message: React.FC<MessageProps> = ({id, type, name, message, showLo
 						<SmallButton title="edit" onClick={() => setEditing(true)}>
 							<IconEdit />
 						</SmallButton>
-						<SmallButton title="copy" onClick={() => handleCopy()}>
+						<SmallButton title="copy" onClick={handleCopy}>
 							<IconCopy />
 						</SmallButton>
 						<SmallButton title="trash" onClick={() => onDeleteMessage(id)}>

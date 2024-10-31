@@ -96,7 +96,7 @@ export const Chatbot: FC = () => {
 
 			resetInputForm();
 			setMessage(value);
-			processMessage(value);
+			void processMessage(value);
 		}
 	};
 
