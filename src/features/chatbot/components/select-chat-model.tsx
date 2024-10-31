@@ -1,9 +1,8 @@
-import {type ChangeEventHandler} from 'react';
+import {useMemo, type ChangeEventHandler} from 'react';
 import {twMerge} from 'tailwind-merge';
 
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useCurrentModel} from '../hooks/use-current-model';
-import {usePlugin, useSettings} from '@/hooks/useApp';
 import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/libs/constants';
 
@@ -13,10 +12,8 @@ interface SelectChatModelProps {
 }
 
 export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => {
-	const plugin = usePlugin();
-	const settings = useSettings();
 	const providers = useEnabledLLMModels();
-	const [currentModel, setCurrentModel] = useCurrentModel(settings);
+	const [currentModel, setCurrentModel] = useCurrentModel();
 
 	const handleModelChange: ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
@@ -28,10 +25,6 @@ export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => 
 
 		// 현재 모델 및 설정 업데이트
 		setCurrentModel(newProvider, newModel);
-		settings.general.provider = newProvider;
-		settings.general.model = newModel;
-
-		void plugin.saveSettings();
 	};
 
 	// 모델 옵션 렌더링
@@ -49,9 +42,11 @@ export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => 
 		});
 	};
 
+	const selectedModel = useMemo<string>(() => currentModel && `${currentModel.provider}/${currentModel.model}`, [currentModel]);
+
 	return (
 		<Dropdown
-			value={`${currentModel.provider}/${currentModel.model}`}
+			value={selectedModel}
 			onChange={handleModelChange}
 			disabled={disabled}
 			className={twMerge(

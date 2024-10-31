@@ -37,7 +37,7 @@ export const Chatbot: FC = () => {
 	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
 	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
 
-	const [currentModel] = useCurrentModel(settings);
+	const [currentModel] = useCurrentModel();
 
 	const {allowReferenceCurrentNote} = useChatbotState();
 
