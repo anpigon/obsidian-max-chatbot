@@ -1,5 +1,5 @@
+import {ChangeEventHandler, useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useCallback, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
 import clsx from 'clsx';
 
@@ -25,6 +25,20 @@ export const OpenAiSetting = () => {
 		refreshChatbotView();
 	}, [plugin]);
 
+	const handleApiKeyChange: ChangeEventHandler<HTMLInputElement> = event => {
+		const value = event.target.value?.trim();
+		setApiKey(value);
+		providerSettings.apiKey = value;
+		void saveSettings();
+	};
+
+	const handleAllowStreamChange: ChangeEventHandler<HTMLInputElement> = event => {
+		const value = event.target.checked;
+		setAllowStream(value);
+		providerSettings.allowStream = value;
+		void saveSettings();
+	};
+
 	return (
 		<>
 			<SettingItem heading name={t('OpenAI')} className="bg-secondary rounded-lg !px-3  mt-1">
@@ -41,31 +55,11 @@ export const OpenAiSetting = () => {
 
 			<div className={twMerge(clsx('p-3 hidden', {block: enable}))}>
 				<SettingItem name={t('Provider API Key', {name: 'OpenAI API'})} description={t('Insert your provider API Key', {name: 'OpenAI API'})}>
-					<input
-						type="password"
-						spellCheck={false}
-						placeholder="sk-aOO-...Cvll"
-						defaultValue={apiKey}
-						onChange={event => {
-							const value = event.target.value?.trim();
-							setApiKey(value);
-							providerSettings.apiKey = value;
-							void saveSettings();
-						}}
-					/>
+					<input type="password" spellCheck={false} placeholder="sk-aOO-...Cvll" defaultValue={apiKey} onChange={handleApiKeyChange} />
 				</SettingItem>
 
 				<SettingItem name={t('Allow Stream')} description={t('Allow the model to stream responses.', {name: 'OpenAI'})}>
-					<Toggle
-						name="allowStream"
-						checked={allowStream}
-						onChange={event => {
-							const value = event.target.checked;
-							setAllowStream(value);
-							providerSettings.allowStream = value;
-							void saveSettings();
-						}}
-					/>
+					<Toggle name="allowStream" checked={allowStream} onChange={handleAllowStreamChange} />
 				</SettingItem>
 			</div>
 		</>
