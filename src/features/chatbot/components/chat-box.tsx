@@ -6,6 +6,7 @@ import {usePlugin} from '@/hooks/useApp';
 import {useChatbotDispatch, useChatbotState} from '../context';
 import ReferenceToggle from './ReferenceToggle';
 import TextArea from './TextArea';
+import { SelectModel } from './SelectModel';
 
 export interface ChatBoxProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	controller?: AbortController;
@@ -31,6 +32,7 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, ChatBoxProps>(({controlle
 		<div className="flex flex-col mx-3 my-3 p-1">
 			<ReferenceToggle checked={allowReferenceCurrentNote} onChange={handleToggleChange} />
 			<TextArea {...props} ref={ref} canStop={canStop} controller={controller} />
+			<SelectModel />
 		</div>
 	);
 });
