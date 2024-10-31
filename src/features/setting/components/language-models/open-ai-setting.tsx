@@ -1,4 +1,4 @@
-import {ChangeEventHandler, useCallback, useState} from 'react';
+import {ChangeEventHandler, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {SettingItem} from '@/components/settings/setting-item';
@@ -13,23 +13,19 @@ export const OpenAiSetting = () => {
 	const {refreshChatbotView} = useSettingDispatch();
 	const providerSettings = settings.providers.OPEN_AI;
 
-	const [apiKey, setApiKey] = useState(providerSettings?.apiKey ?? '');
-
 	const saveSettings = useCallback(async () => {
 		await plugin.saveSettings();
 		refreshChatbotView();
 	}, [plugin]);
 
 	const handleApiKeyChange: ChangeEventHandler<HTMLInputElement> = event => {
-		const value = event.target.value?.trim();
-		setApiKey(value);
-		providerSettings.apiKey = value;
+		providerSettings.apiKey = event.target.value?.trim();
 		void saveSettings();
 	};
 
 	return (
 		<SettingItem name={t('Provider API Key', {name: 'OpenAI API'})} description={t('Insert your provider API Key', {name: 'OpenAI API'})}>
-			<input type="password" spellCheck={false} placeholder="sk-aOO-...Cvll" defaultValue={apiKey} onChange={handleApiKeyChange} />
+			<input type="password" spellCheck={false} placeholder="sk-aOO-...Cvll" defaultValue={providerSettings?.apiKey} onChange={handleApiKeyChange} />
 		</SettingItem>
 	);
 };
