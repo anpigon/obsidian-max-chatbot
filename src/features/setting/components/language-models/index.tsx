@@ -9,6 +9,7 @@ import {OpenAiSetting} from './open-ai-setting';
 import {GoogleSetting} from './google-setting';
 import {OllamaSetting} from './ollama-setting';
 import {GroqSetting} from './groq-setting';
+import { AnthropicSetting } from './anthropic-setting';
 
 export default function LanguageModels() {
 	const {t} = useTranslation('settings');
@@ -23,8 +24,7 @@ export default function LanguageModels() {
 			<GoogleSetting />
 			<GroqSetting />
 			<UpstageSetting />
-			{/* TODO: Anthropic API의 CORS 에러로 인해 현재는 주석 처리 됨. 이후 CORS 문제 해결 시 주석 해제 요망 */}
-			{/* <AnthropicSetting /> */}
+			<AnthropicSetting />
 		</>
 	);
 }
