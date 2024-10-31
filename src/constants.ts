@@ -1,11 +1,6 @@
 export const SESSIONS_FILENAME = 'sessions';
 export const SESSIONS_DIR = 'sessions';
 
-export const DEFAULT_MODEL = 'xionic-ko-llama-3-70b';
-
-export const SIONIC_AI_BASE_URL = 'http://sionic.tech:28000/v1';
-export const SIONIC_AI_MODELS = ['llama-3.1-xionic-ko-70b'];
-
 export const OLLAMA_BASE_URL = 'http://localhost:11434';
 export const LM_STUDIO_BASE_URL = 'http://localhost:1234/v1';
 export const OPEN_AI_BASE_URL = 'https://api.openai.com/v1';
@@ -23,7 +18,6 @@ export const ANTHROPIC_MODELS = ['claude-3-5-sonnet-20240620', 'claude-3-opus-20
 export const OPEN_AI_MODELS = ['gpt-3.5-turbo', 'gpt-4o', 'gpt-4'];
 
 export const enum LLM_PROVIDERS {
-	SIONIC_AI = 'SIONIC_AI',
 	OLLAMA = 'OLLAMA',
 	LM_STUDIO = 'LM_STUDIO',
 	REST_API = 'REST_API',

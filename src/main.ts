@@ -43,8 +43,6 @@ export default class MAXPlugin extends Plugin {
 			Logger.debug('updateModels');
 			// this.app.workspace.trigger('max:update-models');
 			if (this.settings) {
-				this.settings.providers.SIONIC_AI = DEFAULT_SETTINGS.providers.SIONIC_AI;
-
 				void this.saveData(this.settings);
 			}
 		});

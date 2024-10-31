@@ -27,7 +27,6 @@ export interface OllamaSettings extends ProviderSettings {
 }
 
 export interface LLMProviderSettings {
-	[LLM_PROVIDERS.SIONIC_AI]: ProviderSettings;
 	[LLM_PROVIDERS.OLLAMA]: OllamaSettings;
 	[LLM_PROVIDERS.LM_STUDIO]: ProviderSettings;
 	[LLM_PROVIDERS.REST_API]: ProviderSettings;

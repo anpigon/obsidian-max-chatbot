@@ -3,12 +3,10 @@ import {Trans, useTranslation} from 'react-i18next';
 
 import {SettingItem} from '@/components/settings/setting-item';
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
-import {DEFAULT_MODEL, LLM_PROVIDERS} from '@/constants';
 import {Dropdown} from '@/components/form/dropdown';
 import {Toggle} from '@/components/form/toggle';
+import {LLM_PROVIDERS} from '@/constants';
 import {usePlugin} from '@/hooks/useApp';
-
-// Helper function to fetch models based on the source type
 
 export const GeneralSetting = () => {
 	const plugin = usePlugin();
@@ -17,9 +15,7 @@ export const GeneralSetting = () => {
 	const [temperature, setTemperature] = useState(settings.general.temperature);
 	const [maxTokens, setMaxTokens] = useState(settings.general.maxTokens);
 	const [allowReferenceCurrentNote, setAllowReferenceCurrentNote] = useState(settings.general.allowReferenceCurrentNote);
-	const [modelList, setModelList] = useState([DEFAULT_MODEL]);
-
-	async function fetchModels(sourceType: LLM_PROVIDERS) {}
+	const [modelList, setModelList] = useState([]);
 
 	const modelSources = [
 		{type: LLM_PROVIDERS.OLLAMA, condition: settings.providers.OLLAMA?.enable},

@@ -1,13 +1,10 @@
 import {
-	DEFAULT_MODEL,
 	GOOGLE_GEMINI_BASE_URL,
 	GROQ_BASE_URL,
 	LLM_PROVIDERS,
 	LM_STUDIO_BASE_URL,
 	OLLAMA_BASE_URL,
 	OPEN_AI_BASE_URL,
-	SIONIC_AI_BASE_URL,
-	SIONIC_AI_MODELS,
 	UPSTAGE_BASE_URL,
 } from '@/constants';
 
@@ -19,8 +16,8 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		profileFolderPath: 'MAX/Profiles',
 	},
 	general: {
-		provider: LLM_PROVIDERS.SIONIC_AI,
-		model: DEFAULT_MODEL,
+		provider: null,
+		model: null,
 		systemPrompt: '',
 		maxTokens: '',
 		temperature: '1.00',
@@ -44,13 +41,6 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		allowRenameNoteTitle: false,
 	},
 	providers: {
-		[LLM_PROVIDERS.SIONIC_AI]: {
-			enable: true,
-			baseUrl: SIONIC_AI_BASE_URL,
-			apiKey: 'SIONIC_AI_API_KEY',
-			models: SIONIC_AI_MODELS,
-			allowStream: true,
-		},
 		[LLM_PROVIDERS.OLLAMA]: {
 			enable: false,
 			baseUrl: OLLAMA_BASE_URL,
@@ -152,7 +142,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 	toggleOpenRouterSettings: false,
 	toggleOllamaSettings: true,
 	toggleAdvancedSettings: false,
-	allModels: [DEFAULT_MODEL],
+	allModels: [],
 	isVerbose: false,
 	langSmithKey: '',
 	agents: [],
