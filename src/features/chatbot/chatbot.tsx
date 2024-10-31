@@ -129,6 +129,7 @@ export const Chatbot: FC = () => {
 					<IconButton className="absolute top-2 right-2" label={t('Start new chat')} icon="plus" onClick={handleStartNewChat} />
 				</div>
 			</div>
+			
 			<Drawer side="left" isOpen={isDrawerOpen} onClose={handleCloseDrawer}>
 				<div className="p-4 relative">
 					<h3 className="text-lg font-semibold p-0 mt-0 mb-4">{t('Chat History')}</h3>
