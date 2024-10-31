@@ -38,7 +38,8 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, ChatBoxProps>(({controlle
 				<textarea
 					ref={ref}
 					autoFocus
-					className="w-full h-8 max-h-40 resize-none text-base overflow-y-auto text-[var(--text-normal)] placeholder:text-sm"
+					className="w-full"
+					// className="w-full h-8 max-h-40 resize-none text-base overflow-y-auto text-[var(--text-normal)] placeholder:text-sm"
 					// contentEditable
 					placeholder={t('What can I help you with?')}
 					{...props}
