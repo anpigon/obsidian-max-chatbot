@@ -5,7 +5,7 @@ import {usePlugin} from '@/hooks/useApp';
 import {useChatbotDispatch, useChatbotState} from '../context';
 import TextArea, {TextAreaProps} from './TextArea';
 import ReferenceToggle from './ReferenceToggle';
-import {SelectModel} from './SelectModel';
+import {SelectChatModel} from './select-chat-model';
 
 export const MessageInputBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({controller, canStop, disabled, ...props}, ref) => {
 	const plugin = usePlugin();
@@ -27,7 +27,7 @@ export const MessageInputBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
 			<div className="relative">
 				<TextArea {...props} ref={ref} disabled={disabled} canStop={canStop} controller={controller} />
 				<div className="absolute bottom-2 left-0">
-					<SelectModel disabled={disabled} />
+					<SelectChatModel disabled={disabled} />
 				</div>
 			</div>
 		</div>

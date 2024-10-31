@@ -7,12 +7,12 @@ import {usePlugin, useSettings} from '@/hooks/useApp';
 import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/libs/constants';
 
-interface SelectModelProps {
+interface SelectChatModelProps {
 	disabled?: boolean;
 	className?: string;
 }
 
-export const SelectModel = ({disabled, className}: SelectModelProps) => {
+export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => {
 	const plugin = usePlugin();
 	const settings = useSettings();
 	const providers = useEnabledLLMModels();
