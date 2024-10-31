@@ -2,8 +2,8 @@
 import './set-process-env-mobile';
 
 import {decode, encode} from '@msgpack/msgpack';
-import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
 import {Editor, Notice, Plugin, TFile, WorkspaceLeaf, normalizePath} from 'obsidian';
 
 import {DEFAULT_SETTINGS} from '@/features/setting/constants';
@@ -16,11 +16,11 @@ import type {MAXSettings} from '@/features/setting/types';
 
 import './i18n';
 
-import {DEFAULT_VECTOR_STORE_NAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
+import {DEFAULT_VECTOR_STORE_NAME, SESSIONS_DIR, SESSIONS_FILENAME, VECTOR_STORE_FILE_EXTENSION} from './constants';
 import {ChatMessage} from './features/chatbot/hooks/use-llm';
+import generateSummaryFromContent from './libs/ai/generate/generateSummaryFromContent';
 import generateTitleFromContent from './libs/ai/generate/generateTitleFromContent';
 import './styles.css';
-import generateSummaryFromContent from './libs/ai/generate/generateSummaryFromContent';
 
 export default class MAXPlugin extends Plugin {
 	settings: MAXSettings | undefined;
@@ -56,8 +56,10 @@ export default class MAXPlugin extends Plugin {
 
 		let folderName = this.app.vault.getAbstractFileByPath(activeFile?.path || '')?.parent?.path || '';
 		if (folderName && !folderName.endsWith('/')) folderName += '/';
-		Logger.debug('folderName', folderName);
-		Logger.debug('activeFile', activeFile);
+		if (this.settings?.isVerbose) {
+			Logger.debug('folderName', folderName);
+			Logger.debug('activeFile', activeFile);
+		}
 
 		// Function to check if a file name already exists
 		const filenameExists = (filename: string | null) => {
@@ -118,6 +120,7 @@ export default class MAXPlugin extends Plugin {
 			if (maxView) {
 				void this.saveSettings();
 			}
+			leaf.detach();
 		});
 	}
 
@@ -141,8 +144,12 @@ export default class MAXPlugin extends Plugin {
 
 	// 설정 관련 메서드
 	async loadSettings(): Promise<void> {
-		const loadedData = (await this.loadData()) as MAXSettings;
-		this.settings = merge(cloneDeep(DEFAULT_SETTINGS), loadedData);
+		const loadedData: unknown = await this.loadData();
+		if (loadedData && typeof loadedData === 'object') {
+			this.settings = merge(cloneDeep(DEFAULT_SETTINGS), loadedData as MAXSettings);
+		} else {
+			this.settings = cloneDeep(DEFAULT_SETTINGS);
+		}
 	}
 
 	async saveSettings(): Promise<void> {
@@ -240,8 +247,8 @@ export default class MAXPlugin extends Plugin {
 		}
 	}
 
-	public async getChatHistoryFilepath(fileName = 'sessions'): Promise<string> {
-		const chatbotSessionsFilepath = normalizePath(this.manifest.dir + '/sessions');
+	public async getChatHistoryFilepath(fileName = SESSIONS_FILENAME): Promise<string> {
+		const chatbotSessionsFilepath = normalizePath(this.manifest.dir + '/' + SESSIONS_DIR);
 		if (!(await this.app.vault.adapter.exists(chatbotSessionsFilepath))) {
 			await this.app.vault.adapter.mkdir(chatbotSessionsFilepath);
 		}

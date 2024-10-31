@@ -41,7 +41,7 @@
 		"esbuild": "0.23.0",
 		"eslint": "^9.9.0",
 		"husky": "^9.1.4",
-		"obsidian": "latest",
+		"obsidian": "^1.7.2",
 		"postcss": "^8.4.41",
 		"postcss-prefix-selector": "^1.16.1",
 		"prettier": "^3.3.3",

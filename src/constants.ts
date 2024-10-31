@@ -1,3 +1,6 @@
+export const SESSIONS_FILENAME = 'sessions';
+export const SESSIONS_DIR = 'sessions';
+
 export const DEFAULT_MODEL = 'xionic-ko-llama-3-70b';
 
 export const SIONIC_AI_BASE_URL = 'http://sionic.tech:28000/v1';
