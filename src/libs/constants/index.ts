@@ -28,6 +28,8 @@ export const enum LLM_PROVIDERS {
 	OPEN_ROUTER = 'OPEN_ROUTER',
 	UPSTAGE = 'UPSTAGE',
 	GROQ = 'GROQ',
+	SAMBANOVA = 'SAMBANOVA',
+	CEREBRAS = 'CEREBRAS',
 }
 
 export const MAX_TOKEN = {
