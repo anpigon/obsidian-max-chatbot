@@ -29,7 +29,7 @@ export const ChatBox = forwardRef<HTMLTextAreaElement, ChatBoxProps>(({controlle
 	return (
 		<div className="flex flex-col mx-3 my-3 p-1">
 			<ReferenceToggle checked={allowReferenceCurrentNote} onChange={handleToggleChange} />
-			<TextArea {...props} ref={ref} canStop={canStop} controller={controller} />
+			<TextArea {...props} ref={ref} disabled={disabled} canStop={canStop} controller={controller} />
 			<SelectModel disabled={disabled} />
 		</div>
 	);

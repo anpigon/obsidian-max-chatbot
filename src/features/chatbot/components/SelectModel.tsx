@@ -1,4 +1,5 @@
 import {type ChangeEventHandler} from 'react';
+import {twMerge} from 'tailwind-merge';
 
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {ANTHROPIC_MODELS, LLM_PROVIDERS} from '@/constants';
@@ -64,7 +65,19 @@ export const SelectModel = ({disabled}: SelectModelProps) => {
 	};
 
 	return (
-		<Dropdown value={`${currentModel.provider}/${currentModel.model}`} onChange={handleModelChange} disabled={disabled}>
+		<Dropdown
+			value={`${currentModel.provider}/${currentModel.model}`}
+			onChange={handleModelChange}
+			disabled={disabled}
+			className={twMerge(
+				'bg-transparent hover:bg-transparent',
+				'focus:outline-none shadow-none focus:shadow-none hover:shadow-none',
+				'cursor-pointer',
+				'text-xs',
+				'h-4',
+				'w-40 min-w-[10rem]'
+			)}
+		>
 			{renderModelOptions()}
 		</Dropdown>
 	);
