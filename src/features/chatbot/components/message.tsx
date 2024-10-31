@@ -11,8 +11,8 @@ import {useState} from 'react';
 import {t} from 'i18next';
 
 import {MarkdownView} from '@/components';
-import {SmallButton} from './button';
 import {Loading} from './loading';
+import SmallButton from '@/components/buttons/small-button';
 
 interface MessageProps {
 	id: string;
