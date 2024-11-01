@@ -45,20 +45,23 @@ export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => 
 	const selectedModel = useMemo<string>(() => currentModel && `${currentModel.provider}/${currentModel.model}`, [currentModel]);
 
 	return (
-		<Dropdown
-			value={selectedModel}
-			onChange={handleModelChange}
-			disabled={disabled}
-			className={twMerge(
-				'bg-none bg-transparent hover:bg-transparent',
-				'focus:outline-none shadow-none focus:shadow-none hover:shadow-none',
-				'text-xs text-[var(--text-faint)]',
-				'h-4 w-40 min-w-[10rem]',
-				'cursor-pointer',
-				className
-			)}
-		>
-			{renderModelOptions()}
-		</Dropdown>
+		<div className={twMerge('relative', 'text-[var(--text-faint)]')}>
+			<select
+				value={selectedModel}
+				onChange={handleModelChange}
+				disabled={disabled}
+				className={twMerge(
+					'bg-none bg-transparent hover:bg-transparent',
+					'focus:outline-none shadow-none focus:shadow-none hover:shadow-none',
+					'text-xs text-[var(--text-faint)]',
+					'cursor-pointer w-full p-0 pr-4',
+					'line-clamp-1 overflow-hidden text-ellipsis',
+					className
+				)}
+			>
+				{renderModelOptions()}
+			</select>
+			<span className="absolute right-2 bottom-[9px]">&#x2304;</span>
+		</div>
 	);
 };
