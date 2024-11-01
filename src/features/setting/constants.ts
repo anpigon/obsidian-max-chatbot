@@ -6,6 +6,7 @@ import {
 	OLLAMA_BASE_URL,
 	OPEN_AI_BASE_URL,
 	UPSTAGE_BASE_URL,
+	SAMBANOVA_BASE_URL,
 } from '@/libs/constants';
 
 import type {MAXSettings} from '@/features/setting/types';
@@ -129,7 +130,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		[LLM_PROVIDERS.SAMBANOVA]: {
 			enable: false,
 			apiKey: '',
-			baseUrl: '',
+			baseUrl: SAMBANOVA_BASE_URL,
 			allowStream: true,
 			models: [],
 		},

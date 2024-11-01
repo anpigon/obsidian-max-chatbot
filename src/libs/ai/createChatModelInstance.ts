@@ -1,16 +1,16 @@
-import {ChatOllama} from '@langchain/community/chat_models/ollama';
 import {ChatGoogleGenerativeAI} from '@langchain/google-genai';
 import {ChatAnthropic} from '@langchain/anthropic';
 import {ChatOpenAI} from '@langchain/openai';
 import {ChatGroq} from '@langchain/groq';
 
-import {MAXSettings, ProviderSettings} from '@/features/setting/types';
-import {LLM_PROVIDERS} from '@/libs/constants';
+import {ChatOllama} from '@langchain/ollama';
+
+import {LLM_PROVIDERS, SAMBANOVA_BASE_URL} from '@/libs/constants';
+import {ProviderSettings} from '@/features/setting/types';
 import Logger from '../logging';
 
-export default function createChatModelInstance(provider: LLM_PROVIDERS, model: string, setting: MAXSettings) {
+export default function createChatModelInstance(provider: LLM_PROVIDERS, model: string, providerOptions: ProviderSettings) {
 	const verbose = false;
-	const providerOptions: ProviderSettings = setting.providers[provider];
 	const options = {...providerOptions, model, verbose};
 
 	try {
@@ -23,6 +23,11 @@ export default function createChatModelInstance(provider: LLM_PROVIDERS, model: 
 				return new ChatGroq(options);
 			case LLM_PROVIDERS.ANTHROPIC:
 				return new ChatAnthropic(options);
+			case LLM_PROVIDERS.SAMBANOVA:
+				return new ChatOpenAI({
+					...options,
+					configuration: {baseURL: SAMBANOVA_BASE_URL, apiKey: providerOptions.apiKey},
+				});
 			default:
 				return new ChatOpenAI({
 					...options,

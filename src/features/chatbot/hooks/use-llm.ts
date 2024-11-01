@@ -7,12 +7,11 @@ import {Runnable, RunnableConfig} from '@langchain/core/runnables';
 import {StringOutputParser} from '@langchain/core/output_parsers';
 import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
-import {LLM_PROVIDERS} from '@/libs/constants';
 import Logger from '@/libs/logging';
 import {v4 as uuidv4} from 'uuid';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
-import {LLMProviderSettings} from '@/features/setting/types';
+import getProviderOptions from '@/libs/ai/getProviderOptions';
 import {useSelectedModel} from './use-current-model';
 
 export class LLMError extends Error {
@@ -83,25 +82,16 @@ export const useLLM = ({systemPrompt, allowReferenceCurrentNote, handlers}: UseL
 	const settings = useSettings();
 	const [{provider, model}] = useSelectedModel();
 
-	const isValidProvider = (provider: LLM_PROVIDERS): provider is keyof LLMProviderSettings => {
-		return provider in settings.providers;
-	};
-
-	if (!isValidProvider(provider)) {
-		throw new Error(`Invalid provider: ${provider}`);
-	}
-
-	const options = settings.providers[provider];
-
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
 	const [sessionID, setSessionID] = useState<string>(uuidv4());
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
-
+	
 	Logger.debug({provider, model});
-	const llm = createChatModelInstance(provider, model, settings);
+	const options = getProviderOptions(provider, settings);
+	const llm = createChatModelInstance(provider, model, options);
 	const outputParser = new StringOutputParser();
 
 	const loadChatHistory = async (sessionID: string) => {

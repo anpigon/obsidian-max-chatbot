@@ -15,19 +15,22 @@ importers:
         specifier: ^2.1.5
         version: 2.1.5(react@18.3.1)
       '@langchain/anthropic':
-        specifier: ^0.2.14
+        specifier: ^0.2.18
         version: 0.2.18(openai@4.69.0(zod@3.23.8))
       '@langchain/community':
         specifier: ^0.2.27
-        version: 0.2.33(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(lodash@4.17.21)(openai@4.69.0(zod@3.23.8))
+        version: 0.2.33(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(lodash@4.17.21)(openai@4.69.0(zod@3.23.8))
       '@langchain/google-genai':
         specifier: ^0.0.25
         version: 0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8)
       '@langchain/groq':
         specifier: ^0.0.16
         version: 0.0.16(openai@4.69.0(zod@3.23.8))
+      '@langchain/ollama':
+        specifier: ^0.1.1
+        version: 0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8)))
       '@langchain/openai':
-        specifier: ^0.2.1
+        specifier: ^0.2.11
         version: 0.2.11
       '@msgpack/msgpack':
         specifier: 3.0.0-beta2
@@ -46,7 +49,7 @@ importers:
         version: 23.16.4
       langchain:
         specifier: ^0.2.16
-        version: 0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8))
+        version: 0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8))
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1037,6 +1040,12 @@ packages:
   '@langchain/groq@0.0.16':
     resolution: {integrity: sha512-rwD57PzT54clE4WigMzTMmA9rIifXq82uQ9nqFHJ4hfDV38P2lbQ1/N21QE0+L8c9oKvdY+TVm0vlilxV4w22A==}
     engines: {node: '>=18'}
+
+  '@langchain/ollama@0.1.1':
+    resolution: {integrity: sha512-IQEdzGkfKzdoyys3GW5hCXc64d/u1xkrYXved73BLO+bnyQfzrM224jdsiYGUpjW3cUaO1ebD6PUiMYcANPPFQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@langchain/core': 0.2.23
 
   '@langchain/openai@0.2.11':
     resolution: {integrity: sha512-Pu8+WfJojCgSf0bAsXb4AjqvcDyAWyoEB1AoCRNACgEnBWZuitz3hLwCo9I+6hAbeg3QJ37g82yKcmvKAg1feg==}
@@ -2256,6 +2265,9 @@ packages:
       '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
 
+  ollama@0.5.9:
+    resolution: {integrity: sha512-F/KZuDRC+ZsVCuMvcOYuQ6zj42/idzCkkuknGyyGVmNStMZ/sU3jQpvhnl4SyC0+zBzLiKNZJnJeuPFuieWZvQ==}
+
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -2750,6 +2762,9 @@ packages:
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
+
   whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
@@ -3213,7 +3228,7 @@ snapshots:
       - encoding
       - openai
 
-  '@langchain/community@0.2.33(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(lodash@4.17.21)(openai@4.69.0(zod@3.23.8))':
+  '@langchain/community@0.2.33(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(lodash@4.17.21)(openai@4.69.0(zod@3.23.8))':
     dependencies:
       '@langchain/core': 0.2.23(openai@4.69.0(zod@3.23.8))
       '@langchain/openai': 0.2.11
@@ -3221,7 +3236,7 @@ snapshots:
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
-      langchain: 0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8))
+      langchain: 0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8))
       langsmith: 0.1.68(openai@4.69.0(zod@3.23.8))
       uuid: 10.0.0
       zod: 3.23.8
@@ -3282,6 +3297,12 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - openai
+
+  '@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8)))':
+    dependencies:
+      '@langchain/core': 0.2.23(openai@4.69.0(zod@3.23.8))
+      ollama: 0.5.9
+      uuid: 10.0.0
 
   '@langchain/openai@0.2.11':
     dependencies:
@@ -4184,7 +4205,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  langchain@0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8)):
+  langchain@0.2.20(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(openai@4.69.0(zod@3.23.8)):
     dependencies:
       '@langchain/core': 0.2.23(openai@4.69.0(zod@3.23.8))
       '@langchain/openai': 0.2.11
@@ -4204,6 +4225,7 @@ snapshots:
       '@langchain/anthropic': 0.2.18(openai@4.69.0(zod@3.23.8))
       '@langchain/google-genai': 0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8)
       '@langchain/groq': 0.0.16(openai@4.69.0(zod@3.23.8))
+      '@langchain/ollama': 0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8)))
       fast-xml-parser: 4.5.0
       ignore: 5.3.2
     transitivePeerDependencies:
@@ -4319,6 +4341,10 @@ snapshots:
       '@codemirror/view': 6.34.1
       '@types/codemirror': 5.60.8
       moment: 2.29.4
+
+  ollama@0.5.9:
+    dependencies:
+      whatwg-fetch: 3.6.20
 
   once@1.4.0:
     dependencies:
@@ -4723,6 +4749,8 @@ snapshots:
   web-streams-polyfill@4.0.0-beta.3: {}
 
   webidl-conversions@3.0.1: {}
+
+  whatwg-fetch@3.6.20: {}
 
   whatwg-url@5.0.0:
     dependencies:

@@ -13,7 +13,6 @@ import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
 import {MessageInputBox} from './components/message-input-box';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
-import {useSelectedModel} from './hooks/use-current-model';
 import {ChatHistories} from './components/chat-histories';
 import {Message} from './components/message';
 import {Drawer} from './components/drawer';
@@ -32,8 +31,6 @@ export const Chatbot: FC = () => {
 	const messageEndRef = useRef<HTMLDivElement>(null);
 
 	const {value: isDrawerOpen, setTrue: handleViewHistory, setFalse: handleCloseDrawer} = useBoolean(false);
-
-	const [currentModel] = useSelectedModel();
 
 	const {allowReferenceCurrentNote} = useChatbotState();
 

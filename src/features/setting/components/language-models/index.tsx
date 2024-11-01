@@ -21,8 +21,10 @@ export default function LanguageModels() {
 			<AnthropicSetting />
 			<GoogleSetting />
 			<GroqSetting />
-			<SambaBovaSetting />
 			<UpstageSetting />
+			<div className="hidden">
+				<SambaBovaSetting />
+			</div>
 		</>
 	);
 }
