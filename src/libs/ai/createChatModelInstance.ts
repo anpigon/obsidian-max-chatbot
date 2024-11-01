@@ -37,7 +37,7 @@ export default function createChatModelInstance(provider: LLM_PROVIDERS, model: 
 					},
 				});
 		}
-	} catch (error: any) {
+	} catch (error) {
 		Logger.error(error);
 		// new Notice('Failed to create chat model instance: ' + error?.message || error || 'Unknown error');
 		throw error;
