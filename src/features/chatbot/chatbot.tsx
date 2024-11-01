@@ -13,8 +13,8 @@ import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
 import {MessageInputBox} from './components/message-input-box';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
+import {useSelectedModel} from './hooks/use-current-model';
 import {ChatHistories} from './components/chat-histories';
-import {useCurrentModel} from './hooks/use-current-model';
 import {Message} from './components/message';
 import {Drawer} from './components/drawer';
 import {useChatbotState} from './context';
@@ -33,7 +33,7 @@ export const Chatbot: FC = () => {
 
 	const {value: isDrawerOpen, setTrue: handleViewHistory, setFalse: handleCloseDrawer} = useBoolean(false);
 
-	const [currentModel] = useCurrentModel();
+	const [currentModel] = useSelectedModel();
 
 	const {allowReferenceCurrentNote} = useChatbotState();
 
@@ -42,8 +42,6 @@ export const Chatbot: FC = () => {
 	const scrollToBottom = useScrollToBottom(messageContainerRef);
 
 	const {newSession, sessionID, loadChatHistory, messages, isStreaming, controller, setMessage, processMessage, deleteMessage, updateMessage} = useLLM({
-		provider: currentModel.provider,
-		model: currentModel.model,
 		systemPrompt: defaultSystemPrompt,
 		allowReferenceCurrentNote,
 		handlers: {onMessageAdded: scrollToBottom},

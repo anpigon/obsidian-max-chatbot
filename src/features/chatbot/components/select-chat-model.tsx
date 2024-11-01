@@ -2,7 +2,7 @@ import {useMemo, type ChangeEventHandler} from 'react';
 import {twMerge} from 'tailwind-merge';
 
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
-import {useCurrentModel} from '../hooks/use-current-model';
+import {useSelectedModel} from '../hooks/use-current-model';
 import {LLM_PROVIDERS} from '@/libs/constants';
 
 interface SelectChatModelProps {
@@ -12,7 +12,7 @@ interface SelectChatModelProps {
 
 export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => {
 	const providers = useEnabledLLMModels();
-	const [currentModel, setCurrentModel] = useCurrentModel();
+	const [currentModel, setCurrentModel] = useSelectedModel();
 
 	const handleModelChange: ChangeEventHandler<HTMLSelectElement> = e => {
 		const value = e.target.value;
@@ -23,7 +23,7 @@ export const SelectChatModel = ({disabled, className}: SelectChatModelProps) => 
 		const newModel = modelName.join('/');
 
 		// 현재 모델 및 설정 업데이트
-		setCurrentModel(newProvider, newModel);
+		setCurrentModel({provider: newProvider, model: newModel});
 	};
 
 	// 모델 옵션 렌더링

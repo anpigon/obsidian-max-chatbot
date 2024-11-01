@@ -16,8 +16,8 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		profileFolderPath: 'MAX/Profiles',
 	},
 	general: {
-		provider: null,
-		model: null,
+		provider: LLM_PROVIDERS.OPEN_AI,
+		model: 'gpt-4o-mini',
 		systemPrompt: '',
 		maxTokens: '',
 		temperature: '1.00',

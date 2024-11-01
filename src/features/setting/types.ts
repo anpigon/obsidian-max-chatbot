@@ -60,8 +60,8 @@ export interface MAXSettings {
 		profileFolderPath: string;
 	};
 	general: {
-		provider: LLM_PROVIDERS | null;
-		model: string | null;
+		provider: LLM_PROVIDERS;
+		model: string;
 		systemPrompt: string;
 		maxTokens: string;
 		temperature: string;

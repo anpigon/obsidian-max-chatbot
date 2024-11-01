@@ -13,6 +13,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
 import {LLMProviderSettings} from '@/features/setting/types';
+import {useSelectedModel} from './use-current-model';
 
 export class LLMError extends Error {
 	constructor(message: string) {
@@ -22,8 +23,6 @@ export class LLMError extends Error {
 }
 
 export interface UseLLMProps {
-	provider: LLM_PROVIDERS;
-	model: string;
 	systemPrompt: string;
 	allowReferenceCurrentNote?: boolean;
 	handlers?: UseChatStreamEventHandlers;
@@ -78,10 +77,11 @@ const messageUtils = {
 	},
 };
 
-export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
+export const useLLM = ({systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
 	const app = useApp();
 	const plugin = usePlugin();
 	const settings = useSettings();
+	const [{provider, model}] = useSelectedModel();
 
 	const isValidProvider = (provider: LLM_PROVIDERS): provider is keyof LLMProviderSettings => {
 		return provider in settings.providers;
@@ -100,6 +100,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
 
+	Logger.debug({provider, model});
 	const llm = createChatModelInstance(provider, model, settings);
 	const outputParser = new StringOutputParser();
 
@@ -179,6 +180,7 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		setController(newController);
 
 		try {
+			Logger.info('LLM:', llm);
 			const chain = llm.bind({signal: newController.signal}).pipe(outputParser);
 			Logger.info('Sending message to LLM:', messageHistory);
 			const response = await (options.allowStream ? handleStreaming(chain, messageHistory) : handleInvocation(chain, messageHistory));

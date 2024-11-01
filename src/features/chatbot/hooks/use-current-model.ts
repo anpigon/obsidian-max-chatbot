@@ -1,42 +1,23 @@
-import {useState} from 'react';
-
-import {LLM_PROVIDERS} from '@/libs/constants';
-
-import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
-
+import {SelectedModel, useChatbotDispatch, useChatbotState} from '../context';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 
-export const useCurrentModel = () => {
+export const useSelectedModel = () => {
 	const plugin = usePlugin();
 	const settings = useSettings();
-	const defaultModel = getSelectedAIProviderAndModel(settings);
-	const [provider, setProvider] = useState<LLM_PROVIDERS>(defaultModel.provider);
-	const [model, setModel] = useState<string>(defaultModel.model);
+	const {selectedModel} = useChatbotState();
+	const {setSelectedModel} = useChatbotDispatch();
 
-	// if (settings.providers[provider].models.indexOf(model) === -1) {
-	// 	setModel(settings.providers[provider].models[0]);
-	// }
+	const onChangeModel = (newModel: SelectedModel) => {
+		setSelectedModel(newModel);
 
-	const setCurrentModel = (newProvider: LLM_PROVIDERS, newModel: string) => {
-		setProvider(newProvider);
-		setModel(newModel);
-
-		settings.general.provider = newProvider;
-		settings.general.model = newModel;
+		settings.general.provider = newModel.provider;
+		settings.general.model = newModel.model;
 		void plugin.saveSettings();
 	};
 
-	const currentModel = {
-		provider,
-		model,
-	};
-
-	return [currentModel, setCurrentModel] as [
-		{
-			provider: LLM_PROVIDERS;
-			model: string;
-		},
+	return [selectedModel, onChangeModel] as [
+		SelectedModel,
 		// eslint-disable-next-line no-unused-vars
-		(newProvider: LLM_PROVIDERS, newModel: string) => void,
+		(model: SelectedModel) => void,
 	];
 };
