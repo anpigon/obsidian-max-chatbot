@@ -126,6 +126,13 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 			allowStream: false,
 			models: [],
 		},
+		[LLM_PROVIDERS.SAMBANOVA]: {
+			enable: false,
+			apiKey: '',
+			baseUrl: '',
+			allowStream: false,
+			models: [],
+		},
 	},
 	toggleGeneralSettings: true,
 	toggleAppearanceSettings: false,
