@@ -5,13 +5,14 @@ import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} f
 import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
 import {Runnable, RunnableConfig} from '@langchain/core/runnables';
 import {StringOutputParser} from '@langchain/core/output_parsers';
+import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 import {LLM_PROVIDERS} from '@/libs/constants';
-import {usePlugin} from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 import {v4 as uuidv4} from 'uuid';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
+import {LLMProviderSettings} from '@/features/setting/types';
 
 export interface UseLLMProps {
 	provider: LLM_PROVIDERS;
@@ -71,9 +72,18 @@ const messageUtils = {
 };
 
 export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
+	const app = useApp();
 	const plugin = usePlugin();
-	const app = plugin.app;
-	const settings = plugin.settings!;
+	const settings = useSettings();
+
+	const isValidProvider = (provider: LLM_PROVIDERS): provider is keyof LLMProviderSettings => {
+		return provider in settings.providers;
+	};
+
+	if (!isValidProvider(provider)) {
+		throw new Error(`Invalid provider: ${provider}`);
+	}
+
 	const options = settings.providers[provider];
 
 	const [controller, setController] = useState<AbortController>();
@@ -118,7 +128,9 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 
 	const getCurrentNoteContent = async () => {
 		if (currentActiveFile?.extension === 'md') {
-			const title = app.metadataCache.getFileCache(currentActiveFile)?.frontmatter?.title || currentActiveFile.basename;
+			const fileCache = app.metadataCache.getFileCache(currentActiveFile);
+			const frontmatter = fileCache?.frontmatter as {title: string} | undefined;
+			const title = frontmatter?.title || currentActiveFile.basename;
 			const content = await app.vault.cachedRead(currentActiveFile);
 			const clearFrontMatterContent = content.slice(getFrontMatterInfo(content).contentStart);
 			return `\n\n<Notes>\n\n# ${title}\n\n${clearFrontMatterContent}\n\n</Notes>\n\n`;
@@ -200,13 +212,13 @@ export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote
 		setMessages(messages => messageUtils.append(messages, content));
 	};
 
-	const handleError = (error: any, aiMessage: ChatMessage) => {
+	const handleError = (error: Error, aiMessage: ChatMessage) => {
 		if (error instanceof Error && error.message === 'AbortError') {
 			setMessages(messages => messageUtils.append(messages, ' (Request aborted)'));
 			return;
 		}
 		Logger.error('Error invoking LLM:', error);
-		const errorMessage = (error as Error)?.message || BOT_ERROR_MESSAGE;
+		const errorMessage = error?.message || BOT_ERROR_MESSAGE;
 		appendMessageToChat(errorMessage);
 		handlers?.onMessageAdded?.({...aiMessage, content: errorMessage});
 	};
