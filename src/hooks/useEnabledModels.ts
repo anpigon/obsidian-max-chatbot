@@ -24,7 +24,7 @@ export const useEnabledLLMModels = () => {
 				if (!models?.length) return false;
 				if (!(provider in settings.providers)) return false;
 				const setting = settings.providers[provider as keyof LLMProviderSettings];
-				return setting.apiKey || setting.enable;
+				return setting.apiKey;
 			})
 			.map(([provider, models]) => ({
 				provider: provider as LLM_PROVIDERS,

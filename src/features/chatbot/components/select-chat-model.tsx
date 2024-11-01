@@ -3,7 +3,6 @@ import {twMerge} from 'tailwind-merge';
 
 import {useEnabledLLMModels} from '@/hooks/useEnabledModels';
 import {useCurrentModel} from '../hooks/use-current-model';
-import {Dropdown} from '@/components/form/dropdown';
 import {LLM_PROVIDERS} from '@/libs/constants';
 
 interface SelectChatModelProps {
