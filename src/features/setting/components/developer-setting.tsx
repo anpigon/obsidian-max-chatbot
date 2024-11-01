@@ -18,7 +18,7 @@ export const DeveloperSetting: FC = () => {
 		const value = event.target.checked;
 		setIsVerbose(value);
 		settings.isVerbose = value;
-		plugin.saveSettings();
+		void plugin.saveSettings();
 	};
 
 	return (
@@ -38,7 +38,7 @@ export const DeveloperSetting: FC = () => {
 					placeholder="lsv2_sk_5...a1e5"
 					onChange={event => {
 						settings.langSmithKey = event.target.value?.trim();
-						plugin.saveSettings();
+						void plugin.saveSettings();
 					}}
 				/>
 			</SettingItem>
