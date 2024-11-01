@@ -26,7 +26,7 @@ export const MessageInputBox = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
 			<ReferenceToggle checked={allowReferenceCurrentNote} onChange={handleToggleChange} />
 			<div className="relative">
 				<TextArea {...props} ref={ref} disabled={disabled} canStop={canStop} controller={controller} />
-				<div className="absolute bottom-0 left-2 max-w-[50%]">
+				<div className="absolute bottom-0 left-2 max-w-[135px]">
 					<SelectChatModel disabled={disabled} />
 				</div>
 			</div>
