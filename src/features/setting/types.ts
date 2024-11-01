@@ -1,11 +1,11 @@
 import {LLM_PROVIDERS} from '@/libs/constants';
 
 export interface ProviderSettings {
-	enable: boolean;
+	enable?: boolean;
 	apiKey: string;
-	baseUrl: string;
-	allowStream: boolean;
-	models: string[];
+	baseUrl?: string;
+	allowStream?: boolean;
+	models?: string[];
 }
 
 export interface OllamaSettings extends ProviderSettings {
@@ -60,8 +60,8 @@ export interface MAXSettings {
 		profileFolderPath: string;
 	};
 	general: {
-		provider: LLM_PROVIDERS;
-		model: string;
+		provider: LLM_PROVIDERS | null;
+		model: string | null;
 		systemPrompt: string;
 		maxTokens: string;
 		temperature: string;
