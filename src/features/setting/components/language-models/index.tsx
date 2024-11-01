@@ -4,6 +4,9 @@ import {SettingItem} from '@/components/settings/setting-item';
 
 import {OpenAiSetting} from './open-ai-setting';
 import { GoogleSetting } from './google-setting';
+import { AnthropicSetting } from './anthropic-setting';
+import { GroqSetting } from './groq-setting';
+import { UpstageSetting } from './upstage-setting';
 
 export default function LanguageModels() {
 	const {t} = useTranslation('settings');
@@ -14,10 +17,10 @@ export default function LanguageModels() {
 			{/* <OllamaSetting /> */}
 			{/* <RestApiSetting /> */}
 			<OpenAiSetting />
+			<AnthropicSetting />
 			<GoogleSetting />
-			{/*<GroqSetting />
+			<GroqSetting />
 			<UpstageSetting />
-			<AnthropicSetting /> */}
 		</>
 	);
 }

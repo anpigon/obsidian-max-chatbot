@@ -23,7 +23,6 @@ export const OpenAiSetting = () => {
 		void saveSettings();
 	};
 
-	//t('Insert your provider API Key', {name: 'OpenAI API'})}
 	return (
 		<SettingItem
 			name={t('Provider API Key', {name: 'OpenAI'})}
