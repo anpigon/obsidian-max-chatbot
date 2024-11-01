@@ -1,5 +1,5 @@
 import {TFile, getFrontMatterInfo} from 'obsidian';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 
 import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} from '@langchain/core/messages';
 import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
@@ -61,25 +61,22 @@ const createMessageHistory = (messages: ChatMessage[], message: string) => {
 	return [...history, new HumanMessage({content: message})];
 };
 
-const messageUtils = useMemo(
-	() => ({
-		create: (message: Omit<ChatMessage, 'id'>): ChatMessage => ({
-			...message,
-			id: Date.now().toString(36) + '-' + message.role,
-		}),
-
-		append: (messages: ChatMessage[], content: string): ChatMessage[] => {
-			const latestMessage = messages[messages.length - 1];
-			return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + content}];
-		},
-
-		updateLoading: (messages: ChatMessage[]): ChatMessage[] => {
-			const latestMessage = messages[messages.length - 1];
-			return [...messages.slice(0, -1), {...latestMessage, showLoading: false}];
-		},
+const messageUtils = {
+	create: (message: Omit<ChatMessage, 'id'>): ChatMessage => ({
+		...message,
+		id: Date.now().toString(36) + '-' + message.role,
 	}),
-	[]
-);
+
+	append: (messages: ChatMessage[], content: string): ChatMessage[] => {
+		const latestMessage = messages[messages.length - 1];
+		return [...messages.slice(0, -1), {...latestMessage, content: latestMessage.content + content}];
+	},
+
+	updateLoading: (messages: ChatMessage[]): ChatMessage[] => {
+		const latestMessage = messages[messages.length - 1];
+		return [...messages.slice(0, -1), {...latestMessage, showLoading: false}];
+	},
+};
 
 export const useLLM = ({provider, model, systemPrompt, allowReferenceCurrentNote, handlers}: UseLLMProps) => {
 	const app = useApp();

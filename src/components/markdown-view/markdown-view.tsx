@@ -1,11 +1,11 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {MarkdownRenderer, Notice} from 'obsidian';
-import {useCopyToClipboard} from 'usehooks-ts';
-import {t} from 'i18next';
+import { t } from 'i18next';
+import { MarkdownRenderer, Notice } from 'obsidian';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCopyToClipboard } from 'usehooks-ts';
 
-import type {FC} from 'react';
+import type { FC } from 'react';
 
-import {usePlugin} from '@/hooks/useApp';
+import { usePlugin } from '@/hooks/useApp';
 import Logger from '@/libs/logging';
 
 interface MarkdownViewProps {

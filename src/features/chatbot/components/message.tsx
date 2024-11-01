@@ -60,9 +60,11 @@ export const Message: FC<MessageProps> = ({id, type, name, message, showLoading 
 				{!showLoading && (
 					<div data-component="buttonContainer" className="invisible group-hover:visible m-0 flex justify-between items-center">
 						<SmallButton title="regenerate" className="invisible opacity-0"></SmallButton>
-						<SmallButton title="edit" onClick={() => setEditing(true)}>
-							<IconEdit />
-						</SmallButton>
+						{type === 'user' && (
+							<SmallButton title="edit" onClick={() => setEditing(true)}>
+								<IconEdit />
+							</SmallButton>
+						)}
 						<SmallButton title="copy" onClick={handleCopy}>
 							<IconCopy />
 						</SmallButton>
