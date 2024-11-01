@@ -1,4 +1,4 @@
-import {ReactNode, createContext, useContext, useMemo, useState} from 'react';
+import {Dispatch, ReactNode, SetStateAction, createContext, useContext, useMemo, useState} from 'react';
 
 import {useSettings} from '@/hooks/useApp';
 
@@ -7,7 +7,7 @@ interface ChatbotState {
 }
 
 interface ChatbotDispatch {
-	setAllowReferenceCurrentNote: React.Dispatch<React.SetStateAction<boolean>>;
+	setAllowReferenceCurrentNote: Dispatch<SetStateAction<boolean>>;
 }
 
 const ChatbotStateContext = createContext<ChatbotState | undefined>(undefined);
