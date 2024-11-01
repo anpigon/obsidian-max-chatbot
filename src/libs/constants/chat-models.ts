@@ -120,11 +120,103 @@ export const CHAT_MODEL_OPTIONS: Record<LLM_PROVIDERS, ChatModelOption[]> = {
 			max_output_tokens: 4096,
 		},
 	],
+	[LLM_PROVIDERS.GROQ]: [
+		// GOOGLE
+		{
+			id: 'gemma2-9b-it',
+			name: 'Gemma 2 9B IT',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+		{
+			id: 'gemma-7b-it',
+			name: 'Gemma 7B IT',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+
+		// GROQ
+		{
+			id: 'llama3-groq-70b-8192-tool-use-preview',
+			name: 'Llama 3 Groq 70B',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+		{
+			id: 'llama3-groq-8b-8192-tool-use-preview',
+			name: 'Llama 3 Groq 8B',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+
+		// META/LLAMA
+		{
+			id: 'llama-3.1-70b-versatile',
+			name: 'Llama 3.1 70B Versatile',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-3.1-8b-instant',
+			name: 'Llama 3.1 8B Instant',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-3.2-1b-preview',
+			name: 'Llama 3.2 1B',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-3.2-3b-preview',
+			name: 'Llama 3.2 3B',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-3.2-11b-vision-preview',
+			name: 'Llama 3.2 11B Vision',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-3.2-90b-vision-preview',
+			name: 'Llama 3.2 90B Vision',
+			context_window: 128000,
+			max_output_tokens: 8000,
+		},
+		{
+			id: 'llama-guard-3-8b',
+			name: 'Llama Guard 3 8B',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+		{
+			id: 'llama3-70b-8192',
+			name: 'Llama 3 70B',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+		{
+			id: 'llama3-8b-8192',
+			name: 'Llama 3 8B',
+			context_window: 8192,
+			max_output_tokens: 8192,
+		},
+
+		// MISTRAL
+		{
+			id: 'mixtral-8x7b-32768',
+			name: 'Mixtral 8x7B',
+			context_window: 32768,
+			max_output_tokens: 32768,
+		},
+	],
 	[LLM_PROVIDERS.MISTRAL]: [],
-	[LLM_PROVIDERS.GROQ]: [],
 	[LLM_PROVIDERS.OPEN_ROUTER]: [],
 	[LLM_PROVIDERS.OLLAMA]: [],
 	[LLM_PROVIDERS.LM_STUDIO]: [],
 	[LLM_PROVIDERS.REST_API]: [],
-	[LLM_PROVIDERS.CEREBRAS]: []
+	[LLM_PROVIDERS.CEREBRAS]: [],
 };
