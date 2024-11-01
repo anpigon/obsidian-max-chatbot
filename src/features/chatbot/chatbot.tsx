@@ -4,7 +4,6 @@ import {Notice} from 'obsidian';
 
 import type {ChangeEvent, FC, KeyboardEvent} from 'react';
 
-import {DEFAULT_SETTINGS} from '@/features/setting/constants';
 import {usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 
@@ -12,10 +11,10 @@ import {useBoolean} from 'usehooks-ts';
 
 import {MessagesContainer} from './components/messages-container';
 import {ChatbotContainer} from './components/chatbot-container';
+import {MessageInputBox} from './components/message-input-box';
 import {useScrollToBottom} from './hooks/use-scroll-to-bottom';
 import {ChatHistories} from './components/chat-histories';
 import {useCurrentModel} from './hooks/use-current-model';
-import {MessageInputBox} from './components/message-input-box';
 import {Message} from './components/message';
 import {Drawer} from './components/drawer';
 import {useChatbotState} from './context';
@@ -33,9 +32,6 @@ export const Chatbot: FC = () => {
 	const messageEndRef = useRef<HTMLDivElement>(null);
 
 	const {value: isDrawerOpen, setTrue: handleViewHistory, setFalse: handleCloseDrawer} = useBoolean(false);
-
-	const chatbotName = settings?.appearance?.chatbotName ?? DEFAULT_SETTINGS.appearance.chatbotName;
-	const username = settings?.appearance.userName || DEFAULT_SETTINGS.appearance.userName;
 
 	const [currentModel] = useCurrentModel();
 
@@ -148,14 +144,14 @@ export const Chatbot: FC = () => {
 							key={id}
 							id={id}
 							type="bot"
-							name={chatbotName}
+							name="AI"
 							message={content}
 							showLoading={showLoading}
 							onDeleteMessage={deleteMessage}
 							onEditMessage={updateMessage}
 						/>
 					) : (
-						<Message key={i} id={id} type="user" name={username} message={content} onDeleteMessage={deleteMessage} onEditMessage={updateMessage} />
+						<Message key={i} id={id} type="user" name="USER" message={content} onDeleteMessage={deleteMessage} onEditMessage={updateMessage} />
 					)
 				)}
 				<div ref={messageEndRef} />
