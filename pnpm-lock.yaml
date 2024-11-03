@@ -18,8 +18,11 @@ importers:
         specifier: ^0.2.18
         version: 0.2.18(openai@4.69.0(zod@3.23.8))
       '@langchain/community':
-        specifier: ^0.2.27
+        specifier: ^0.2.33
         version: 0.2.33(@langchain/anthropic@0.2.18(openai@4.69.0(zod@3.23.8)))(@langchain/google-genai@0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8))(@langchain/groq@0.0.16(openai@4.69.0(zod@3.23.8)))(@langchain/ollama@0.1.1(@langchain/core@0.2.23(openai@4.69.0(zod@3.23.8))))(fast-xml-parser@4.5.0)(ignore@5.3.2)(lodash@4.17.21)(openai@4.69.0(zod@3.23.8))
+      '@langchain/core':
+        specifier: 0.2.23
+        version: 0.2.23(openai@4.69.0(zod@3.23.8))
       '@langchain/google-genai':
         specifier: ^0.0.25
         version: 0.0.25(openai@4.69.0(zod@3.23.8))(zod@3.23.8)
