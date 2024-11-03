@@ -5,6 +5,7 @@ import {AIMessage, HumanMessage, MessageType, SystemMessage, type BaseMessage} f
 import {BaseLanguageModelInput} from '@langchain/core/language_models/base';
 import {Runnable, RunnableConfig} from '@langchain/core/runnables';
 import {StringOutputParser} from '@langchain/core/output_parsers';
+
 import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 import Logger from '@/libs/logging';
@@ -35,7 +36,8 @@ export interface ChatMessage {
 }
 
 interface UseChatStreamEventHandlers {
-	onMessageAdded: (message: ChatMessage) => any | Promise<any>;
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-redundant-type-constituents
+	onMessageAdded: (message: ChatMessage) => Promise<unknown> | unknown;
 }
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';

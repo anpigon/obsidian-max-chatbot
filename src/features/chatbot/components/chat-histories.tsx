@@ -7,6 +7,7 @@ import {IconButton} from '@/components';
 import Logger from '@/libs/logging';
 
 export interface ChatHistoriesProps {
+	// eslint-disable-next-line no-unused-vars
 	onSelect: (sessionID: string) => void;
 }
 
@@ -22,7 +23,7 @@ export const ChatHistories: FC<ChatHistoriesProps> = ({onSelect}) => {
 	>([]);
 
 	useEffect(() => {
-		plugin.getChatHistories().then(histories => {
+		void plugin.getChatHistories().then(histories => {
 			// relativeTime을 추가하고 최신순으로 정렬
 			const historiesWithRelativeTime = histories.map(history => ({
 				...history,
@@ -36,7 +37,7 @@ export const ChatHistories: FC<ChatHistoriesProps> = ({onSelect}) => {
 	const handleDelete = (sessionID: string) => {
 		// 삭제 로직 구현
 		Logger.debug('Delete session:', sessionID);
-		plugin.deleteChatHistory(sessionID).then(() => {
+		void plugin.deleteChatHistory(sessionID).then(() => {
 			setHistories(histories.filter(history => history.sessionID !== sessionID));
 		});
 	};
