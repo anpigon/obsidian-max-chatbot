@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 
-import moment from 'moment';
+import {moment} from 'obsidian';
 
 import {usePlugin} from '@/hooks/useApp';
 import {IconButton} from '@/components';
