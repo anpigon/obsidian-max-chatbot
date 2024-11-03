@@ -9,11 +9,14 @@ import {StringOutputParser} from '@langchain/core/output_parsers';
 import {useApp, usePlugin, useSettings} from '@/hooks/useApp';
 import useOnceEffect from '@/hooks/useOnceEffect';
 import Logger from '@/libs/logging';
-import {v4 as uuidv4} from 'uuid';
 
 import createChatModelInstance from '@/libs/ai/createChatModelInstance';
 import getProviderOptions from '@/libs/ai/getProviderOptions';
 import {useSelectedModel} from './use-current-model';
+
+function generateId(): string {
+	return globalThis.crypto.randomUUID();
+}
 
 export class LLMError extends Error {
 	constructor(message: string) {
@@ -86,7 +89,7 @@ export const useLLM = ({systemPrompt, allowReferenceCurrentNote, handlers}: UseL
 
 	const [controller, setController] = useState<AbortController>();
 	const [isStreaming, setIsStreaming] = useState(false);
-	const [sessionID, setSessionID] = useState<string>(uuidv4());
+	const [sessionID, setSessionID] = useState<string>(generateId());
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
@@ -105,7 +108,7 @@ export const useLLM = ({systemPrompt, allowReferenceCurrentNote, handlers}: UseL
 	};
 
 	const handleNewSession = () => {
-		setSessionID(uuidv4());
+		setSessionID(generateId());
 		setMessages([]);
 		setMessage('');
 	};
