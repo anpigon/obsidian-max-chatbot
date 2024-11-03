@@ -5,30 +5,39 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build plugin
-        run: bun run build
+        run: pnpm run build
 
       - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           tag="${GITHUB_REF#refs/tags/}" \
 
-          git log $(git describe --tags --abbrev=0)..HEAD --oneline > release-notes.md && git add release-notes.md \
+          git log $(git describe --tags --abbrev=0)..HEAD --oneline > release-notes.md \
 
           gh release create "$tag" \
             --title="$tag" \
