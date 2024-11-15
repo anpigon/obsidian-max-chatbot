@@ -1,11 +1,10 @@
-import {JsonOutputParser, StringOutputParser} from '@langchain/core/output_parsers';
-import {HumanMessage, SystemMessage} from '@langchain/core/messages';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { JsonOutputParser, StringOutputParser } from '@langchain/core/output_parsers';
 
+import { MAXSettings } from '@/features/setting/types';
+import Logger from '@/libs/logging';
 import getSelectedAIProviderAndModel from '@/libs/settings/getSelectedAIProviderAndModel';
 import createChatModelInstance from '../createChatModelInstance';
-import {MAXSettings} from '@/features/setting/types';
-import getProviderOptions from '../getProviderOptions';
-import Logger from '@/libs/logging';
 
 interface Summary {
 	Missing_Entities: string;
@@ -14,8 +13,7 @@ interface Summary {
 
 export default async function generateSummaryFromContent(settings: MAXSettings, fileContent: string) {
 	const {provider, model} = getSelectedAIProviderAndModel(settings);
-	const options = getProviderOptions(provider, settings);
-	const llm = createChatModelInstance(provider, model, options);
+	const llm = createChatModelInstance(provider, model, settings);
 	// TODO: model의 performance와 max context length에 따라서 prompt를 수정해야 함
 	try {
 		const prompt = [

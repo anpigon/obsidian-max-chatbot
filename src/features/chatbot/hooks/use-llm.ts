@@ -93,10 +93,10 @@ export const useLLM = ({systemPrompt, allowReferenceCurrentNote, handlers}: UseL
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [message, setMessage] = useState('');
 	const [currentActiveFile, setCurrentActiveFile] = useState<null | TFile>(null);
-	
+
 	Logger.debug({provider, model});
 	const options = getProviderOptions(provider, settings);
-	const llm = createChatModelInstance(provider, model, options);
+	const llm = createChatModelInstance(provider, model, settings);
 	const outputParser = new StringOutputParser();
 
 	const loadChatHistory = async (sessionID: string) => {
