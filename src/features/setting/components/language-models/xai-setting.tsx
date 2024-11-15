@@ -18,9 +18,9 @@ export const XAISetting = () => {
 	}, [plugin]);
 
 	const handleApiKeyChange = useCallback(
-		(event: ChangeEvent<HTMLInputElement>) => {
-			providerSettings.apiKey = event.target.value?.trim();
-			void saveSettings();
+		async (event: ChangeEvent<HTMLInputElement>) => {
+			providerSettings['apiKey'] = event.target.value?.trim();
+			await saveSettings();
 		},
 		[providerSettings, saveSettings]
 	);
