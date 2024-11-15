@@ -7,6 +7,7 @@ import {UpstageSetting} from './upstage-setting';
 import {OpenAiSetting} from './open-ai-setting';
 import {GoogleSetting} from './google-setting';
 import {GroqSetting} from './groq-setting';
+import { XAISetting } from './xai-setting';
 
 export default function LanguageModels() {
 	const {t} = useTranslation('settings');
@@ -22,6 +23,7 @@ export default function LanguageModels() {
 			<GoogleSetting />
 			<GroqSetting />
 			<UpstageSetting />
+			<XAISetting />
 		</>
 	);
 }
