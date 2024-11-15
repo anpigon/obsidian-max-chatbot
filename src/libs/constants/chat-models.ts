@@ -44,6 +44,12 @@ export const CHAT_MODEL_OPTIONS: Record<LLM_PROVIDERS, ChatModelOption[]> = {
 			context_window: 200000,
 			max_output_tokens: 8192,
 		},
+		{
+			id: 'claude-3-5-haiku-latest',
+			name: 'claude-3-5-haiku',
+			context_window: 200000,
+			max_output_tokens: 8192,
+		},
 	],
 	// https://ai.google.dev/gemini-api/docs/models/gemini?hl=ko
 	[LLM_PROVIDERS.GOOGLE_GEMINI]: [
@@ -210,6 +216,16 @@ export const CHAT_MODEL_OPTIONS: Record<LLM_PROVIDERS, ChatModelOption[]> = {
 			id: 'mixtral-8x7b-32768',
 			name: 'Mixtral 8x7B',
 			context_window: 32768,
+			max_output_tokens: 32768,
+		},
+	],
+
+	// https://docs.x.ai/docs#models
+	[LLM_PROVIDERS.GROK]: [
+		{
+			id: 'grok-beta',
+			name: 'Grok',
+			context_window: 128000,
 			max_output_tokens: 32768,
 		},
 	],
