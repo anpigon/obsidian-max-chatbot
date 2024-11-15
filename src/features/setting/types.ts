@@ -37,6 +37,7 @@ export interface LLMProviderSettings {
 	[LLM_PROVIDERS.MISTRAL]: ProviderSettings;
 	[LLM_PROVIDERS.OPEN_ROUTER]: ProviderSettings;
 	[LLM_PROVIDERS.GROQ]: ProviderSettings;
+	[LLM_PROVIDERS.XAI]: ProviderSettings;
 	[LLM_PROVIDERS.SAMBANOVA]: ProviderSettings;
 }
 
