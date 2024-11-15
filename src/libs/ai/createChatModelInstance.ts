@@ -3,6 +3,8 @@ import {ChatAnthropic} from '@langchain/anthropic';
 import {ChatOpenAI} from '@langchain/openai';
 import {ChatGroq} from '@langchain/groq';
 
+import {ChatXAI} from '@langchain/xai';
+
 import {ChatOllama} from '@langchain/ollama';
 
 import {providerBaseUrls} from '../constants/provider-base-urls';
@@ -27,11 +29,14 @@ export default function createChatModelInstance(provider: LLM_PROVIDERS, model: 
 				return new ChatGroq(options);
 			case LLM_PROVIDERS.ANTHROPIC:
 				return new ChatAnthropic(options);
+			case LLM_PROVIDERS.XAI:
+				return new ChatXAI(options);
 			default:
 				return new ChatOpenAI({
 					...options,
 					apiKey,
 					configuration: {
+						// fetch: obsidianFetchApi,
 						baseURL: options.baseUrl || providerBaseUrls[provider],
 						apiKey,
 					},

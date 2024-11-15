@@ -27,7 +27,7 @@ const obsidianFetchApi = async (
 	} catch (error) {
 		// @ts-expect-error
 		// eslint-disable-next-line no-undef
-		console.error("Pinecone API request failed:", error, error?.response);
+		console.error("API request failed:", error, error?.response);
 		throw error;
 	}
 };
