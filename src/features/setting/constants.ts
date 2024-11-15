@@ -1,15 +1,17 @@
 import {
-	GOOGLE_GEMINI_BASE_URL,
-	GROQ_BASE_URL,
 	LLM_PROVIDERS,
-	LM_STUDIO_BASE_URL,
-	OLLAMA_BASE_URL,
-	OPEN_AI_BASE_URL,
-	UPSTAGE_BASE_URL,
-	SAMBANOVA_BASE_URL,
+	OLLAMA_BASE_URL
 } from '@/libs/constants';
 
-import type {MAXSettings} from '@/features/setting/types';
+import type { MAXSettings, ProviderSettings } from '@/features/setting/types';
+
+const providers = Object.values(LLM_PROVIDERS).reduce((acc, key) => {
+	acc[key] = {
+		apiKey: '',
+		baseUrl: '',
+	};
+	return acc;
+}, {} as Record<LLM_PROVIDERS, ProviderSettings>);
 
 export const DEFAULT_SETTINGS: MAXSettings = {
 	profiles: {
@@ -42,6 +44,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		allowRenameNoteTitle: false,
 	},
 	providers: {
+		...providers,
 		[LLM_PROVIDERS.OLLAMA]: {
 			enable: false,
 			baseUrl: OLLAMA_BASE_URL,
@@ -63,76 +66,6 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 				topK: 40,
 				topP: 0.9,
 			},
-		},
-		[LLM_PROVIDERS.LM_STUDIO]: {
-			enable: false,
-			apiKey: 'lm-studio',
-			baseUrl: LM_STUDIO_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.OPEN_AI]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: OPEN_AI_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.UPSTAGE]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: UPSTAGE_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.REST_API]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: false,
-			models: [],
-		},
-		[LLM_PROVIDERS.ANTHROPIC]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.GOOGLE_GEMINI]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: GOOGLE_GEMINI_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.GROQ]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: GROQ_BASE_URL,
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.MISTRAL]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.OPEN_ROUTER]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: '',
-			allowStream: true,
-			models: [],
-		},
-		[LLM_PROVIDERS.SAMBANOVA]: {
-			enable: false,
-			apiKey: '',
-			baseUrl: SAMBANOVA_BASE_URL,
-			allowStream: true,
-			models: [],
 		},
 	},
 	toggleGeneralSettings: true,
