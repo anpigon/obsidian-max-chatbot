@@ -10,6 +10,7 @@ export const MISTRAL_BASE_URL = 'https://api.mistral.ai/v1';
 export const OPEN_ROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 export const UPSTAGE_BASE_URL = 'https://api.upstage.ai/v1/solar';
 export const GROQ_BASE_URL = 'https://api.groq.com/openai/v1';
+export const XAI_BASE_URL = 'https://api.x.ai/v1';
 export const SAMBANOVA_BASE_URL = 'https://api.sambanova.ai/v1'; // https://api.sambanova.ai/v1/chat/completions
 
 export const enum LLM_PROVIDERS {
@@ -23,7 +24,7 @@ export const enum LLM_PROVIDERS {
 	OPEN_ROUTER = 'OPEN_ROUTER',
 	UPSTAGE = 'UPSTAGE',
 	GROQ = 'GROQ',
-	GROK = 'GROK',
+	XAI = 'XAI',
 	SAMBANOVA = 'SAMBANOVA',
 	CEREBRAS = 'CEREBRAS',
 }
