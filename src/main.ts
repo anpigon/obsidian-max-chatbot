@@ -126,7 +126,7 @@ export default class MAXPlugin extends Plugin {
 	async activateView(): Promise<void> {
 		const {workspace} = this.app;
 		const leaf = this.findExistingChatbotLeaf() || (await this.createNewChatbotLeaf());
-		if (leaf) workspace.revealLeaf(leaf);
+		if (leaf) await workspace.revealLeaf(leaf);
 	}
 
 	private findExistingChatbotLeaf(): WorkspaceLeaf | null {
