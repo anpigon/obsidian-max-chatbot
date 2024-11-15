@@ -1,17 +1,19 @@
-import {
-	LLM_PROVIDERS,
-	OLLAMA_BASE_URL
-} from '@/libs/constants';
+import {LLM_PROVIDERS} from '@/libs/constants';
 
-import type { MAXSettings, ProviderSettings } from '@/features/setting/types';
+import { providerBaseUrls } from '@/libs/constants/provider-base-urls';
 
-const providers = Object.values(LLM_PROVIDERS).reduce((acc, key) => {
-	acc[key] = {
-		apiKey: '',
-		baseUrl: '',
-	};
-	return acc;
-}, {} as Record<LLM_PROVIDERS, ProviderSettings>);
+import type {MAXSettings, ProviderSettings} from '@/features/setting/types';
+
+const providers = Object.values(LLM_PROVIDERS).reduce(
+	(acc, key) => {
+		acc[key] = {
+			apiKey: '',
+			baseUrl: providerBaseUrls[key],
+		};
+		return acc;
+	},
+	{} as Record<LLM_PROVIDERS, ProviderSettings>
+);
 
 export const DEFAULT_SETTINGS: MAXSettings = {
 	profiles: {
@@ -47,7 +49,7 @@ export const DEFAULT_SETTINGS: MAXSettings = {
 		...providers,
 		[LLM_PROVIDERS.OLLAMA]: {
 			enable: false,
-			baseUrl: OLLAMA_BASE_URL,
+			baseUrl: providerBaseUrls.OLLAMA,
 			apiKey: '',
 			allowStream: true,
 			models: [],
