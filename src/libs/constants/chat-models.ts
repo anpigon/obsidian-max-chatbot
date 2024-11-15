@@ -221,7 +221,7 @@ export const CHAT_MODEL_OPTIONS: Record<LLM_PROVIDERS, ChatModelOption[]> = {
 	],
 
 	// https://docs.x.ai/docs#models
-	[LLM_PROVIDERS.GROK]: [
+	[LLM_PROVIDERS.XAI]: [
 		{
 			id: 'grok-beta',
 			name: 'Grok',
