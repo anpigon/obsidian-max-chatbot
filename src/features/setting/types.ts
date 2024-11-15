@@ -1,8 +1,8 @@
 import {LLM_PROVIDERS} from '@/libs/constants';
 
 export interface ProviderSettings {
-	enable?: boolean;
 	apiKey: string;
+	enable?: boolean;
 	baseUrl?: string;
 	allowStream?: boolean;
 	models?: string[];
